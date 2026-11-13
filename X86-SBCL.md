@@ -92,6 +92,29 @@ evaluator, reached only by calling it from raw Lisp (the finding itself notes
 SBCL x86 codegen divergence. Reported here as an observed version delta, not an
 SBCL bug.
 
+### 1a. Stale raw-Lisp state after undo (`siblings/stale-raw-state/`, the S6/R7 cluster)
+
+The systematic `df-ftype-*` / inline family (stale `double-float` ftype
+proclamations and inline expansions surviving undo). Each run on the x86-64
+image; compared to the arm64 **SBCL** column of `siblings/STALE-RAW-STATE.md`.
+
+| test | arm64 SBCL | x86-64 SBCL 2.2.9 | delta |
+|---|---|---|---|
+| `df-ftype-encapsulate-local` | correct / correct | correct / correct | same |
+| `df-ftype-failed-progn` | correct / correct | correct / correct | same |
+| `df-ftype-certify-local` | correct / correct | correct / correct | same |
+| `df-ftype-include-book-u` | correct / correct | correct / correct | same |
+| `df-ftype-undo-restore` | **gv = `1.0e-323` (wrong)** / no-gv correct | **gv = `9.88e-324` (wrong)** / no-gv correct | **same** (both wrong; garbage is the function's integer result read as a `double-float`; the differing low bits are the same mechanism) |
+| `df-ftype-redef-overwrite` | **memory fault** (`Unhandled memory fault at #xFFFFFFFFFFFFFFFB`) | **memory fault** (`Unhandled memory fault at #xFFFFFFFFFFFFFFFB`) | **same crash** |
+| `inline-undo-restore` | gv `2361183241434822606850` / no-gv `4` | gv `2361183241434822606850` / no-gv `4` | same |
+
+So the whole cluster is architecture-/SBCL-version-invariant. Directly answering
+the steer: **x86-64 SBCL does retain the stale df ftype on the undo-restore
+route (wrong value on both arches) and crashes identically on the
+redef-overwrite route** — it behaves exactly as arm64 SBCL, no new delta. (The
+plain `:u` case, `derived-types/repros/stale-df-ftype` = S6, is CCL-only wrong;
+x86 SBCL is correct there too — row S6 above.)
+
 ## 2. ACL2 routes and stale-artifact machinery on x86-64
 
 ### 2a. Route matrix (`routes/run-matrix.sh`, adapted → `routes/run-matrix-x86.sh`)
