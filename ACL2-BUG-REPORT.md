@@ -167,23 +167,60 @@ logical definition returns 1. Guard verification succeeds under the plain
 (A one-line `NIL` proof from this divergence is being confirmed separately; the two
 differing values above are firsthand.)
 
-### S6 — stale `double-float` ftype proclamation survives `:u` + redefinition (CCL)
+### S6 — a `double-float` ftype proclamation is never retracted when its function goes away (CCL)
 
-`derived-types/repros/stale-df-ftype/` (`run.sh [ccl|sbcl]`). CCL only; requires redefinition. Re-run by the reporter.
+`siblings/stale-raw-state/` (several routes; `df-ftype-encapsulate-local/`, `df-ftype-certify-local/`,
+`df-ftype-failed-progn/`, `df-ftype-include-book-u/`) and `derived-types/repros/stale-df-ftype/`. CCL only. Re-run by the reporter.
+
+`proclaim-dfs` (`interface-raw.lisp`) proclaims `(ftype (function (double-float &optional)
+(values double-float &optional)) f)` the moment a `double-float`-typed `f` is compiled.
+Nothing retracts that proclamation when `f` is subsequently replaced by a definition
+that returns something else. A later guard-verified caller then miscompiles `f`'s result
+as a `double-float` and returns garbage; the logical path is correct; SBCL keeps the
+correct value (it does not retain the proclamation).
+
+The strongest route needs **no undo command and no redefinition** — a `local` `double-float`
+`f` inside an `encapsulate`, then an ordinary `f`:
 ```lisp
-(defun f (x) (declare (type double-float x)) (df+ x x))      ; proclaims f :: double-float -> double-float
-:u
-(defun f (x) (declare (xargs :guard (rationalp x))) (+ x 1180591620717411303424))   ; f now returns an integer
+(encapsulate () (local (defun f (x) (declare (type double-float x)) (df+ x x))))
+(defun f   (x) (declare (xargs :guard (rationalp x))) (+ x 1180591620717411303424))
 (defun g-gv   (x) (declare (xargs :guard (rationalp x)))                    (+ (f x) (f x)))
 (defun g-nogv (x) (declare (xargs :guard (rationalp x) :verify-guards nil)) (+ (f x) (f x)))
-(g-gv 1)     ; CCL => 1.0E-323        (garbage: integer bits read as a double-float)
-(g-nogv 1)   ; CCL => 2361183241434822606850   (correct)
+(g-gv 1)     ; CCL => 1.0E-323                  (garbage)
+(g-nogv 1)   ; CCL => 2361183241434822606850    (correct)
 ```
-`proclaim-dfs` (`interface-raw.lisp`) proclaims an `(ftype (function (double-float …)
-(values double-float …)) f)` for the first `f`; `:u` and the non-`df` redefinition do
-not retract it, so the guard-verified caller miscompiles `f`'s now-integer result as a
-`double-float`. The logical path is correct. SBCL returns the correct value on both
-paths (it does not retain the stale proclamation).
+The `local` `f`'s proclamation outlives the `encapsulate` that introduced it. The same
+wrong value appears after `certify-book` of a book with a `local` `double-float` `f`
+then a top-level `f`; after a `progn` whose later event fails; and via the original
+`include-book`/`:u` route. On the `redef!`+`:u` route **SBCL crashes** with an unhandled
+memory fault instead of returning a value (robustness; see R7).
+
+**Scope note.** A separate sweep (`derived-types/`, ledger T1) checked the host
+compiler's *inferred result type* of every primitive call against the logical value,
+for guard-satisfying arguments of many declared types — about 7M checks per host,
+6,542 functions, 265/264 operators — and found **zero** cases where an inferred type
+excludes a constructible logical value, on either host. So none of the findings here
+is an inference-narrowing bug of the kind fixed in the recent SBCL-related notes;
+S5/S6/S7 are a macro-equality mismatch and stale raw-Lisp state.
+
+### S7 — `defun-inline` keeps a stale inline body after the definition is undone (both hosts)
+
+`siblings/stale-raw-state/inline-undo-restore/`. Both hosts. Re-run by the reporter.
+```lisp
+(defun-inline f (x) (declare (xargs :guard (rationalp x))) (+ x 1))
+(redef!)
+(defun-inline f (x) (declare (xargs :guard (rationalp x))) (+ x 1180591620717411303424))
+:u                                                     ; undoes back to the (+ x 1) definition
+(defun g-gv   (x) (declare (xargs :guard (rationalp x)))                    (+ (f x) (f x)))
+(defun g-nogv (x) (declare (xargs :guard (rationalp x) :verify-guards nil)) (+ (f x) (f x)))
+(g-gv 1)     ; => 2361183241434822606850   (inlines the UNDONE +2^70 body)
+(g-nogv 1)   ; => 4                         (logic uses the current +1 body)
+```
+After `:u`, the logical world holds the `(+ x 1)` definition (so the `:verify-guards nil`
+twin returns 4), but the raw inline-expansion machinery still carries the undone
+`(+ x 1180591620717411303424)` body, so a guard-verified caller inlines it and returns
+the stale value. Both SBCL and CCL. (`(redef!)` is needed only to perform the middle
+redefinition; the divergence is produced by the ordinary `:u`.)
 
 **Scope note.** A separate sweep (`derived-types/`, ledger T1) checked the host
 compiler's *inferred result type* of every primitive call against the logical value,
@@ -289,6 +326,16 @@ established.
 audit reports `throw-or-attach-call` and `null-body-er` behave the same (those two not
 re-run by the reporter).
 
+### R7 — SBCL crashes with a memory fault on the `redef!`+`:u` stale-df-ftype route
+
+`siblings/stale-raw-state/df-ftype-redef-overwrite/`. SBCL only (CCL returns the S6 wrong value instead). From the audit; not re-run by the reporter.
+
+On the S6 route that uses `(redef!)` then an ordinary `:u`, SBCL-hosted ACL2 does not
+return a value: it dies with an unhandled memory fault. The stale `double-float` ftype
+proclamation (S6) is presumably driving a miscompiled access that faults on SBCL rather
+than silently returning garbage as on CCL. Robustness (crash), and a lead that the S6
+stale proclamation has worse consequences than a wrong value.
+
 ---
 
 ## 3. Host divergence (same event, different outcome on the two hosts)
@@ -362,7 +409,9 @@ repros/defstobj-satisfies-host/stale-type-cache/f8-min.lisp                     
 repros/defstobj-satisfies-host/string-stobj/f9-min.lisp                         # S4 (both; ld it)
 repros/defstobj-satisfies-host/run.sh        /sbcl/saved_acl2 /ccl/saved_acl2   # H1 (22-case table)
 derived-types/repros/count-eql-vs-equal/run.sh   [ccl|sbcl]                     # S5
-derived-types/repros/stale-df-ftype/run.sh       [ccl|sbcl]                     # S6 (CCL)
+siblings/stale-raw-state/df-ftype-encapsulate-local/test.lsp                    # S6 (CCL; no undo/redef; ld it)
+siblings/stale-raw-state/inline-undo-restore/test.lsp                           # S7 (both; ld it)
+siblings/stale-raw-state/df-ftype-redef-overwrite/test.lsp                      # R7 (SBCL crash; ld it)
 derived-types/repros/ccl-ash-near-fixnum-limit/run.sh                           # C2 (CCL)
 repros/loop-ignore-ok/run.sh                 /path/to/saved_acl2        # R1
 repros/lambda-ignore-ok/run.sh               /path/to/saved_acl2        # R2
