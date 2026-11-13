@@ -1,0 +1,8 @@
+RESULT s3 1 :A
+RESULT s4 1 NIL
+RESULT s6 1/2
+RESULT s7 1 #\a
+   8 ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+RESULT s10 0 1
+RESULT s11 200 1
+RESULT end

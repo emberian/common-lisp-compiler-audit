@@ -1,0 +1,5 @@
+(defstub p (x) nil)
+(defstobj st (ar :type (array (or null (satisfies p)) (3)) :initially nil))
+(cw "RESULT ~x0~%" (ari 0 st))
+(defstobj st2 (ht :type (hash-table eql 10 (or null (satisfies p)))))
+(cw "RESULT ~x0~%" (ht-get 1 st2))

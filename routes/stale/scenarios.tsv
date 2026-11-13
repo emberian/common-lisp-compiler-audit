@@ -1,0 +1,123 @@
+# id	expected (regex over observed)	group	description
+base	equal	baseline	certify A, include, compare with fresh ld of A
+ctl_rawload	STALE-silent	control	fresh ld of B then raw LOAD of A's compiled file: the queries must report stale code
+fasl_missing	warned-equal	compiled	compiled file deleted
+fasl_older	warned-equal	compiled	compiled file older than the certificate
+fasl_truncated	warned-equal	compiled	compiled file cut to half its length, mtime kept
+fasl_zero	warned-equal	compiled	compiled file emptied, mtime kept
+fasl_garbage	warned-equal|refused	compiled	compiled file replaced by Lisp source text defining f differently, mtime kept
+fasl_otherhost	warned-equal	compiled	the other host's compiled file under this host's file name, newer than cert
+fasl_oldver_newer	warned-equal|refused	compiled	B certified; compiled file of A (same names, other bodies) newer than cert
+fasl_oldver_same_mtime	warned-equal|refused	compiled	as above, compiled file carries exactly the mtime of B's own compiled file
+fasl_oldver_eq_cert	warned-equal|refused	compiled	as above, compiled file mtime equal to the cert's
+fasl_oldver_older	warned-equal	compiled	as above, compiled file older than cert
+fasl_oldver_checksum	warned-equal|refused	compiled	as fasl_oldver_newer with checksum book-hashes (book-hash-alistp nil)
+fasl_oldver_lcf_t	warned-equal|refused	compiled	as fasl_oldver_newer with :load-compiled-file t
+fasl_otherbook	equal|warned-equal|refused	compiled	compiled file of an unrelated book renamed to this book, newer than cert
+recert_nocompile	warned-equal	compiled	certify A compiled, edit to B, recertify with compile-flg nil
+recert_nocompile_future	warned-equal	compiled	as above; the old compiled file had a future mtime
+src_touch	warned-equal	source	source mtime changed, contents the same
+src_whitespace	warned-equal	source	newline appended to the source
+src_whitespace_samelen	equal|warned-equal	source	one space replaced by a newline; length and mtime kept
+src_body_len	warned-equal	source	a body changed (length changes)
+src_body_samelen	warned-equal|refused	source	bodies changed (A to B), same length and same mtime
+src_body_samelen_mtime	warned-equal	source	bodies changed, same length, mtime 5 s later
+src_body_samelen_checksum	warned-equal	source	bodies changed, same length and mtime, checksum book-hashes
+src_guard_samelen	warned-equal|refused	source	a type declaration widened, same length and mtime; then a call legal only under the new declaration
+src_fn_added	warned-equal	source	a function appended to the source
+fasl_oldver_trunc25	warned-equal	compiled	B certified; first 25% of A's compiled file, newer than cert (partial raw load, then source)
+fasl_oldver_trunc50	warned-equal	compiled	as above, 50%
+fasl_oldver_trunc90	warned-equal	compiled	as above, 90%
+fasl_oldver_trunc99	warned-equal	compiled	as above, 99%
+cert_missing	warned-equal	cert	certificate deleted, compiled file present
+cert_zero	warned-equal|refused	cert	certificate emptied
+cert_truncated	warned-equal|refused	cert	certificate cut to half
+cert_otherbook	warned-equal|refused	cert	certificate of an unrelated book renamed to this book
+cert_oldver_fasl_new	warned-equal|refused	cert	cert of A next to source B (same length and mtime) and B's compiled file
+cert_otherhost_nofasl	warned-equal	cert	certified by the other host; no compiled file for this host
+cert_otherhost_natural	equal|warned-equal	cert	certified here, then recertified by the other host in the same directory (this host's compiled file is now older)
+cert_otherhost_fasl	equal	cert	other host's cert with this host's compiled file of the same source made newer
+cert_otherhost_oldfasl	warned-equal|refused	cert	this host compiled A; other host certified B; this host's A compiled file newer than cert
+port_missing	equal	cert	.port deleted, book certified
+port_other	equal	cert	.port of another book (with a portcullis defpkg), book certified
+port_other_uncert	warned-equal|refused	cert	.port of another book, certificate deleted
+env_defaults	equal	environment	acl2-defaults-table differs (ignore-ok, irrelevant-formals-ok, state-ok, eagerness 0, program mode)
+env_redundant	equal	environment	session already has identical *k*, f and inline i
+env_conflict_fn	refused	environment	session has g with another body; afterwards session g must be intact
+env_conflict_const	refused	environment	session has *k* with another value
+env_conflict_macro	refused	environment	session has a macro named like a book function
+env_conflict_inline	refused	environment	session has inline i with another body and a caller of it
+env_conflict_late	refused	environment	conflict at the book's last function; then the session defines f, g, e, m, h itself
+env_conflict_stobj	refused	environment	session has stobj st with other fields
+env_conflict_dirs	refused	environment	same book name in two directories with different bodies; second include must fail and leave the first intact
+env_redef	equal|warned-equal|refused	environment	session has another g and redefinition is allowed
+env_pkg	equal	environment	current package differs
+env_skip_proofs	equal	environment	ld-skip-proofsp t during the include
+env_gc_none	equal	environment	guard checking :none during the include
+env_gc_all	equal	environment	guard checking :all during the include
+env_gc_nil	equal	environment	guard checking nil during the include
+env_nocompiler	equal|warned-equal	environment	set-compiler-enabled nil
+env_nocompiler_oldver	equal|warned-equal	environment	set-compiler-enabled nil with A's compiled file under certified B
+env_lcf_t	equal	environment	:load-compiled-file t
+env_lcf_nil	equal	environment	:load-compiled-file nil
+env_lcf_nil_oldver	equal	environment	:load-compiled-file nil with A's compiled file under certified B
+env_lcf_warn	equal	environment	:load-compiled-file :warn
+env_lcf_comp	equal	environment	:load-compiled-file :comp
+env_lcf_t_missing	refused	environment	:load-compiled-file t and no compiled file
+env_memo	equal	environment	session has identical f, memoized and called
+env_stobj_same	equal	environment	session has the identical stobj with a modified field
+env_attach	equal	environment	session has the stub with another attachment; the book attaches its own
+env_attach_memo	equal	environment	as above plus a memoized (aokp) caller already called
+env_pkg_conflict	refused	environment	book portcullis defpkg conflicts with the session's package of that name
+me_same	equal	make-event	make-event expansions; include environment = certification environment
+me_global	equal|warned-equal|refused	make-event	expansion reads a state global that differs at include time
+me_unset	equal|warned-equal|refused	make-event	the state global is unbound at include time
+me_file	equal|warned-equal|refused	make-event	expansion reads a file whose contents changed after certification
+me_world	equal|warned-equal|refused	make-event	expansion depends on the presence of a function that the including session has
+me_host	equal|warned-equal|refused	make-event	expansion reads (@ host-lisp); certified by the other host
+mec_same	equal	make-event	the same book with :check-expansion t; same environment
+mec_global	refused	make-event	:check-expansion t, state global differs
+mec_file	refused	make-event	:check-expansion t, file changed
+mec_world	refused	make-event	:check-expansion t, world differs
+mec_host	refused	make-event	:check-expansion t, certified by the other host
+rc_host	equal|warned-equal|refused	make-event	#+sbcl/#+ccl reader conditionals in a defun and a defthm; certified by the other host, no compiled file
+rc_host_fasl	equal|warned-equal|refused	make-event	as above with this host's own compiled file
+sub_pristine	equal	sub-book	top includes sub (and lsub locally); all certified
+sub_src_edited	warned-equal	sub-book	sub source replaced by B, nothing recertified
+sub_recert	warned-equal	sub-book	sub replaced by B and recertified; top's artifacts stale
+sub_recert_samestamp	warned-equal|refused	sub-book	as above, sub keeps its length and mtime
+sub_recert_samestamp_checksum	warned-equal	sub-book	as above with checksum book-hashes
+sub_fasl_oldver	warned-equal|refused	sub-book	everything certified with B; sub's compiled file from A, newer
+sub_top_fasl_oldver	warned-equal|refused	sub-book	everything certified with B; top's compiled file from when sub was A
+sub_fasl_missing	warned-equal	sub-book	sub's compiled file deleted
+sub_lcf_t_missing	refused	sub-book	sub's compiled file deleted, top included with :load-compiled-file t
+sub_cert_missing	warned-equal	sub-book	sub's certificate deleted
+sub_local_changed	equal|warned-equal	sub-book	the locally included book changed and recertified
+sub_local_missing	equal|warned-equal|refused	sub-book	the locally included book deleted
+sub_preincluded_other	refused	sub-book	session defines sub's sf differently before including top
+vt_pristine	equal	reclassify	vt1 has a :program and an unverified function; vt2 does verify-termination and verify-guards
+vt_pre_program	equal	reclassify	session has the :program function (same body) and has called it
+vt_pre_logic	equal	reclassify	session has the function in :logic mode already
+vt_pre_conflict	refused	reclassify	session has the :program function with another body
+vt_sub_recert	warned-equal|refused	reclassify	vt1 replaced by B and recertified; vt2's artifacts stale
+vt_sub_recert_samestamp	warned-equal|refused	reclassify	as above, vt1 keeps its length and mtime
+vt_sub_first	warned-equal|refused	reclassify	as vt_sub_recert, with vt1 included first
+exp_nofasl	warned-equal	expansion	expansion file saved; compiled file deleted
+exp_oldver	warned-equal|refused	expansion	B certified; A's expansion file newer than cert, no compiled file
+exp_oldver_comp	warned-equal|refused	expansion	as above, include with :load-compiled-file :comp, then a plain include in a new session
+exp_oldver_fasl_ok	equal	expansion	A's expansion file next to B's good compiled file
+img_restart	equal	image	include A, save-exec, replace artifacts by B, restart: values must be those of A (the image is a snapshot)
+img_reinclude	warned-equal|refused	image	as above, then include-book again in the restarted image (B on disk)
+img_undo_reinclude	equal	image	as above, undo the include in the restarted image and include again: must be B
+img_certify_on_top	warned-equal|refused	image	in the restarted image certify a book with a theorem true only of A; include it in a new session
+syn_base	equal	generated	generated book (seed 11, 12 function pairs)
+syn_fasl_missing	warned-equal	generated	compiled file deleted
+syn_fasl_mutant	warned-equal|refused	generated	compiled file of a mutant (two constants changed), newer than cert
+syn_fasl_otherseed	warned-equal|refused	generated	compiled file of seed 12's book (same names, unrelated bodies), newer than cert
+syn_src_mutant_samestamp	warned-equal|refused	generated	source replaced by the mutant, same length and mtime
+syn_cert_otherhost	warned-equal	generated	certified by the other host, no compiled file for this host
+cert_otherhost_oldfasl_natural	warned-equal|refused	cert	this host certifies A, source becomes B, the other host certifies B immediately; no mtimes set by hand
+portcullis_book_changed	warned-equal|refused	cert	top2 certified on top of (include-book "book") in its portcullis; book then changed and recertified
+local_leftover	equal	environment	book has local defuns and a locally included book; afterwards the session defines those names itself
+local_predef	equal	environment	the session defines those names first (other bodies), then includes the book
+fasl_oldver_cp_p	warned-equal|refused	compiled	B certified elsewhere first, A certified here later, then B's source and cert copied in with cp -p (no other time changes)

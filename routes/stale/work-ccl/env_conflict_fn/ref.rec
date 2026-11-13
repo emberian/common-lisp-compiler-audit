@@ -1,0 +1,12 @@
+@Q g 27
+@N g 27
+@W f NIL
+@W g (IF (INTEGERP X) (BINARY-* '9 X) '0)
+@W e NIL
+@W tz NIL
+@W k NIL
+@W big (NIL 0 NIL)
+@W fthm NIL
+@W cls (NIL :IDEAL NIL)
+@S (:DIFF :OK :DIFF :DIFF :DIFF :DIFF :DIFF)
+@END

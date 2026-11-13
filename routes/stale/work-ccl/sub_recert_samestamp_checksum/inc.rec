@@ -1,0 +1,10 @@
+@Q tf ((3 FB) (3 MA) (3 IA) 20)
+@Q tg ((1 FB) (1 MA))
+@Q tc ((1 FB) (1 MA))
+@Q sf ((3 FB) (3 MB) (3 IB) (3 HB) 20)
+@N tf ((3 FB) (3 MA) (3 IA) 20)
+@W tf 
+@W tc '((1 FB) (1 MA))
+@W sf (CONS X (CONS 'FB 'NIL))
+@S (:DIFF :DIFF)
+@END

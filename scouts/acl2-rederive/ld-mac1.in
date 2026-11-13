@@ -1,0 +1,4 @@
+(defmacro my-mac (x) `(+ ,x 1))
+(ld "mac1-book.lisp")
+(f 1)
+(quit)

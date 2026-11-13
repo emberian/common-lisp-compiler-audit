@@ -1,0 +1,16 @@
+u8 | same-page=YES | HANG |  | cleanup-note=1
+bt | same-page=YES | HANG | @read (0 0 0 0) | cleanup-note=0
+u16 | same-page=YES | HANG |  | cleanup-note=1
+u32 | same-page=YES | HANG |  | cleanup-note=1
+u64 | same-page=YES | HANG |  | cleanup-note=1
+s8 | same-page=YES | HANG |  | cleanup-note=1
+s32 | same-page=YES | HANG | @read (0 0 0 0) | cleanup-note=0
+s64 | same-page=no | returned | @read (0 1 0 0) | cleanup-note=0
+int | same-page=no | returned | @read (0 1 0 0) | cleanup-note=0
+t | same-page=no | returned | @read (0 1 0 0) | cleanup-note=0
+rs | same-page=YES | HANG | @read (0 0 0 0) | cleanup-note=0
+il | same-page=no | HANG |  | cleanup-note=1
+df | same-page=no | returned | @read (1) | cleanup-note=0
+ch | same-page=YES | HANG |  | cleanup-note=1
+u8-scalar | n/a | returned | @read 6 | cleanup-note=0
+u8-read | n/a | returned | @read 0 | cleanup-note=0

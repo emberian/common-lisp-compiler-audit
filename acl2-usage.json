@@ -1,0 +1,150 @@
+[
+  {
+    "operation": "car",
+    "count": 8775
+  },
+  {
+    "operation": "cdr",
+    "count": 6770
+  },
+  {
+    "operation": "cons",
+    "count": 4796
+  },
+  {
+    "operation": "if",
+    "count": 4666
+  },
+  {
+    "operation": "let",
+    "count": 3843
+  },
+  {
+    "operation": "let*",
+    "count": 1388
+  },
+  {
+    "operation": "length",
+    "count": 979
+  },
+  {
+    "operation": "append",
+    "count": 406
+  },
+  {
+    "operation": "len",
+    "count": 238
+  },
+  {
+    "operation": "aref",
+    "count": 99
+  },
+  {
+    "operation": "floor",
+    "count": 62
+  },
+  {
+    "operation": "zp",
+    "count": 61
+  },
+  {
+    "operation": "nfix",
+    "count": 55
+  },
+  {
+    "operation": "ec-call",
+    "count": 54
+  },
+  {
+    "operation": "values",
+    "count": 49
+  },
+  {
+    "operation": "mbe",
+    "count": 47
+  },
+  {
+    "operation": "ash",
+    "count": 46
+  },
+  {
+    "operation": "return-last",
+    "count": 34
+  },
+  {
+    "operation": "aref1",
+    "count": 32
+  },
+  {
+    "operation": "compress1",
+    "count": 32
+  },
+  {
+    "operation": "fix",
+    "count": 28
+  },
+  {
+    "operation": "non-exec",
+    "count": 18
+  },
+  {
+    "operation": "mod",
+    "count": 16
+  },
+  {
+    "operation": "nonnegative-integer-quotient",
+    "count": 16
+  },
+  {
+    "operation": "ceiling",
+    "count": 11
+  },
+  {
+    "operation": "mv-list",
+    "count": 10
+  },
+  {
+    "operation": "ifix",
+    "count": 9
+  },
+  {
+    "operation": "aref2",
+    "count": 8
+  },
+  {
+    "operation": "zip",
+    "count": 8
+  },
+  {
+    "operation": "compress2",
+    "count": 6
+  },
+  {
+    "operation": "maybe-flush-and-compress1",
+    "count": 6
+  },
+  {
+    "operation": "aset1",
+    "count": 5
+  },
+  {
+    "operation": "rem",
+    "count": 5
+  },
+  {
+    "operation": "round",
+    "count": 4
+  },
+  {
+    "operation": "truncate",
+    "count": 3
+  },
+  {
+    "operation": "aset2",
+    "count": 2
+  },
+  {
+    "operation": "nth-value",
+    "count": 1
+  }
+]

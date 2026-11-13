@@ -1,0 +1,6 @@
+(include-book "repro-defconst-mbe-vg-book" :load-compiled-file nil)
+(list *mbe-vg-value*
+      (mbe-vg-choice)
+      (read-mbe-vg-choice)
+      (getpropc '*mbe-vg-value* 'const (w state)))
+(quit)

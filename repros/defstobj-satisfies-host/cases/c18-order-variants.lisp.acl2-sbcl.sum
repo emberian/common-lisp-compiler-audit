@@ -1,0 +1,11 @@
+   3 CALLED pcw NIL
+   2 CALLED pcw 0
+   4 CALLED pcw NIL
+ACL2 Error in ( DEFSTOBJ S7 ...):  The value specified by the :initially
+******** FAILED ********
+CALLED pcw NIL
+ACL2 Error in ( DEFSTOBJ S8 ...):  The value specified by the :initially
+******** FAILED ********
+CALLED pcw NIL
+CALLED pcw 7
+RESULT :A 7

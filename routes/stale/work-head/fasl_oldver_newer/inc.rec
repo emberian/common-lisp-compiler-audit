@@ -1,0 +1,33 @@
+@Q f 1004
+@Q g 6
+@Q h (3 . HA)
+@Q m (3 MB)
+@Q um (3 MA)
+@Q e (3 EA)
+@Q p (3 PA)
+@Q i (3 IA)
+@Q ui (3 IA)
+@Q ub (BA 6001 1006)
+@Q big (BA 6001 1006)
+@Q k 1000
+@Q rd 106
+@Q ev1 (TA FA)
+@Q tz 10
+@Q lpz 9
+@N f 1004
+@N g 6
+@N e (3 EA)
+@N ui (3 IA)
+@N tz 10
+@N lpz 9
+@N ev1 (TA FA)
+@W f (BINARY-+ X (BINARY-+ '2000 '2))
+@W g (IF (INTEGERP X) (BINARY-* '3 X) '0)
+@W e (CONS X (CONS 'EB 'NIL))
+@W tz (BINARY-+ X '8)
+@W k '1000
+@W big (BA 6001 1006)
+@W fthm (EQUAL (F '0) '2002)
+@W cls (:COMMON-LISP-COMPLIANT :IDEAL :PROGRAM)
+@S (:DIFF :DIFF :DIFF :DIFF :DIFF :OK :DIFF)
+@END

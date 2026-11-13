@@ -1,0 +1,3 @@
+(ld "t5-book.lisp")
+(f 1)
+(quit)

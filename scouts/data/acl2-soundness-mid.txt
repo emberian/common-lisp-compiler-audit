@@ -1,0 +1,90 @@
+==== NOTE-4-0 ====
+Previously, the [constraint] on f and h was essentially the conjunction of the definition of h and the theorem h-is-f. Now, the definition of g is conjoined as well; moreover, g receives the same [constraint] as do f and h, where previously g was only constrained by its definition. While we are not aware of a soundness bug caused by the previous approach, the new approach follows more precisely the intended notion of [constraint].
+
+New function [mv-list] is the identity function logically, but converts multiple values to lists. The first argument is the number of values, so an example form is as follows, where foo returns three values: (mv-list 3 (foo x y)). Thanks to Sol Swords for requesting this feature and for reporting a soundness bug in one of our preliminary implementations.
+
+Fixed a soundness bug in destructor elimination, which was preventing some cases from being generated. Thanks to Eric Smith for reporting this bug and sending a helpful example. (Technical detail: the fixes were in ACL2 source functions apply-instantiated-elim-rule and eliminate-destructors-clause1, and comments in the former contain Eric's example.)
+
+Fixed a bug that supported a proof of nil by exploiting the fact that [portcullis] [command]s were not included in check-sum computations in a book's [certificate]. For such a proof of nil, see the relevant comment in the ACL2 source file ld.lisp under (deflabel note-4-0 ...).
+
+Changed the implementation of [add-include-book-dir]. The previous implementation could allow relative pathnames to be stored in the [portcullis] [command]s of [certificate]s of [books], which perhaps could lead to unsoundness (though we did not try to exploit this to prove nil). Thanks to Jared Davis for reporting a bug in our first new implementation. An additional change to both [add-include-book-dir] and [delete-include-book-dir] is that these now work in raw-mode (see [set-raw-mode]). (Thanks to Dave Greve for suggesting a reduction in the warnings we produced related to raw-mode.) Note that it is no longer permitted to make a direct call of the form (table acl2-defaults-table :include-book-dir-alist ...); use [add-include-book-dir] instead.
+
+Fixed a soundness bug related to [xargs] keyword :non-executable. New macros, defun-nx and defund-nx, have been provided for declaring functions to be non-executable; see [defun-nx]. While we expect this bug to occur only rarely if at all in practice, the following example shows how it could be evoked.
+
+==== NOTE-4-1 ====
+We fixed a soundness bug that could occur when a function that returns multiple values is called in its own guard. Thanks to Sol Swords for reporting this bug and sending a small self-contained example, which is included in a comment in the function chk-acceptable-defuns1 in ACL2 source file defuns.lisp.
+
+==== NOTE-4-2 ====
+Now suppose that one includes a book with this theorem (with :[rule-classes] nil), using an ACL2 built on top of a different host Lisp, say CCL, that does not import the symbol SYSTEM::ALLOCATE into the \"COMMON-LISP\" package. Then then one can prove nil by giving this theorem as a :use hint.
+
+It is no longer permitted to submit definitions in :logic mode for merely part of an existing [mutual-recursion] event. Such an action left the user in an odd state and seemed a potential soundness hole.
+
+Fixed a long-standing soundness bug caused by the interaction of [force]d hypotheses with destructor [elim]ination. The fix was to avoid using forcing when building the context (so-called ``type-alist'') when the goal is considered for destructor elimination; those who are interested can see a discussion in source function eliminate-destructors-clause1, which includes a proof of nil that no longer succeeds. A similar fix was made for generalization, though we have not exploited the previous code to prove nil in that case.
+
+==== NOTE-4-3 ====
+A soundness bug was fixed in some raw-Lisp code implementing the function, [take]. Thanks to Sol Swords for pointing out this bug with (essentially) the following proof of nil.
+
+Calls of [mbe] in ``safe-mode'' situations --- i.e., during evaluation of [defconst], [value-triple], and [defpkg] forms, and during macroexpansion --- are now guard-checked. Thus, in these situations both the :logic and :exec forms will be evaluated, with an error if the results are not equal. Formerly, only the :logic form was evaluated, which was a soundness bug that could be exploited to prove nil. For such a proof and a bit of further explanation, see the example at the top of the comments for (deflabel note-4-3 ..) in ACL2 source file ld.lisp.
+
+It had been possible to prove nil by proving the following theorem using ACL2 built on CCL and then proving its negation using ACL2 built on a different host Lisp.
+
+Fixed a bug in detection of package redefinition. While we have no example demonstrating this as a soundness bug, we cannot rule it out.
+
+==== NOTE-5-0 ====
+Fixed a class of soundness bugs involving each of the following functions: [getenv$], get-wormhole-status, [cpu-core-count], [wormhole-p], [random$], file-write-date$, and serialize-read-fn, and (for the HONS version of ACL2) [clear-memoize-table] and [clear-memoize-tables] as well as (possible soundness bug) serialize-write-fn. For example, we were able to admit the following events, but that is no longer the case (neither for getenv$ as shown, nor analogously for other functions listed above).
+
+Fixed a soundness bug involving with-live-state, which could cause an error in the use of [add-include-book-dir] or [delete-include-book-dir] in a book or its [portcullis] commands. See [with-live-state], as the documentation for this macro has been updated; in particular it is now untouchable (see [remove-untouchable]) and is intended only for system hackers. Thanks to Jared Davis for reporting a bug in the use of [add-include-book-dir] after our first attempt at a fix.
+
+Fixed a soundness bug based on the use of [skip-proofs] together with the little-used argument k=t for [certify-book]. An example proof of nil appears in a comment in the ACL2 sources, in (deflabel note-5-0 ...).
+
+Fixed a soundness bug that allowed users to define new [proof-builder] primitive commands. Before this fix, a book proving nil could be certified, as shown in a comment now in the introduction of the [table] pc-command-table in source file proof-builder-a.lisp.
+
+Fixed a bug in [guard] verification due to expanding calls of primitives when translating user-level terms to internal form, so called ``translated terms'' (see [term]). While we have not observed a soundness hole due to this bug, we have not ruled it out. Before the bug fix, the following event was admissible, as guard verification succeeded (but clearly should not have).
+
+We fixed a bug in a prover routine involved in [type-set] computations involving linear arithmetic. This bug has been around since at least as far back as Version_3.3 (released November, 2007). We are not aware of any resulting unsoundness, though it did have the potential to weaken the prover. For example, the following is proved now, but was not proved before the bug was fixed.
+
+==== NOTE-6-0 ====
+Fixed a soundness bug in [defabsstobj] based on [guard]s that violated single-threadedness restrictions. Thanks to Sol Swords for bringing this bug to our attention and supplying a proof of nil, which we include as a comment in source file ld.lisp, in (deflabel note-6-0 ...). We also thank Sol for helpful discussions about [guard]s of functions introduced by defabsstobj, which has led us to enhance the [documentation]; see [defabsstobj].
+
+Fixed a soundness bug in [defabsstobj] based on interrupted updates of abstract stobjs. As part of the fix a new keyword, :PROTECT, has been introduced for defabsstobj exports, along with a new top-level defabsstobj keyword, :PROTECT-DEFAULT; see [defabsstobj]. We do some analysis that we expect will avoid the use of :PROTECT in many cases, which is fortunate since the use of :PROTECT t may cause a slight slowdown in (abstract) stobj updates. Thanks to Sol Swords for bringing this bug to our attention and supplying a proof of nil, which we include as a comment in source file other-events.lisp, in the definition of function set-absstobj-debug.
+
+==== NOTE-6-1 ====
+A soundness bug has been fixed that exploited the use of expansion files (see [book-compiled-file]) together with [defstobj]. For an example illustrating this bug, see the comment about ``Expansion/Defstobj Bug'' in the form (deflabel note-6-1 ...) in ACL2 source file ld.lisp.
+
+We fixed a soundness bug involving system function [canonical-pathname] and (most likely) other functions in the former value of constant *unattachable-primitives*. Thanks to Jared Davis and Sol Swords for bringing this bug to our attention by way of an example. We include a very slight variant of that example in a comment within the form (deflabel note-6-1 ...) in ACL2 source file ld.lisp.
+
+There was a soundness bug that allowed attachments to prove nil in a consistent logical [world] involving [defaxiom] [events]. This has been fixed, by requiring that no function symbol ancestral in a [defaxiom] formula is allowed to get an attachment. See [defattach], in particular discussion of ``a restriction based on a notion of a function symbol syntactically supporting an event'', which concludes with a proof of nil that is no longer possible.
+
+(ACL2(h) only) We fixed a soundness bug in the interaction of memoization with congruent stobjs, in cases where the :congruent-to field of [defstobj] was not the canonical representative in the congruence class. For an example illustrating this bug, see the comment about ``memoize/congruent stobj bug'' in the form (deflabel note-6-1 ...) in ACL2 source file ld.lisp.
+
+==== NOTE-6-2 ====
+We fixed a soundness bug that could be exploited by calling system functions acl2-magic-mfc or acl2-magic-canonical-pathname. Thanks to Sol Swords for bringing this bug to our attention.
+
+We fixed a soundness bug in the handling of [stobj]s, in which strings were recognized as stobjs in raw Lisp. Thanks to Jared Davis for sending us a proof of nil that exploited this bug. We now have a much simpler example of this bug, as follows.
+
+We fixed bugs in extended metafunctions (see [extended-metafunctions]). The macro mfc-ap no longer takes a :TTREEP keyword argument, because this argument could allow returning a tag tree that does not properly account for forcing. The remaining mfc-xx macros --- mfc-relieve-hyp, mfc-rw+, mfc-rw, and mfc-ts --- still take a :TTREEP keyword argument, but the corresponding functions when :TTREEP is t --- mfc-relieve-hyp-ttree, mfc-rw+-ttree, mfc-rw-ttree, and mfc-ts-ttree --- were introduced with incorrect output signatures. A complication is that mfc-relieve-hyp-ttree was improperly defined in raw Lisp in a way that actually matched the incorrect signature! All of these bugs have been fixed. Perhaps any of them could have made it possible to prove nil, though we have not tried to do so.
+
+==== NOTE-6-3 ====
+Fixed a soundness bug that was permitting a [stobj] to be bound by a [let] or [mv-let] form, without being among the outputs of that form. Thanks to Jen Davis and Dave Greve for reporting this bug. Their report included an example which forms the basis for a proof of nil, included as a comment in the form (deflabel note-6-3 ...) in ACL2 source file ld.lisp.
+
+(GCL only) Fixed an obscure soundness bug due to an error in the GCL implementation of [set-debugger-enable]. For details, see the relevant comment in the ACL2 source code under (deflabel note-6-3 ...).
+
+==== NOTE-6-4 ====
+Fixed a soundness bug in the handling of hypotheses of conditional :[definition] rules invoked during rewriting by applying :[expand] [hints]. See (defxdoc note-6-4 ...) in community book system/doc/acl2-doc.lisp for a proof of nil in ACL2 Version_6.3 that exploits this bug.
+
+It had been possible to update a [stobj] (either an ordinary stobj or an abstract stobjs) so that it no longer satisfies its recognizer predicate. This soundness bug has been fixed. Thanks to Jared Davis and Sol Swords for pointing out this bug, making useful observations about the issue, and sending proofs of nil, one of which may be found in a Lisp comment in the defxdoc form for note-6-4.
+
+Fixed a long-standing soundness bug (found at least as far back as Version 1.9!) in the checking done for [congruence] rules. There had failed to be a check that the new variable on the right-hand side of the conclusion is indeed new. The following example is shown in detail as a comment in function interpret-term-as-congruence-rule, ACL2 source file defthm.lisp, where it is used to prove nil in Version 6.3.
+
+==== NOTE-6-5 ====
+We fixed a soundness bug in how the [tau-system] processed calls of if. Thanks to Dmitry Nadezhin for reporting this bug by sending a simple example that exploited it to prove nil. To see that example, see the comment about ``tau soundness bug'' in the form (defxdoc note-6-5 ...) in [community-books] file books/system/doc/acl2-doc.lisp.
+
+We fixed a soundness bug for nested [stobj]s (see [stobj-let]). In the case of a stobj producer variable that is not a child stobj, it had been possible to update that stobj without returning it. Thanks to Sol Swords for reporting this bug and providing a corresponding proof of nil, which is included in a comment in the form (defxdoc note-6-5 ...) in [community-books] file books/system/doc/acl2-doc.lisp.)
+
+We fixed a soundness bug in the case of a [stobj] with a field that is a resizable array of stobjs. Thanks to Sol Swords for sending a proof of nil exploiting this bug, together with some helpful analysis attributing the bug to a mistake in the generated logical definition of the corresponding resize function. (His example is included in a comment in the form (defxdoc note-6-5 ...) in [community-books] file books/system/doc/acl2-doc.lisp.)
+
+(ACL2(h) only) We fixed a soundness bug involving the interaction of [stobj-let] and [memoize], which thus is only a bug in ACL2(h) (see [hons-and-memoization]), not in ACL2. The fix was to add code to stobj-let that clears the memoization table for the parent stobj if any child stobj is updated. An example proof of nil before this fix may be found in the ACL2 source file translate.lisp, in a comment in the function stobj-let-fn-raw.
+
+The utility [sys-call+] can now only be called if there is an active [trust-tag], which is the restriction that was already in place for [sys-call]. This plugs a potential soundness hole.
+
+We have made several system functions untouchable (see [remove-untouchable]), in order to prevent soundness bugs. We thank Jared Davis and Sol Swords for sending us an example that used a call of one of these functions to prove nil. We have placed that example into a comment in Community Books file system/doc/acl2-doc.lisp, form (defxdoc note-6-5 ...).

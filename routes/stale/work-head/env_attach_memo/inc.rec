@@ -1,0 +1,5 @@
+@Q pre (3 OLD)
+@Q pre2 ((3 OLD) CA)
+@Q cst (((3 NEW) CA) (4 NEW))
+@W cst ((CST . IMPL-NEW))
+@END

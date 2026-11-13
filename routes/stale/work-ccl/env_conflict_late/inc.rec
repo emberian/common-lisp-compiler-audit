@@ -1,0 +1,21 @@
+@Q f -2
+@Q g (3 78)
+@Q h (3 81)
+@Q m (3 80)
+@Q um (3 80)
+@Q e (3 79)
+@Q k 5
+@Q lm (3 77)
+@N f -2
+@N g (3 78)
+@N e (3 79)
+@W f (BINARY-+ X (UNARY-- '5))
+@W g (CONS X (CONS '78 'NIL))
+@W e (CONS X (CONS '79 'NIL))
+@W tz NIL
+@W k '5
+@W big (NIL 0 NIL)
+@W fthm NIL
+@W cls (:COMMON-LISP-COMPLIANT :COMMON-LISP-COMPLIANT :PROGRAM)
+@S (:OK :OK :OK :DIFF :DIFF :DIFF :DIFF)
+@END

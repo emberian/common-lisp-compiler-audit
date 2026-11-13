@@ -1,0 +1,7 @@
+(include-book "top")
+(cw "@R (tf 1) evaluates to ~x0; logical body of tf: ~x1~%" (tf 1) (getpropc 'tf 'unnormalized-body nil (w state)))
+(cw "@R world value of *tc*: ~x0; (sm 1) now: ~x1~%" (getpropc '*tc* 'const nil (w state)) (sm 1))
+(defthm by-definition (equal (tf 1) '(1 . new)) :rule-classes nil :hints (("Goal" :in-theory (disable (:e tf)))))
+(defthm by-execution (equal (tf 1) '(1 . old)) :rule-classes nil)
+(defthm contradiction nil :rule-classes nil :hints (("Goal" :use (by-definition by-execution))))
+(cw "@R NIL proved: ~x0~%" (if (equal (getpropc 'contradiction 'theorem t (w state)) ''nil) :YES :no))

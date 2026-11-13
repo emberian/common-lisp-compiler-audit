@@ -1,0 +1,4 @@
+(include-book "repro-world-macro-book")
+(world-sensitive-fn state)
+(thm (equal (world-sensitive-fn state) 'base))
+(quit)

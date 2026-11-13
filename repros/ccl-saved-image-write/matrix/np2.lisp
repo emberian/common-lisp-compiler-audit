@@ -1,0 +1,5 @@
+(format t "@started~%") (finish-output)
+(format t "@addr arr=~x code=~x~%" (ccl::%address-of *u8*) (ccl::%address-of (ccl::uvref #'presave-fn 0))) (finish-output)
+(format t "@call ~s~%" (presave-fn 1)) (finish-output)
+(format t "@write ~s~%" (progn (set-u8-safe *u8* 1 9) *u8*)) (finish-output)
+(ccl:quit 0)

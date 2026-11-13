@@ -1,0 +1,7 @@
+(:fn PSW-CTL-POS-STAR1 :route :NONE :kind :MISMATCH :idx (20) :args ("abc") :logical (:VAL . "abc") :actual (:VAL . WRONG))
+(:fn PSW-CTL-POS-STAR1 :route :GUARD :kind :GUARD-DIV :idx (20) :args ("abc") :logical (:VAL) :actual (:VAL . WRONG))
+(:fn PSW-CTL-POS-GUARDED :route :T :kind :MISMATCH :idx (6) :args (1152921504606846976) :logical (:VAL . 1152921504606846977) :actual (:VAL . 0))
+(:fn PSW-CTL-POS-GUARDED :route :RAW :kind :MISMATCH :idx (6) :args (1152921504606846976) :logical (:VAL . 1152921504606846977) :actual (:VAL . 0))
+(:fn PSW-CTL-POS-RAW :route :NONE :kind :MISMATCH :idx (1 2) :args (1 -1) :logical (:VAL 1 . -1) :actual (:VAL . WRONG))
+(:fn PSW-CTL-POS-RAW :route :T :kind :MISMATCH :idx (1 2) :args (1 -1) :logical (:VAL 1 . -1) :actual (:VAL . WRONG))
+(:fn PSW-CTL-POS-RAW :route :RAW :kind :MISMATCH :idx (1 2) :args (1 -1) :logical (:VAL 1 . -1) :actual (:VAL . WRONG))

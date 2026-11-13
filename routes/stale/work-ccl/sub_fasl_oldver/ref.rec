@@ -1,0 +1,10 @@
+@Q tf ((3 FB) (3 MB) (3 IB) 20)
+@Q tg ((1 FB) (1 MB))
+@Q tc ((1 FB) (1 MB))
+@Q sf ((3 FB) (3 MB) (3 IB) (3 HB) 20)
+@N tf ((3 FB) (3 MB) (3 IB) 20)
+@W tf 
+@W tc '((1 FB) (1 MB))
+@W sf (CONS X (CONS 'FB 'NIL))
+@S (:OK :OK)
+@END

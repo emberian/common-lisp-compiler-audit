@@ -1,0 +1,12 @@
+(defun psw-b-identity (x) (declare (xargs :guard t)) x)
+(defun psw-b-let-mv (x y) (declare (xargs :guard t)) (let ((z (cons x y))) (mv z (if (consp x) (car x) y))))
+(defun psw-b-rec (x) (declare (xargs :guard t)) (if (consp x) (cons 1 (psw-b-rec (cdr x))) nil))
+(defun psw-b-mbe (x) (declare (xargs :guard t)) (mbe :logic (if (consp x) (car x) nil) :exec (if (consp x) (car x) nil)))
+:q
+(in-package "ACL2")
+(defparameter *psw-outdir* "/Users/ember/dev/compiler-audit/primitives/results/probe-sbcl/")
+(let ((*readtable* (copy-readtable nil)))
+  (load "/Users/ember/dev/compiler-audit/primitives/sweep.lisp")
+  (load "/Users/ember/dev/compiler-audit/primitives/independence-probe.lisp"))
+(psw-probe-main)
+(psw-exit 0)

@@ -1,0 +1,3 @@
+(certify-book "repro-defattach-book")
+(attach-h 3)
+(quit)

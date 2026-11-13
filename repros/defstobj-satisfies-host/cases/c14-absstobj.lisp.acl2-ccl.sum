@@ -1,0 +1,45 @@
+  32 CALLED pcw NIL
+CALLED pcw 0
+CALLED pcw 1
+   2 CALLED pcw 0
+CALLED pcw 1
+CALLED pcw 0
+   2 CALLED pcw 1
+CALLED pcw T
+CALLED pcw 0
+CALLED pcw 1
+CALLED pcw 0
+   2 CALLED pcw T
+CALLED pcw NIL
+   2 CALLED pcw T
+CALLED pcw NIL
+CALLED pcw T
+CALLED pcw NIL
+   4 CALLED pcw T
+CALLED pcw NIL
+   3 CALLED pcw T
+CALLED pcw NIL
+   2 CALLED pcw 1
+CALLED pcw NIL
+CALLED pcw T
+   2 CALLED pcw NIL
+   2 CALLED pcw 1
+CALLED pcw 0
+CALLED pcw 1
+CALLED pcw 0
+   4 CALLED pcw 1
+   2 CALLED pcw 0
+   2 CALLED pcw 1
+   3 CALLED pcw 0
+CALLED pcw 1
+CALLED pcw 0
+   2 CALLED pcw 1
+   2 CALLED pcw 0
+   2 CALLED pcw 1
+   2 CALLED pcw 0
+ACL2 Error in ( DEFABSSTOBJ ST ...):  The following events must be
+******** FAILED ********
+ACL2 Error [Translate] in TOP-LEVEL:  The symbol UPDATE-FLD (in package
+ACL2 Error [Translate] in TOP-LEVEL:  The symbol FLD (in package "ACL2")
+   2 ACL2 Error [Translate] in TOP-LEVEL:  The symbol UPDATE-FLD (in package
+ACL2 Error [Translate] in TOP-LEVEL:  The symbol FLD (in package "ACL2")

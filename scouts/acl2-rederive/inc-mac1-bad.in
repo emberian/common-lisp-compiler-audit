@@ -1,0 +1,6 @@
+(defmacro my-mac (x) `(+ ,x 100))
+(include-book "mac1-book")
+(f 1)
+(thm (equal (f 1) 2) :rule-classes nil)
+(thm (equal (f 1) 101) :rule-classes nil)
+(quit)

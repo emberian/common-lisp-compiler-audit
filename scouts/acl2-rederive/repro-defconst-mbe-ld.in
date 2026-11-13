@@ -1,0 +1,8 @@
+(ld "repro-defconst-mbe-book.lisp")
+(list *mbe-choice-value*
+      *mbe-direct-value*
+      (mbe-choice)
+      (read-mbe-choices)
+      (getpropc '*mbe-choice-value* 'const (w state))
+      (getpropc '*mbe-direct-value* 'const (w state)))
+(quit)

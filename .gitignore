@@ -1,0 +1,44 @@
+# Generated route-matrix and campaign work dirs (large, regenerable)
+/runs/
+/harness-coverage/
+/harness-coverage-5000/
+/harness-campaign-5000/
+/harness-campaign-large/
+/harness-mutated/
+/harness-mutated-run/
+/harness-mutated-5000/
+/harness-mutated-5000-run/
+/harness-work/
+/values-campaign-final/
+/values-smoke/
+/list-smoke/
+/arrays-smoke/
+/public-smoke/
+
+# Scratch / transient agent working areas
+scratch/
+__pycache__/
+*.pyc
+
+# ACL2 / Lisp build and run artifacts (every reproducer's run.sh regenerates these)
+*.out
+*.cert
+*.port
+*.fasl
+*.lx64fsl
+*.dx64fsl
+*.da64fsl
+*.*fsl
+*.candidate
+*.core
+saved_acl2
+zimg*
+/**/img
+
+# Headless worker bookkeeping
+worker.log
+worker.pid
+worker.backend
+*.glm.log
+
+.DS_Store

@@ -1,0 +1,4 @@
+@W vh ((CONS X (CONS 'VX 'NIL)) NIL)
+@W cls (:PROGRAM NIL)
+@S (:DIFF :DIFF)
+@END

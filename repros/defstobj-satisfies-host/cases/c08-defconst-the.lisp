@@ -1,0 +1,5 @@
+(defun pcw (x) (declare (xargs :guard t)) (prog2$ (cw "CALLED pcw ~x0~%" x) (integerp x)))
+(defconst *c* (the (or null (satisfies pcw)) nil))
+(cw "RESULT ~x0~%" *c*)
+(defconst *d* (let ((y 3)) (declare (type (or null (satisfies pcw)) y)) y))
+(cw "RESULT ~x0~%" *d*)

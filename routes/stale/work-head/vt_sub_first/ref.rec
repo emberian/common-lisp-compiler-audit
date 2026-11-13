@@ -1,0 +1,4 @@
+@W vh ((CONS X (CONS 'VB 'NIL)) (CONS X (CONS 'GB 'NIL)))
+@W cls (:PROGRAM :IDEAL)
+@S (:DIFF :OK)
+@END

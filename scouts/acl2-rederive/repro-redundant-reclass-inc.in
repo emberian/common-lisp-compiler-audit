@@ -1,0 +1,7 @@
+(defun redundant-f (x)
+  (declare (xargs :mode :program))
+  (cons x x))
+(include-book "repro-redundant-reclass-book")
+(list (symbol-class 'redundant-f (w state))
+      (redundant-f 3) (redundant-g 4))
+(quit)

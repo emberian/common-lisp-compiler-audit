@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(local (include-book "lq"))
+(encapsulate () (local (defun q2 (x) (declare (xargs :guard t)) (cons x 'local2))) (defun lt (x) (declare (xargs :guard t)) (cons x 'lt)))
+(local (defun q3 (x) (declare (xargs :guard t)) (cons x 'local3)))
+(defun lt2 (x) (declare (xargs :guard t)) (cons x 'lt2))

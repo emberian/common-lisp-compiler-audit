@@ -1,0 +1,3 @@
+(ld "repro-oneify-constructs-book.lisp")
+(oneify-control-values 5)
+(quit)

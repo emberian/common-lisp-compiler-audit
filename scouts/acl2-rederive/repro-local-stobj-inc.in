@@ -1,0 +1,3 @@
+(include-book "repro-local-stobj-book")
+(local-st-value 8)
+(quit)

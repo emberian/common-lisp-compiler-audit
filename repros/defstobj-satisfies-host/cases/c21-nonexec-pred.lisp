@@ -1,0 +1,5 @@
+(defun-nx pnx (x) (integerp x))
+(defun f (x) (declare (xargs :guard (null x))) (the (or null (satisfies pnx)) x))
+(cw "RESULT ~x0~%" (f nil))
+(defun g (x) (declare (type (or null (satisfies pnx)) x) (xargs :verify-guards nil)) x)
+(cw "RESULT ~x0~%" (g nil))

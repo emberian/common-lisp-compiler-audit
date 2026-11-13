@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(defstobj lo lo-fld)
+(defstobj hi (hi-fld :type lo))
+(defstobj lo2 lo2-fld :congruent-to lo)
+(defstobj hi2 (hi2-fld :type lo2))

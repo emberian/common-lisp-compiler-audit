@@ -1,0 +1,782 @@
+HOST-RESULT|=-0045|eval|T
+HOST-RESULT|=-0045|compiled|T
+HOST-RESULT|=-0046|eval|T
+HOST-RESULT|=-0046|compiled|T
+HOST-RESULT|=-0047|eval|NIL
+HOST-RESULT|=-0047|compiled|NIL
+HOST-RESULT|=-0048|eval|T
+HOST-RESULT|=-0048|compiled|T
+HOST-RESULT|=-0049|eval|NIL
+HOST-RESULT|=-0049|compiled|NIL
+HOST-RESULT|=-0050|eval|NIL
+HOST-RESULT|=-0050|compiled|NIL
+HOST-RESULT|=-0051|eval|:ERROR
+HOST-RESULT|=-0051|compiled|:ERROR
+HOST-RESULT|=-0052|eval|:ERROR
+HOST-RESULT|=-0052|compiled|:ERROR
+HOST-RESULT|=-0053|eval|:ERROR
+HOST-RESULT|=-0053|compiled|:ERROR
+HOST-RESULT|=-0054|eval|:ERROR
+HOST-RESULT|=-0054|compiled|:ERROR
+HOST-RESULT|/=-0055|eval|NIL
+HOST-RESULT|/=-0055|compiled|NIL
+HOST-RESULT|/=-0056|eval|NIL
+HOST-RESULT|/=-0056|compiled|NIL
+HOST-RESULT|/=-0057|eval|T
+HOST-RESULT|/=-0057|compiled|T
+HOST-RESULT|/=-0058|eval|NIL
+HOST-RESULT|/=-0058|compiled|NIL
+HOST-RESULT|/=-0059|eval|T
+HOST-RESULT|/=-0059|compiled|T
+HOST-RESULT|/=-0060|eval|T
+HOST-RESULT|/=-0060|compiled|T
+HOST-RESULT|car-0065|eval|NIL
+HOST-RESULT|car-0065|compiled|NIL
+HOST-RESULT|car-0066|eval|1
+HOST-RESULT|car-0066|compiled|1
+HOST-RESULT|car-0067|eval|1
+HOST-RESULT|car-0067|compiled|1
+HOST-RESULT|car-0068|eval|:ERROR
+HOST-RESULT|car-0068|compiled|:ERROR
+HOST-RESULT|car-0069|eval|:ERROR
+HOST-RESULT|car-0069|compiled|:ERROR
+HOST-RESULT|car-0070|eval|:ERROR
+HOST-RESULT|car-0070|compiled|:ERROR
+HOST-RESULT|cdr-0071|eval|NIL
+HOST-RESULT|cdr-0071|compiled|NIL
+HOST-RESULT|cdr-0072|eval|(2 3)
+HOST-RESULT|cdr-0072|compiled|(2 3)
+HOST-RESULT|cdr-0073|eval|(2 . 3)
+HOST-RESULT|cdr-0073|compiled|(2 . 3)
+HOST-RESULT|cdr-0074|eval|:ERROR
+HOST-RESULT|cdr-0074|compiled|:ERROR
+HOST-RESULT|cdr-0075|eval|:ERROR
+HOST-RESULT|cdr-0075|compiled|:ERROR
+HOST-RESULT|cdr-0076|eval|:ERROR
+HOST-RESULT|cdr-0076|compiled|:ERROR
+HOST-RESULT|len-0077|eval|0
+HOST-RESULT|len-0077|compiled|0
+HOST-RESULT|len-0078|eval|1
+HOST-RESULT|len-0078|compiled|1
+HOST-RESULT|len-0079|eval|3
+HOST-RESULT|len-0079|compiled|3
+HOST-RESULT|len-0080|eval|:ERROR
+HOST-RESULT|len-0080|compiled|:ERROR
+HOST-RESULT|len-0081|eval|:ERROR
+HOST-RESULT|len-0081|compiled|:ERROR
+HOST-RESULT|len-0082|eval|:ERROR
+HOST-RESULT|len-0082|compiled|:ERROR
+HOST-RESULT|len-0083|eval|:ERROR
+HOST-RESULT|len-0083|compiled|:ERROR
+HOST-RESULT|len-0084|eval|0
+HOST-RESULT|len-0084|compiled|0
+HOST-RESULT|len-0085|eval|3
+HOST-RESULT|len-0085|compiled|3
+HOST-RESULT|len-0086|eval|5
+HOST-RESULT|len-0086|compiled|5
+HOST-RESULT|mod-0087|eval|-1
+HOST-RESULT|mod-0087|compiled|-1
+HOST-RESULT|mod-0088|eval|-1/3
+HOST-RESULT|mod-0088|compiled|-1/3
+HOST-RESULT|mod-0089|eval|1/3
+HOST-RESULT|mod-0089|compiled|1/3
+HOST-RESULT|mod-0090|eval|2
+HOST-RESULT|mod-0090|compiled|2
+HOST-RESULT|mod-0091|eval|:ERROR
+HOST-RESULT|mod-0091|compiled|:ERROR
+HOST-RESULT|mod-0092|eval|-5/2
+HOST-RESULT|mod-0092|compiled|-5/2
+HOST-RESULT|mod-0093|eval|-1/2
+HOST-RESULT|mod-0093|compiled|-1/2
+HOST-RESULT|mod-0094|eval|1/6
+HOST-RESULT|mod-0094|compiled|1/6
+HOST-RESULT|mod-0095|eval|1/2
+HOST-RESULT|mod-0095|compiled|1/2
+HOST-RESULT|mod-0096|eval|:ERROR
+HOST-RESULT|mod-0096|compiled|:ERROR
+HOST-RESULT|mod-0097|eval|0
+HOST-RESULT|mod-0097|compiled|0
+HOST-RESULT|mod-0098|eval|0
+HOST-RESULT|mod-0098|compiled|0
+HOST-RESULT|mod-0099|eval|0
+HOST-RESULT|mod-0099|compiled|0
+HOST-RESULT|mod-0100|eval|0
+HOST-RESULT|mod-0100|compiled|0
+HOST-RESULT|mod-0101|eval|:ERROR
+HOST-RESULT|mod-0101|compiled|:ERROR
+HOST-RESULT|mod-0102|eval|-1/2
+HOST-RESULT|mod-0102|compiled|-1/2
+HOST-RESULT|mod-0103|eval|-1/6
+HOST-RESULT|mod-0103|compiled|-1/6
+HOST-RESULT|mod-0104|eval|1/2
+HOST-RESULT|mod-0104|compiled|1/2
+HOST-RESULT|mod-0105|eval|5/2
+HOST-RESULT|mod-0105|compiled|5/2
+HOST-RESULT|mod-0106|eval|:ERROR
+HOST-RESULT|mod-0106|compiled|:ERROR
+HOST-RESULT|mod-0107|eval|-2
+HOST-RESULT|mod-0107|compiled|-2
+HOST-RESULT|mod-0108|eval|-1/3
+HOST-RESULT|mod-0108|compiled|-1/3
+HOST-RESULT|mod-0109|eval|1/3
+HOST-RESULT|mod-0109|compiled|1/3
+HOST-RESULT|mod-0110|eval|1
+HOST-RESULT|mod-0110|compiled|1
+HOST-RESULT|mod-0111|eval|:ERROR
+HOST-RESULT|mod-0111|compiled|:ERROR
+HOST-RESULT|rem-0112|eval|-1
+HOST-RESULT|rem-0112|compiled|-1
+HOST-RESULT|rem-0113|eval|-1/3
+HOST-RESULT|rem-0113|compiled|-1/3
+HOST-RESULT|rem-0114|eval|-1/3
+HOST-RESULT|rem-0114|compiled|-1/3
+HOST-RESULT|rem-0115|eval|-1
+HOST-RESULT|rem-0115|compiled|-1
+HOST-RESULT|rem-0116|eval|:ERROR
+HOST-RESULT|rem-0116|compiled|:ERROR
+HOST-RESULT|rem-0117|eval|-5/2
+HOST-RESULT|rem-0117|compiled|-5/2
+HOST-RESULT|rem-0118|eval|-1/2
+HOST-RESULT|rem-0118|compiled|-1/2
+HOST-RESULT|rem-0119|eval|-1/2
+HOST-RESULT|rem-0119|compiled|-1/2
+HOST-RESULT|rem-0120|eval|-5/2
+HOST-RESULT|rem-0120|compiled|-5/2
+HOST-RESULT|rem-0121|eval|:ERROR
+HOST-RESULT|rem-0121|compiled|:ERROR
+HOST-RESULT|rem-0122|eval|0
+HOST-RESULT|rem-0122|compiled|0
+HOST-RESULT|rem-0123|eval|0
+HOST-RESULT|rem-0123|compiled|0
+HOST-RESULT|rem-0124|eval|0
+HOST-RESULT|rem-0124|compiled|0
+HOST-RESULT|rem-0125|eval|0
+HOST-RESULT|rem-0125|compiled|0
+HOST-RESULT|rem-0126|eval|:ERROR
+HOST-RESULT|rem-0126|compiled|:ERROR
+HOST-RESULT|rem-0127|eval|5/2
+HOST-RESULT|rem-0127|compiled|5/2
+HOST-RESULT|rem-0128|eval|1/2
+HOST-RESULT|rem-0128|compiled|1/2
+HOST-RESULT|rem-0129|eval|1/2
+HOST-RESULT|rem-0129|compiled|1/2
+HOST-RESULT|rem-0130|eval|5/2
+HOST-RESULT|rem-0130|compiled|5/2
+HOST-RESULT|rem-0131|eval|:ERROR
+HOST-RESULT|rem-0131|compiled|:ERROR
+HOST-RESULT|rem-0132|eval|1
+HOST-RESULT|rem-0132|compiled|1
+HOST-RESULT|rem-0133|eval|1/3
+HOST-RESULT|rem-0133|compiled|1/3
+HOST-RESULT|rem-0134|eval|1/3
+HOST-RESULT|rem-0134|compiled|1/3
+HOST-RESULT|rem-0135|eval|1
+HOST-RESULT|rem-0135|compiled|1
+HOST-RESULT|rem-0136|eval|:ERROR
+HOST-RESULT|rem-0136|compiled|:ERROR
+HOST-RESULT|expt-0146|eval|-1/8
+HOST-RESULT|expt-0146|compiled|-1/8
+HOST-RESULT|expt-0147|eval|-8
+HOST-RESULT|expt-0147|compiled|-8
+HOST-RESULT|expt-0148|eval|1
+HOST-RESULT|expt-0148|compiled|1
+HOST-RESULT|expt-0149|eval|-1
+HOST-RESULT|expt-0149|compiled|-1
+HOST-RESULT|expt-0150|eval|4
+HOST-RESULT|expt-0150|compiled|4
+HOST-RESULT|expt-0151|eval|-1/8
+HOST-RESULT|expt-0151|compiled|-1/8
+HOST-RESULT|expt-0152|eval|1
+HOST-RESULT|expt-0152|compiled|1
+HOST-RESULT|expt-0153|eval|0
+HOST-RESULT|expt-0153|compiled|0
+HOST-RESULT|expt-0154|eval|:ERROR
+HOST-RESULT|expt-0154|compiled|:ERROR
+HOST-RESULT|expt-0155|eval|8
+HOST-RESULT|expt-0155|compiled|8
+HOST-RESULT|expt-0156|eval|1
+HOST-RESULT|expt-0156|compiled|1
+HOST-RESULT|expt-0157|eval|1024
+HOST-RESULT|expt-0157|compiled|1024
+HOST-RESULT|expt-0158|eval|#C(0 2)
+HOST-RESULT|expt-0158|compiled|#C(0 2)
+HOST-RESULT|expt-0159|eval|#C(0 -1/2)
+HOST-RESULT|expt-0159|compiled|#C(0 -1/2)
+HOST-RESULT|expt-0160|eval|#C(-1/24 -23/108)
+HOST-RESULT|expt-0160|compiled|#C(-1/24 -23/108)
+HOST-RESULT|expt-0161|eval|#C(2/5 1/5)
+HOST-RESULT|expt-0161|compiled|#C(2/5 1/5)
+HOST-RESULT|loghead-0162|eval|0
+HOST-RESULT|loghead-0162|compiled|0
+HOST-RESULT|loghead-0163|eval|0
+HOST-RESULT|loghead-0163|compiled|0
+HOST-RESULT|loghead-0164|eval|0
+HOST-RESULT|loghead-0164|compiled|0
+HOST-RESULT|loghead-0165|eval|0
+HOST-RESULT|loghead-0165|compiled|0
+HOST-RESULT|loghead-0166|eval|0
+HOST-RESULT|loghead-0166|compiled|0
+HOST-RESULT|loghead-0167|eval|0
+HOST-RESULT|loghead-0167|compiled|0
+HOST-RESULT|loghead-0168|eval|0
+HOST-RESULT|loghead-0168|compiled|0
+HOST-RESULT|loghead-0169|eval|0
+HOST-RESULT|loghead-0169|compiled|0
+HOST-RESULT|loghead-0170|eval|0
+HOST-RESULT|loghead-0170|compiled|0
+HOST-RESULT|loghead-0171|eval|1
+HOST-RESULT|loghead-0171|compiled|1
+HOST-RESULT|loghead-0172|eval|0
+HOST-RESULT|loghead-0172|compiled|0
+HOST-RESULT|loghead-0173|eval|1
+HOST-RESULT|loghead-0173|compiled|1
+HOST-RESULT|loghead-0174|eval|1
+HOST-RESULT|loghead-0174|compiled|1
+HOST-RESULT|loghead-0175|eval|0
+HOST-RESULT|loghead-0175|compiled|0
+HOST-RESULT|loghead-0176|eval|1
+HOST-RESULT|loghead-0176|compiled|1
+HOST-RESULT|loghead-0177|eval|1
+HOST-RESULT|loghead-0177|compiled|1
+HOST-RESULT|loghead-0178|eval|1
+HOST-RESULT|loghead-0178|compiled|1
+HOST-RESULT|loghead-0179|eval|0
+HOST-RESULT|loghead-0179|compiled|0
+HOST-RESULT|loghead-0180|eval|7
+HOST-RESULT|loghead-0180|compiled|7
+HOST-RESULT|loghead-0181|eval|0
+HOST-RESULT|loghead-0181|compiled|0
+HOST-RESULT|loghead-0182|eval|7
+HOST-RESULT|loghead-0182|compiled|7
+HOST-RESULT|loghead-0183|eval|7
+HOST-RESULT|loghead-0183|compiled|7
+HOST-RESULT|loghead-0184|eval|0
+HOST-RESULT|loghead-0184|compiled|0
+HOST-RESULT|loghead-0185|eval|1
+HOST-RESULT|loghead-0185|compiled|1
+HOST-RESULT|loghead-0186|eval|1
+HOST-RESULT|loghead-0186|compiled|1
+HOST-RESULT|loghead-0187|eval|7
+HOST-RESULT|loghead-0187|compiled|7
+HOST-RESULT|loghead-0188|eval|0
+HOST-RESULT|loghead-0188|compiled|0
+HOST-RESULT|loghead-0189|eval|63
+HOST-RESULT|loghead-0189|compiled|63
+HOST-RESULT|loghead-0190|eval|0
+HOST-RESULT|loghead-0190|compiled|0
+HOST-RESULT|loghead-0191|eval|47
+HOST-RESULT|loghead-0191|compiled|47
+HOST-RESULT|loghead-0192|eval|63
+HOST-RESULT|loghead-0192|compiled|63
+HOST-RESULT|loghead-0193|eval|0
+HOST-RESULT|loghead-0193|compiled|0
+HOST-RESULT|loghead-0194|eval|1
+HOST-RESULT|loghead-0194|compiled|1
+HOST-RESULT|loghead-0195|eval|17
+HOST-RESULT|loghead-0195|compiled|17
+HOST-RESULT|loghead-0196|eval|63
+HOST-RESULT|loghead-0196|compiled|63
+HOST-RESULT|loghead-0197|eval|0
+HOST-RESULT|loghead-0197|compiled|0
+HOST-RESULT|loghead-0198|eval|63
+HOST-RESULT|loghead-0198|compiled|63
+HOST-RESULT|loghead-0199|eval|64
+HOST-RESULT|loghead-0199|compiled|64
+HOST-RESULT|loghead-0200|eval|111
+HOST-RESULT|loghead-0200|compiled|111
+HOST-RESULT|loghead-0201|eval|127
+HOST-RESULT|loghead-0201|compiled|127
+HOST-RESULT|loghead-0202|eval|0
+HOST-RESULT|loghead-0202|compiled|0
+HOST-RESULT|loghead-0203|eval|1
+HOST-RESULT|loghead-0203|compiled|1
+HOST-RESULT|loghead-0204|eval|17
+HOST-RESULT|loghead-0204|compiled|17
+HOST-RESULT|loghead-0205|eval|63
+HOST-RESULT|loghead-0205|compiled|63
+HOST-RESULT|loghead-0206|eval|64
+HOST-RESULT|loghead-0206|compiled|64
+HOST-RESULT|loghead-0207|eval|18446744073709551551
+HOST-RESULT|loghead-0207|compiled|18446744073709551551
+HOST-RESULT|loghead-0208|eval|18446744073709551552
+HOST-RESULT|loghead-0208|compiled|18446744073709551552
+HOST-RESULT|loghead-0209|eval|18446744073709551599
+HOST-RESULT|loghead-0209|compiled|18446744073709551599
+HOST-RESULT|loghead-0210|eval|18446744073709551615
+HOST-RESULT|loghead-0210|compiled|18446744073709551615
+HOST-RESULT|loghead-0211|eval|0
+HOST-RESULT|loghead-0211|compiled|0
+HOST-RESULT|loghead-0212|eval|1
+HOST-RESULT|loghead-0212|compiled|1
+HOST-RESULT|loghead-0213|eval|17
+HOST-RESULT|loghead-0213|compiled|17
+HOST-RESULT|loghead-0214|eval|63
+HOST-RESULT|loghead-0214|compiled|63
+HOST-RESULT|loghead-0215|eval|64
+HOST-RESULT|loghead-0215|compiled|64
+HOST-RESULT|logtail-0219|eval|-65
+HOST-RESULT|logtail-0219|compiled|-65
+HOST-RESULT|logtail-0220|eval|-64
+HOST-RESULT|logtail-0220|compiled|-64
+HOST-RESULT|logtail-0221|eval|-17
+HOST-RESULT|logtail-0221|compiled|-17
+HOST-RESULT|logtail-0222|eval|-1
+HOST-RESULT|logtail-0222|compiled|-1
+HOST-RESULT|logtail-0223|eval|0
+HOST-RESULT|logtail-0223|compiled|0
+HOST-RESULT|logtail-0224|eval|1
+HOST-RESULT|logtail-0224|compiled|1
+HOST-RESULT|logtail-0225|eval|17
+HOST-RESULT|logtail-0225|compiled|17
+HOST-RESULT|logtail-0226|eval|63
+HOST-RESULT|logtail-0226|compiled|63
+HOST-RESULT|logtail-0227|eval|64
+HOST-RESULT|logtail-0227|compiled|64
+HOST-RESULT|logtail-0228|eval|-33
+HOST-RESULT|logtail-0228|compiled|-33
+HOST-RESULT|logtail-0229|eval|-32
+HOST-RESULT|logtail-0229|compiled|-32
+HOST-RESULT|logtail-0230|eval|-9
+HOST-RESULT|logtail-0230|compiled|-9
+HOST-RESULT|logtail-0231|eval|-1
+HOST-RESULT|logtail-0231|compiled|-1
+HOST-RESULT|logtail-0232|eval|0
+HOST-RESULT|logtail-0232|compiled|0
+HOST-RESULT|logtail-0233|eval|0
+HOST-RESULT|logtail-0233|compiled|0
+HOST-RESULT|logtail-0234|eval|8
+HOST-RESULT|logtail-0234|compiled|8
+HOST-RESULT|logtail-0235|eval|31
+HOST-RESULT|logtail-0235|compiled|31
+HOST-RESULT|logtail-0236|eval|32
+HOST-RESULT|logtail-0236|compiled|32
+HOST-RESULT|logtail-0237|eval|-9
+HOST-RESULT|logtail-0237|compiled|-9
+HOST-RESULT|logtail-0238|eval|-8
+HOST-RESULT|logtail-0238|compiled|-8
+HOST-RESULT|logtail-0239|eval|-3
+HOST-RESULT|logtail-0239|compiled|-3
+HOST-RESULT|logtail-0240|eval|-1
+HOST-RESULT|logtail-0240|compiled|-1
+HOST-RESULT|logtail-0241|eval|0
+HOST-RESULT|logtail-0241|compiled|0
+HOST-RESULT|logtail-0242|eval|0
+HOST-RESULT|logtail-0242|compiled|0
+HOST-RESULT|logtail-0243|eval|2
+HOST-RESULT|logtail-0243|compiled|2
+HOST-RESULT|logtail-0244|eval|7
+HOST-RESULT|logtail-0244|compiled|7
+HOST-RESULT|logtail-0245|eval|8
+HOST-RESULT|logtail-0245|compiled|8
+HOST-RESULT|logtail-0246|eval|-2
+HOST-RESULT|logtail-0246|compiled|-2
+HOST-RESULT|logtail-0247|eval|-1
+HOST-RESULT|logtail-0247|compiled|-1
+HOST-RESULT|logtail-0248|eval|-1
+HOST-RESULT|logtail-0248|compiled|-1
+HOST-RESULT|logtail-0249|eval|-1
+HOST-RESULT|logtail-0249|compiled|-1
+HOST-RESULT|logtail-0250|eval|0
+HOST-RESULT|logtail-0250|compiled|0
+HOST-RESULT|logtail-0251|eval|0
+HOST-RESULT|logtail-0251|compiled|0
+HOST-RESULT|logtail-0252|eval|0
+HOST-RESULT|logtail-0252|compiled|0
+HOST-RESULT|logtail-0253|eval|0
+HOST-RESULT|logtail-0253|compiled|0
+HOST-RESULT|logtail-0254|eval|1
+HOST-RESULT|logtail-0254|compiled|1
+HOST-RESULT|logtail-0255|eval|-1
+HOST-RESULT|logtail-0255|compiled|-1
+HOST-RESULT|logtail-0256|eval|-1
+HOST-RESULT|logtail-0256|compiled|-1
+HOST-RESULT|logtail-0257|eval|-1
+HOST-RESULT|logtail-0257|compiled|-1
+HOST-RESULT|logtail-0258|eval|-1
+HOST-RESULT|logtail-0258|compiled|-1
+HOST-RESULT|logtail-0259|eval|0
+HOST-RESULT|logtail-0259|compiled|0
+HOST-RESULT|logtail-0260|eval|0
+HOST-RESULT|logtail-0260|compiled|0
+HOST-RESULT|logtail-0261|eval|0
+HOST-RESULT|logtail-0261|compiled|0
+HOST-RESULT|logtail-0262|eval|0
+HOST-RESULT|logtail-0262|compiled|0
+HOST-RESULT|logtail-0263|eval|0
+HOST-RESULT|logtail-0263|compiled|0
+HOST-RESULT|logtail-0264|eval|-1
+HOST-RESULT|logtail-0264|compiled|-1
+HOST-RESULT|logtail-0265|eval|-1
+HOST-RESULT|logtail-0265|compiled|-1
+HOST-RESULT|logtail-0266|eval|-1
+HOST-RESULT|logtail-0266|compiled|-1
+HOST-RESULT|logtail-0267|eval|-1
+HOST-RESULT|logtail-0267|compiled|-1
+HOST-RESULT|logtail-0268|eval|0
+HOST-RESULT|logtail-0268|compiled|0
+HOST-RESULT|logtail-0269|eval|0
+HOST-RESULT|logtail-0269|compiled|0
+HOST-RESULT|logtail-0270|eval|0
+HOST-RESULT|logtail-0270|compiled|0
+HOST-RESULT|logtail-0271|eval|0
+HOST-RESULT|logtail-0271|compiled|0
+HOST-RESULT|logtail-0272|eval|0
+HOST-RESULT|logtail-0272|compiled|0
+HOST-RESULT|lexicographic-<-0276|eval|T
+HOST-RESULT|lexicographic-<-0276|compiled|T
+HOST-RESULT|lexicographic-<-0277|eval|T
+HOST-RESULT|lexicographic-<-0277|compiled|T
+HOST-RESULT|lexicographic-<-0278|eval|T
+HOST-RESULT|lexicographic-<-0278|compiled|T
+HOST-RESULT|lexicographic-<-0279|eval|:ERROR
+HOST-RESULT|lexicographic-<-0279|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0280|eval|:ERROR
+HOST-RESULT|lexicographic-<-0280|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0281|eval|:ERROR
+HOST-RESULT|lexicographic-<-0281|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0282|eval|:ERROR
+HOST-RESULT|lexicographic-<-0282|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0283|eval|:ERROR
+HOST-RESULT|lexicographic-<-0283|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0284|eval|:ERROR
+HOST-RESULT|lexicographic-<-0284|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0285|eval|:ERROR
+HOST-RESULT|lexicographic-<-0285|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0286|eval|:ERROR
+HOST-RESULT|lexicographic-<-0286|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0287|eval|:ERROR
+HOST-RESULT|lexicographic-<-0287|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0288|eval|:ERROR
+HOST-RESULT|lexicographic-<-0288|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0289|eval|:ERROR
+HOST-RESULT|lexicographic-<-0289|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0290|eval|:ERROR
+HOST-RESULT|lexicographic-<-0290|compiled|:ERROR
+HOST-RESULT|lexicographic-<-0291|eval|T
+HOST-RESULT|lexicographic-<-0291|compiled|T
+HOST-RESULT|lexicographic-<-0292|eval|NIL
+HOST-RESULT|lexicographic-<-0292|compiled|NIL
+; in: LAMBDA ()
+;     (= 'A 'A)
+; 
+; caught WARNING:
+;   Constant A conflicts with its asserted type NUMBER.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (= 'A '0)
+; 
+; caught WARNING:
+;   Constant A conflicts with its asserted type NUMBER.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (= NIL '1)
+; 
+; caught WARNING:
+;   Constant NIL conflicts with its asserted type NUMBER.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (= '"x" '0)
+; 
+; caught WARNING:
+;   Constant "x" conflicts with its asserted type NUMBER.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (CAR '7)
+; 
+; caught WARNING:
+;   Constant 7 conflicts with its asserted type LIST.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (CAR 'A)
+; 
+; caught WARNING:
+;   Constant A conflicts with its asserted type LIST.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (CAR '"atom")
+; 
+; caught WARNING:
+;   Constant "atom" conflicts with its asserted type LIST.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (CDR '7)
+; 
+; caught WARNING:
+;   Constant 7 conflicts with its asserted type LIST.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (CDR 'A)
+; 
+; caught WARNING:
+;   Constant A conflicts with its asserted type LIST.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (CDR '"atom")
+; 
+; caught WARNING:
+;   Constant "atom" conflicts with its asserted type LIST.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (LENGTH '(1 . 2))
+; 
+; caught WARNING:
+;   (1 . 2) is not a proper sequence.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (LENGTH '(1 2 . 3))
+; 
+; caught WARNING:
+;   (1 2 . 3) is not a proper sequence.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (LENGTH '9)
+; 
+; caught WARNING:
+;   Constant 9 conflicts with its asserted type SEQUENCE.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (LENGTH 'A)
+; 
+; caught WARNING:
+;   Constant A conflicts with its asserted type SEQUENCE.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (MOD '-7 '0)
+; 
+; caught WARNING:
+;   division by zero
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (MOD '-5/2 '0)
+; 
+; caught WARNING:
+;   division by zero
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (MOD '5/2 '0)
+; 
+; caught WARNING:
+;   division by zero
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (MOD '7 '0)
+; 
+; caught WARNING:
+;   division by zero
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (REM '-7 '0)
+; 
+; caught WARNING:
+;   division by zero
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (REM '-5/2 '0)
+; 
+; caught WARNING:
+;   division by zero
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (REM '5/2 '0)
+; 
+; caught WARNING:
+;   division by zero
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (REM '7 '0)
+; 
+; caught WARNING:
+;   division by zero
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '2 '#C(-1 1))
+; 
+; caught WARNING:
+;   Constant #C(-1 1) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(-1 1) '#C(0 -1))
+; 
+; caught WARNING:
+;   Constant #C(-1 1) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(0 -1) '#C(0 1))
+; 
+; caught WARNING:
+;   Constant #C(0 -1) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(0 1) '#C(1/2 -2))
+; 
+; caught WARNING:
+;   Constant #C(0 1) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(1/2 -2) '#C(1/2 -1))
+; 
+; caught WARNING:
+;   Constant #C(1/2 -2) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(1/2 -1) '1/2)
+; 
+; caught WARNING:
+;   Constant #C(1/2 -1) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '1/2 '#C(1/2 1))
+; 
+; caught WARNING:
+;   Constant #C(1/2 1) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(1/2 1) '#C(2 -100))
+; 
+; caught WARNING:
+;   Constant #C(1/2 1) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(2 -100) '-1)
+; 
+; caught WARNING:
+;   Constant #C(2 -100) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(1 2) '#C(1 3))
+; 
+; caught WARNING:
+;   Constant #C(1 2) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(1 3) '#C(1 2))
+; 
+; caught WARNING:
+;   Constant #C(1 3) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition
+; in: LAMBDA ()
+;     (< '#C(1 2) '2)
+; 
+; caught WARNING:
+;   Constant #C(1 2) conflicts with its asserted type REAL.
+;   See also:
+;     The SBCL Manual, Node "Handling of Types"
+; 
+; compilation unit finished
+;   caught 1 WARNING condition

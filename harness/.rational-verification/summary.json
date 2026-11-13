@@ -1,0 +1,39 @@
+{
+  "result": "discrepancies",
+  "tests": 466,
+  "implementations": [
+    "sbcl-head",
+    "sbcl-installed",
+    "ccl"
+  ],
+  "checks": 1398,
+  "families": {
+    "arithmetic": 80,
+    "comparisons": 36,
+    "division": 64,
+    "expt": 36,
+    "generated": 120,
+    "max-min": 36,
+    "parts-sign-abs": 68,
+    "remainder": 16,
+    "values-control-guards": 10
+  },
+  "expected_errors": 0,
+  "per_implementation": {
+    "sbcl-head": {
+      "tests": 466,
+      "mismatches": 0
+    },
+    "sbcl-installed": {
+      "tests": 466,
+      "mismatches": 0
+    },
+    "ccl": {
+      "tests": 466,
+      "mismatches": 4
+    }
+  },
+  "mismatches": 4,
+  "shrunk": 4,
+  "output": ".rational-verification/mismatches.jsonl"
+}

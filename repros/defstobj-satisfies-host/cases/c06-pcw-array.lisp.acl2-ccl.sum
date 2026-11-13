@@ -1,0 +1,9 @@
+  66 CALLED pcw NIL
+RESULT init NIL
+CALLED pcw 3
+RESULT 3 NIL 5 T
+CALLED pcw A
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+CALLED pcw A
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+RESULT NIL

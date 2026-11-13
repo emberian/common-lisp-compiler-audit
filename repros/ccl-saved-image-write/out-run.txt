@@ -1,0 +1,23 @@
+=== 1. plain CCL: Clozure Common Lisp Version 1.14 darwinarm64
+@code-vector 300000CC497C code-page 300000CC4000  *before* 300000CC4C1C  *after* 300000CBAD2C
+@on-page index 0 (elt page 300000CC4000)   off-page index 13312 (elt page 300000CC8000)
+  control (inline store, element on another page) : returned  @control returned: elt=9, nonzero elements in vector=1
+  generic (out-of-line store, element on code page): returned  @generic returned: elt=9, nonzero elements in vector=1
+  hang    (inline store, element on code page)     : HANG (killed by timeout)  
+  W^X fixups logged in 8 s (CCL_DEBUG_WX logs at most 16): control=2 generic=2 hang=16
+  last fixups of the hang case (same pc, alternating RW/RX):
+    [darwinarm64] W^X fixup #13 RX far=0x300000cc4a10 pc=0x300000cc4a10
+    [darwinarm64] W^X fixup #14 RW far=0x300000cc4c18 pc=0x300000cc4a10
+    [darwinarm64] W^X fixup #15 RX far=0x300000cc4a10 pc=0x300000cc4a10
+    [darwinarm64] W^X fixup #16 RW far=0x300000cc4c18 pc=0x300000cc4a10
+=== 2. ACL2 (defstobj with a (unsigned-byte 8) array field, save-exec, restart)
+  [ccl] before save : @before zar[2]=7 zsc=5
+  [ccl] read + scalar write in saved image : returned  @read zar[2]=7 zsc=5 / @scalar-write zsc=6 @pages array=300005168000 update-zari-code=300005168000
+  [ccl] (update-zari 1 9 zst) in saved image: HANG (killed by timeout)  
+  [sbcl] before save : @before zar[2]=7 zsc=5
+  [sbcl] read + scalar write in saved image : returned  @read zar[2]=7 zsc=5 / @scalar-write zsc=6 
+  [sbcl] (update-zari 1 9 zst) in saved image: returned  @array-write returned zar=(0 9 7 0)
+=== expected on an affected CCL: plain-CCL 'hang' and ACL2-on-CCL update-zari HANG; every other line returns.
+    (After the timeout's SIGTERM, ACL2 may print a cleanup NOTE or simply abort the update; that output is a kill artifact.)
+raw outputs: /Users/ember/dev/compiler-audit/repros/ccl-saved-image-write/out
+no saved image left in /Users/ember/dev/compiler-audit/repros/ccl-saved-image-write

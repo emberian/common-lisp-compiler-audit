@@ -1,0 +1,4 @@
+(defconst *reader-const* '(1 2))
+(certify-book "repro-reader-const-book" 1)
+(reader-const-fn)
+(quit)

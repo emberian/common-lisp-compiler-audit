@@ -1,0 +1,6 @@
+(in-package "ACL2")
+(set-let*-abstractionp t)
+(defun let-star-value (x)
+  (let* ((y (+ x 1))
+         (z (+ y 1)))
+    z))

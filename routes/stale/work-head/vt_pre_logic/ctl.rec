@@ -1,0 +1,4 @@
+@W vh ((CONS X (CONS 'VA 'NIL)) NIL)
+@W cls (:COMMON-LISP-COMPLIANT NIL)
+@S (:OK :DIFF)
+@END

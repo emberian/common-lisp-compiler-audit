@@ -1,0 +1,241 @@
+==== NOTE-7-0 ====
+The guard for function [alpha-char-p] was strengthened to require that its argument is a standard character. The previous guard required only that the argument is a character, and was a soundness bug; for a proof of nil before this fix, see the comment about ``alpha-char-p'' in Community Books file system/doc/acl2-doc.lisp, form (defxdoc note-7-0 ...).
+
+(For [hons-enabled] executables only) Fixed a soundness bug related to function memoization. For a proof of nil exploiting this bug in Version 6.5, see the comment about ``pons-addr-of-argument'' in Community Books file system/doc/acl2-doc.lisp, form (defxdoc note-7-0 ...). Thanks to Jared Davis for improving our original fix: by noting its applicability to [hons-clear] (not just [hons-wash]); by tweaking our fix so that it works even if a control-c interrupts (hons-clear or) hons-wash; and later by finding another bug in source function pons-addr-of-argument and suggesting a fix, which we incorporated.
+
+(For [hons-enabled] executables only) Fixed a soundness bug due to the fact that function never-memoize-fn returned nil in the logic but returned t in raw Lisp. For a proof of nil exploiting this bug in Version 6.5, see the comment about ``never-memoize-fn'' in Community Books file system/doc/acl2-doc.lisp, form (defxdoc note-7-0 ...).
+
+==== NOTE-7-1 ====
+For both [add-include-book-dir] and [add-include-book-dir!], the second argument is no longer evaluated (which we think could perhaps have been exploited to get unsound behavior, by arranging for the value of the second argument to depend on [state]). Moreover, that argument can not only be a string, but also can be a sysfile: an object (:system . filename), where filename is a file name. When filename is a relative pathname, the meaning of such an object is the file with that pathname under the system books directory.
+
+A potential soundness issue could result from the application of [meta]functions and [clause-processor]s: although ACL2 checked that their outputs contain only legal [term]s, it did not check for the absence of calls of certain ``forbidden'' function symbols. For example, [sys-call] should be prohibited unless there is an active trust tag (see [defttag]), but a metafunction was able to introduce a call of sys-call. We have added the necessary checks, in a way that we hope has negligible impact on performance. To avoid that impact or to learn more about this issue, see [set-skip-meta-termp-checks]; this new utility, which requires a trust tag, avoids not only the new checks but even the above-mentioned checks for legal terms.
+
+==== NOTE-7-2 ====
+The utility [with-guard-checking] is now limited to forms that do not reference the ACL2 [state]. A related new utility, [with-guard-checking-error-triple], may be used for forms that evaluate to [error-triple]s. For an example showing a bug when with-guard-checking was applied to forms that access [state], see the comment about ``with-guard-checking'' in Community Books file system/doc/acl2-doc.lisp, in the form (defxdoc note-7-2 ...). We thank Jared Davis for sending us an example showing that our preliminary fix was not adequate; for details, and for how a trust tag can avoid the new restriction (at the potential cost of unsoundness), see the remark for advanced users in the documentation for [with-guard-checking].
+
+Definitions are no longer redundant that have different values specified for their [xargs] keyword, :normalize. (See [redundant-events].) Although we are not aware of a need to make this change, this change eliminates a possible unsoundness.
+
+We fixed a soundness bug pertaining to [local] [defpkg] [events]. See community books directory misc/hidden-defpkg-checks/ for an example that exploits this bug to prove nil in Version 7.1 and perhaps some other previous ACL2 versions. Thanks to Sol Swords for helping us set up that test (specifically, suggesting addition of the comment ``; no_port'' after an [include-book] call that is not to be put into a .port file).
+
+The use of [set-deferred-ttag-notes] during [make-event] expansion could cause some TTAG NOTE messages never to be printed. Thanks to Jared Davis for a remark that led us to discover this bug, which could be considered a soundness bug since the TTAG NOTE mechanism is a key part of the soundness story. With this change, the effects of set-deferred-ttag-notes persist past make-event expansion.
+
+It was possible to use :[program] mode functions to write past the end of an array, leading to unsoundness. This has been fixed. Now, updaters for [stobj] array fields are marked as having so-called ``invariant-risk'', even when the element type of the array is t (unconstrained). Also marked with invariant-risk are built-in functions [aset1] and [aset2]. See [program-wrapper], [invariant-risk] and [set-check-invariant-risk], which is discussed above in the section Changes to Existing Features. Thanks to Jared Davis and Sol Swords for sending an example to illustrate the bug.
+
+Thanks to Dave Greve for bringing this bug to our attention. Note that such a definitional event may be unsound (not surprisingly, because of the use of skip-proofs). For example, the following form succeeds: (thm nil :hints ((\"Goal\" :induct (foo x)))).
+
+==== NOTE-7-3 ====
+A soundness bug exploited the possibility that pathnames contain illegal ACL2 characters. Consider the following bash shell commands, which create a file whose name is the euro sign and create a soft link, \"foo\", to that file. Thanks to Eric McCarthy for helpful discussions showing us how to create such a file, which ultimately led us to discover this bug.
+
+The handling of [meta]functions allowed an invariant to be violated, that conjectures in the prover are always 100% [logic] mode. An example is in a comment in the ACL2 source code under (deflabel note-7-3 ...). We have not exploited this bug to show that it leads to unsoundness, but that seems possible. Our fix is to extend the checks that all applications of metafunctions and [clause-processor]s produce [term]s, to check additionally that those terms are all in logic mode. An analogous change applies to [well-formedness-guarantee]s, using new functions [logic-termp], [logic-term-listp], and [logic-term-list-listp], where logic-termp checks not only [termp] but also the new predicate logic-fnsp, and similarly for the others (logic-term-listp calls logic-fns-listp and logic-term-list-listp calls logic-fns-list-listp).
+
+==== NOTE-7-4 ====
+Fixed a soundness bug, introduced about 10 years ago, that could occur with :use or :by [lemma-instance]s when a variable occurs free in a lambda of a functional substitution. For an explanation see a comment in (defxdoc note-7-4 ...) in community book books/system/doc/acl2-doc.lisp; also, a proof of nil (in Version 7.3) that exploits this bug can be found in a comment in the definition of function remove-capture-in-constraint-lst in the ACL2 source code. This may be the first time that a proved ``theorem'' in the [community-books] has been discovered to be a non-theorem (tr-to-array-of-array-to-tr in books/projects/legacy-defrstobj/typed-records.lisp). Thanks to Sol Swords for pointing out that this directory of books isn't used elsewhere; we temporarily excluded it from the regression by adding a cert_pl_exclude file, until Sol Swords repaired the proof a couple of days later. Also thanks to Ruben Gamboa for fixing proofs in the nonstd/ books that failed after the bug fix.
+
+==== NOTE-8-0 ====
+Soundness bugs have been fixed in the handling of [stobj-let], due to aliasing that could take place by binding two different but congruent stobjs to the same stobj. To see examples, search for ``soundness'' in [community-book] books/system/tests/nested-stobj-tests.lisp. We are very grateful to Sol Swords not only for bringing this to our attention, but especially for his contributions to a fix through helpful conversations and by providing code and examples.
+
+A bug in the [proof-builder]'s command, rewrite (or equivalently, r; see [ACL2-pc::rewrite]), avoided creating necessary subgoals, which can presumably be unsound. That bad behavior could occur when the third (and optional) argument of that command was a non-nil value other than t.
+
+The built-in evaluator functions for ACL2 relied on a system function, ev-fncall-w, that was not a function! We do not see how to exploit this oddity to prove nil, since ev-fncall-w is guaranteed never to be in [logic] mode. However, it is clearly undesirable. In the following example, the two ev-fncall-w calls gave different answers on the same inputs --- (mv nil 7) and (mv nil 12) --- but now the second call results in an error.
+
+The check for the requisite theorems supporting a [defabsstobj] event included a case where the check was too weak, and it also could cause an unexpected assertion. The first of these could probably cause unsoundness. Thanks to Sol Swords for finding these issues and providing fixes.
+
+==== NOTE-8-1 ====
+There was a soundness bug in the automatic functional instantiation that can be applied for a :termination-theorem [lemma-instance]. Thanks to Eric Smith for sending an example to illustrate this bug, for suggesting its cause, and for permission to include that example in a comment in the ACL2 sources definition of the constant, *non-instantiable-primitives*.
+
+Bugs have been fixed in the [tau-system] that caused unsoundness (going all the way back through Version 6.0, released December, 2012). The problem was with conversion of a non-strict inequality with 0 to a strict inequality when the quantity is known not to be 0; for example, (<= x 0) was converted to (< x 0) when x was known to be non-zero. But of course, this conversion is only valid when x is known to be a number. Thanks to Yan Peng for sending an example that illustrates the bug, which in its essence was the ability of ACL2 to prove this formula, which for example is false when x = t: (or (< x 0) (= x 0) (> x 0)). If you encounter a failure in a proof that formerly succeeded, the fix might be to add a call of [ACL2-numberp] to the hypotheses of your theorem.
+
+==== NOTE-8-2 ====
+Fixed a bug, probably a soundness bug (though we haven't tried to prove nil by exploiting it). The bug is in the computation of the ``immediate-canonical-ancestors'' of a function symbol, which is used in the implementations of [memoization] and [defattach], as well as in interactions between attachments and both [defaxiom] events and :[meta] rules. Thanks to Sol Swords for pointing out this bug and presenting a helpful example.
+
+==== NOTE-8-3 ====
+The function [meta-extract-formula] could return a non-trivial value (i.e., not 'T) when applied to a [program]-mode function. We thank Sol Swords for reporting this bug with a proof of nil that exploited it. This soundness bug has been fixed. That work led us to fix the following related bugs (which could also be soundness bugs, though we have not checked). First, the function [fncall-term] could similarly return a non-trivial value when applied to a program-mode function. Second, the utility [mfc-rw], as well as other such mfc-xx utilities in support of [extended-metafunctions] and [meta-extract-contextual-fact], could be called on terms containing program-mode function symbols.
+
+==== NOTE-8-4 ====
+A soundness bug, present since [loop$] was introduced, was fixed. The bug was manifested when the keyword :guard was used as the loop$ body, as in (loop$ for v in lst collect :guard). (Note: It's not clear that this bug could be used to prove nil.)
+
+A soundness bug was fixed by changing [defabsstobj] to avoid using [mbe] in the definitions generated for the logic. The problem was that the :logic and :exec forms are not actually equal (they correspond, in the sense of the correspondence predicate), and this can be exploited by using a :[guard-theorem] [lemma-instance]. For an example proof of nil in Version 8.3, see a comment about a defabsstobj bug in the form (defxdoc note-8-4 ...) in file books/system/doc/acl2-doc.lisp.
+
+A soundness bug was fixed in the functions that print to strings, such as fmt-to-string; see [printing-to-strings]. The bug was a dependence of the result on the ACL2 [state], even though state is not an argument to these functions. More specifically, the dependence was on the [current-package] and the global [evisc-table]. For examples see [community-books] books/system/tests/fmt-to-string.lisp and books/system/tests/fmt-to-string-pkg.lisp. Note: We also strengthened the [guard]s on these functions to require that the keys of the fmt-control-alist alist argument are all appropriate; in particular, the symbol current-package in the \"ACL2\" package is a suitable key, but for example the keyword :current-package is not.
+
+It was possible to prove nil by counterfeiting record-expansion calls, which are normally only created by the implementation in support of [make-event] calls. This soundness bug has been fixed. (The bug was perhaps impossible to hit in ordinary usage, where record-expansion is not used explicitly.) A proof of nil before this fix may be found in a comment in ACL2 source function, corresponding-encaps.
+
+The mechanism for tracking [warrant]s needed during a proof had a bug, which might be a soundness bug if one uses [apply$] or [loop$]. That bug has been fixed.
+
+==== NOTE-8-5 ====
+A soundness bug in [defstobj] has been fixed that allowed a field to contain the [type-spec] (SATISFIES pred) when pred has a [guard] other than t, which generated an unsound guard theorem. Thanks to Eric Smith for sending the following example.
+
+A soundness bug was due to incompleteness of the prohibition against [local] [portcullis] [command]s. For an example, see a comment in the form (defxdoc note-8-5 ...), [community-books] file books/system/doc/acl2-doc.lisp. This has been fixed by allowing local events among the portcullis commands (and treating them properly; see relevant discussion, including how [save-exec] may be helpful, in the ``New Features'' section above).
+
+==== NOTE-8-6 ====
+* Restrictions have been tightened a bit to avoid what could be considered a soundness bug. See discussion about that in the section on ``Bugs'' below.
+
+See [fast-cert] for a ``fast-cert'' mode for faster, but possibly unsound, book certification, in particular when using a saved executable that contains [local] events. Thanks to Sol Swords for requesting such a capability and for helpful design discussions.
+
+Fixed a soundness bug based on rules of class :[meta] or :[clause-processor] that would be exported from an [encapsulate] event with a non-nil [signature] list. A proof of nil in Version 8.5 may be found in the [community-books] file, books/system/tests/transparent-functions-input.lsp; search for this paragraph there.
+
+Fixed a soundness bug in [open-input-channel] and [open-output-channel]. The [guard] in each case required the first argument, a file name, to be a string; but these functions pass that argument to a function --- make-input-channel and make-output-channel, respectively --- that required the string to contain only standard characters (see [standard-char-p]). That was possible because open-input-channel and open-output-channel were invoked under [skip-proofs] in the ACL2 sources. This bug has been fixed, and those uses of skip-proofs eliminated, with removal of the restriction to standard characters for virtually all guards, including the guards for Common Lisp functions [char-downcase] and [char-upcase]. Thanks to Eric Smith for reporting this bug, including a proof of nil by giving a :use hint for an :instance of (:guard-theorem open-input-channel). Eric also supplied events, incorporated into ACL2 source file axioms.lisp, that removed the [skip-proofs] wrappers from five definitions.
+
+Fixed a soundness bug that exploited incorrect generation of raw Lisp code for the recognizer of a [stobj] field of a stobj. More precisely, the bug occurred when a concrete stobj has a field whose type is the name of either a concrete or abstract stobj. Here is an example.
+
+(in-package \"ACL2\") (include-book \"sub\") (defthm thm1 ; logically correct (hi-fldp '(nil)) :rule-classes nil :hints ((\"Goal\" :in-theory (disable (:e hi-fldp))))) (defthm thm2 ; \"proved\" by unsound execution (not (hi-fldp '(nil))) :rule-classes nil) (thm ; proof of nil nil :hints ((\"Goal\" :use (thm1 thm2))))
+
+It was probably a soundness bug to allow a [defaxiom] event to designate a rule of class :[meta] or :[clause-processor] in its :[rule-classes]. That is no longer allowed; [skip-proofs] may be used instead if one believes that the proposed formula is a theorem.
+
+The function [read-file-into-string] has been modified to avoid what might be considered a soundness bug. The change involves causing an error for two reads of the same file without first incrementing the file-clock of the [state]. See [read-file-into-string] for details, in particular for how to avoid that error by evaluating (increment-file-clock state) after calling read-file-into-string. Formerly the error was avoided if the write-date of the file didn't change between the two reads, but the following example shows how this permitted two calls with identical arguments to produce different results, logically causing read-file-into-string to violate the axiom x = x.
+
+Plugged a potential soundness hole in [defwarrant] (though we have not actually observed unsoundness), with changes that will probably be invisible to users. Thanks to Sol Swords for bringing this issue to our attention.
+
+* [Soundness] discusses what we can conclude when we use ACL2 to prove a formula or to compute the value of an expression.
+
+==== NOTE-8-7 ====
+Fixed a soundness bug in the [proof-builder] that could cause goals from [force]d hypotheses to be created incorrectly. (This bug has been around for at least 10 years and probably for 30 years!)
+
+Fixed a soundness bug based on the use of [swap-stobjs] on two [stobj]s of which one is ``live''. See [live-stobj-in-proof]. Thanks to Sol Swords for reporting this bug, including an example and analysis of possible fixes in his report. (Technical Note. We have added code to check for live [stobj]s in proofs, which was sufficient to fix the bug. But the situation described above is caught by a change to swap-stobjs, which now signals an error in the relevant case (exactly one live stobj input).)
+
+Fixed a soundness bug due to the interaction of [stobj]s and [defattach]. The fundamental problem was that defattach events can cause a stobj recognizer to become false; see [community-book] books/system/tests/stobj-attach-unsoundness.lisp. The solution is to disallow attachments for certain supporters of stobj primitives; see [stobj-attachment-restrictions]. Thanks to Sol Swords for reporting the bug, analyzing it quite thoroughly, contributing the book mentioned above, modifying other books as necessary, and providing preliminary code to fix the bug, and for helpful conversations.
+
+==== NOTE-8-8 ====
+The constant [*common-lisp-symbols-from-main-lisp-package*] no longer contains the symbols common-lisp::abs, common-lisp::code-char, common-lisp::coerce, common-lisp::expt, or common-lisp::signum, which are thus no longer imported into the \"ACL2\" package and hence are now distinct from the \"ACL2\" package's symbols [code-char], [coerce], and [expt], respectively. See also the item, in the first section on Bug Fixes below, that pertains to soundness bugs fixed by changes to the raw Lisp definitions of the above-mentioned symbols in the \"ACL2\" package.
+
+As noted in the section above on Changes to Existing Features, ACL2 symbols [abs], [code-char], [coerce], [expt], and [signum] are no longer imported from the \"COMMON-LISP\" package. This change enabled fixes to soundness bugs resulting from the unfortunate ability to generate illegal ACL2 objects from :[program]-mode code. The fixes involved defining the above ACL2 functions so that they cause an error on inputs that could result in non-ACL2 objects. Here is a summary of the soundness bugs fixed by these changes.
+
+* A soundness bug was due to allowing [bind-free] to introduce values that are not legal ACL2 objects. See for example [community-book] system/tests/ev-synp-bind-free.lisp.
+
+* Other examples of unsoundness due to the introduction of objects that are illegal for ACL2 may be found in the following [community-books] directory system/tests/: code-char-300.lisp, expt-irrational.lisp, hint-table-bad-object.lisp, instructions-ckh-default-hints.lisp, books/system/tests/abs-complex-float.lisp, and books/system/tests/signum-complex-float.lisp.
+
+An additional restriction was added to :[elim] rules, namely, for the general form (implies hyp (equiv lhs x)), all occurrences of x in hyp must be equiv-hittable preserving iff. See [elim]. This corrected a soundness bug; see [community-books] system/tests/elim-iff-hyp.lisp and system/tests/elim-iff-hyp-2.lisp. These illustrate the restriction added when an :elim rule is submitted; comments in source function apply-instantiated-elim-rule illustrate a corresponding restriction when the rule is applied.
+
+Restrictions on :[refinement], :[compound-recognizer], and :[type-set-inverter] rules were erroneously not being made in the second pass of an [encapsulate] event, resulting in soundness bugs that we have fixed; see [community-books] system/tests/refine.lisp, system/tests/compound-recognizer-pass-2.lisp, and system/tests/tsi-pass2.lisp.
+
+The [functional-instantiation] code was modified to correct a soundness bug caused by our failure to completely avoid variable capture when instantiating the constraints. See the comment in remove-capture-in-constraint-lst.
+
+A soundness bug was caused by function [df-string] due to the distinction in raw Lisp between 0.0 and -0.0. See [community-book] system/tests/df-negative-zero.lisp.
+
+Soundness bugs were caused by inadequate redundancy checks (see [redundant-events]) for calls of [defun] and its variants, including [defun-nx]). The redundancy checks, which have been fixed, failed to account properly for the following, as explained in the indicated [community-books]:
+
+Monotonicity properties of [df-round] and [to-df] --- constrained-to-df-monotonicity, to-df-monotonicity, and df-round-monotonicity --- have been removed, because they are (surprisingly, to us) not supported by some Common Lisp implementations and in fact render ACL2 unsound in those host Lisps. The issue is described in a comment in the event constrained-to-df-monotonicity) in ACL2 source file @('float-a.lisp.
+
+Fixed two related soundness bugs in the application of :[bdd] [hints]. See [community-books] system/tests/bdd-1.lisp and system/tests/bdd-2.lisp.
+
+Fixed a soundness bug in [boole$], which axiomatized (boole$ *boole-set* x y) to be 1 instead of the correct value, -1. See [community-book] system/tests/boole-set.lisp.
+
+Fixed a soundness bug by adding a check in each of [compress1] and [compress2] that its arguments satisfy its [array1p] or [array2p] [guard], respectively. To see why this is necessary, see [community-book] system/tests/compress1-invariant-risk.lisp. (Note: This fix did not observably slow down running of the complete ACL2 regression suite.)
+
+Fixed a soundness bug in [compress1] in the case of an array whose :order is either < (the default) or > and whose indices are already in order, but whose length exceeds the :maximum-length: recompression was required but was not performed. See [community-book] system/tests/compress1-length-bug.lisp.
+
+Fixed a soundness bug caused by failing to account for [invariant-risk] for function calls inside calls of [loop$]. See [community-book] system/tests/loop-invariant-risk.lisp.
+
+Fixed a soundness bug in [compress2] due to an inadequate ordering check in raw Lisp; see [community-book] system/tests/compress2-order-bug.lisp.
+
+Fixed a soundness bug due to careless generation of a fresh variable, in particular when supporting the processing of a :[compound-recognizer] rule. Thanks to Eric McCarthy and Jim McDonald for an idea leading to Eric Smith's prompt to AI. For an example of the issue, see [community-book] system/tests/cr-empty.lisp.
+
+Fixed a soundness bug that could occur when a type declaration has the form (type (or t <type>) <var>). For an example, see [community-book] system/tests/dcl-guardian-nil.lisp.
+
+Fixed a soundness bug based on the interaction between the [macro-aliases-table] and [memoize] with the :invoke argument. The fix is to check for the required theorems even during the second pass of [encapsulate] and the include-book pass of [certify-book]. For an example of the issue, see [community-book] system/tests/memoize-invoke-macro-alias.lisp.
+
+Fixed a soundness bug due to allowing [double-float] type [declaration]s that were not at the top level. For an example, see [community-book] system/tests/double-float-type-is-atomic.lisp.
+
+Fixed a soundness bug in the evaluation of (@tsee lambda) forms, specifically with respect to their [type] [declaration]s. See system/tests/exploit-lambda-guard-typedecl.lisp.
+
+Fixed three soundness bugs in [non-linear-arithmetic], both in function inverse-polys. See system/tests/linear-inverse-polys.lisp, system/tests/nonlinear-relation-variable.lisp, and system/tests/invert-var-varify.lisp. Thanks to Eric Smith for supplying the fix for the first of these bugs.
+
+Fixed a soundness bug where the keys function for a [stobj-table] field returned internal stand-in symbols instead of the real stobj names. For an example of the issue, see [community-book] system/tests/stobj-table-keys.lisp. Thanks to Grant Jurgensen for supplying the bug fix (in PR #2049).
+
+Fixed a soundness bug that allowed a [congruence] rule whose hypothesis has the form (equiv x x), with the same variable as both arguments. Such a rule is vacuous, yet it was accepted as a [patterned-congruence] rule with the same effect as a genuine congruence rule. For an example, see [community-book] system/tests/congruence-same-var.lisp. Thanks to Grant Jurgensen for supplying the bug fix.
+
+Fixed a soundness bug in the application of [mfc-relieve-hyp], which could cause it to succeed inappropriately when violating the documented restriction that the given hypothesis must not have free variables (see [extended-metafunctions]). For an example, see [community-book] system/tests/meta-extract-relieve-hyp.lisp.
+
+Fixed a soundness bug in the rewriter's handling of [implies]. When the conclusion of (implies test concl) rewrote to nil, the whole implication was unconditionally rewritten to an iff-equivalent of the negation of the test. Therefore, the Boolean implication could be rewritten to a non-Boolean. For an example, see [community-book] system/tests/implies-not-nil.lisp. Thanks to Grant Jurgensen for supplying the bug fix.
+
+Fixed a [proof-builder] soundness bug that failed to require [force]d hypotheses to be proved when an application of the :s command found a contradiction in the assumptions governing the current subterm. (These are the union of the set of top-level assumptions and the set of governing IF-tests.) For an example, see [community-book] system/tests/proof-builder-assumptions-contradiction.lisp.
+
+Fixed a soundness bug by adding the following restriction on [stobj-let] forms: the parent [stobj] must not belong to the list of producer variables. For a relevant example, see [community-book] system/tests/nested-stobj-errors-input.lsp under the header, ``Example involving exclusion of parent stobj from producer-vars''.
+
+Fixed a soundness bug which was fixed by tweaking the raw Lisp code for [set-bad-lisp-consp-memoize].
+
+Fixed a soundness bug in [defabsstobj] due to a failure of ACL2 to consider congruent stobjs when deciding whether to require :PROTECT T to be specified for an exported function. For an example, see [community-book] system/tests/protect-congruent-stobj.lisp.
+
+Fixed several bugs with do$ that manifested themselves differently but were all caused by the same flaw. The sixth argument of do$ is irrelevant to its value and was supposed to be used only to print a certain runtime hard error. But several other utilities in our source code treated the sixth argument as meaningful and this opened up the possibility that a user could supply bogus information in that argument. At least one such exploit allowed AI to construct a proof of nil. The (mis-)uses of the sixth argument have been eliminated.
+
+Fixed a bug in the compilation of do$ loops that allowed the compilation of an mv-setq to reassign a let-bound variable due to our failure to generate a sufficiently ``fresh'' variable to temporarily hold the vector of results computed by the body of the mv-setq expression. See the comment in cmp-do-body for an example. The guard-verified logical definition returns a different result than the compiled raw lisp code due to this variable capture.. AI then exploited this bug to prove nil using a metafunction. See [community-book] system/tests/do-mv-capture.lisp.
+
+Fixed a soundness bug caused by removal of [guard-holders] before compiling [lambda] objects for the compiled lambda cache (see [print-cl-cache]). An additional effect of this change (besides removing unsoundness) is to stop avoiding calls of [cw] and other side effects when using [apply$]. Consider for example an evaluation of the following term, where the body of the [lambda] object is the translation of (prog2$ (cw \"Hello~%\") nil): before the fix, \"Hello\" was not printed, but after the fix, it is printed.
+
+Fixed a soundness bug pertaining to removal of [guard-holders], analogous to the one discussed immediately above for [lambda] objects but instead pertaining to [loop$] expressions. See [community-book] system/tests/loop-alist-stripped-holders.lisp.
+
+Fixed a soundness bug in a check on terms, which allowed illegal use of [type-prescription] rules saved in a book's [certificate]. For an example see [community-book] system/tests/cert-data-guarded-termp.lisp.
+
+Fixed a soundness bug caused by incomplete checking of the legality of [defpkg] events. See [community-book] system/tests/empty-pkg-nil.lisp for a proof of nil that expoited this bug and no longer succeeds.
+
+Fixed a soundness bug due to a check that was too weak for :[clause-processor] rules. This bug is illustrated in [community-book] system/tests/clause-processor-evaluator-shadow.lisp.
+
+A soundness bug in the code the [tau-system] uses to put IF-terms into conjunctive or disjunctive normal form, cnf-dnf was fixed. See system/tests/tau-cnf-dnf-sign.lisp, system/tests/tau-cnf-dnf-not-cnfp.lisp, and system/tests/tau-cnf-dnf-not-cnfp-v2.lisp.
+
+A soundness bug was fixed in tau-term due to passing the wrong arguments into the code that applies form 2 signature rules. See system/tests/tau-form2-sig-actuals.lisp.
+
+A soundness bug was fixed in convert-term-to-pairs, which is used in the [tau-system]. That code included code to transform an IF-term into a set of rules for linking tau-like hypotheses to tau conclusions and the transformation could inadventently drop a hypothesis and thus produce an invalid rule. See system/tests/tau-ancestor-literals.lisp.
+
+Fixed a soundness bug caused by a bogus :[termination-theorem] exported from an [encapsulate] event due to its dependence on properties [local] to the encapsulate event. See [bogus-measure] and see [community-book] system/tests/bogus-measure.lisp.
+
+Fixed a soundness bug in the handling of memoization and stobj fields that are hash-table or stobj-table fields. For an example see [community-book] system/tests/ht-congruent-flush.lisp.
+
+Fixed a soundness bug due to permitting the [proof-builder]'s :SEQUENCE instruction to be invoked directly by the user. See [community-book] system/tests/pcb-sequence-success-expr.lisp.
+
+Fixed a soundness bug in [forward-chaining] that failed to record forced hypotheses in certain cases.
+
+Fixed a soundness bug in the evaluation of calls of [apply$] on [lambda] objects that contain [mv-list] calls. For an example, see [community-book] system/tests/mv-list-quoted-lambda.lisp.
+
+Fixed a soundness bug due to incorrect handling of the output of the ``get?'' function of a [stobj] hash table, to accommodate [df] values (and perhaps stobj values) from the hash table. For an example see [community-book] system/tests/ht-get-boundp-stobjs-out.lisp.
+
+Fixed a soundness bug in the raw Lisp definitions of [stobj] recognizers, which had failed to guarantee that stobj recognizers return Boolean values. See [community-book] system/tests/stobj-recognizer-boolean.lisp for an example.
+
+Fixed a soundness bug due to an insufficient check done when using [with-global-stobj]. See [community-books] system/tests/global-stobjs-property-drops-reads.lisp and system/tests/global-stobjs-nested-read-dropped.lisp.
+
+Fixed a soundness bug (modifying a suggested fix from AI) in [defabsstobj], due to avoiding necessary checks during pass 2 of an [encapsulate] event with a non-empty list of [signature]s. See [community-books] system/tests/defabsstobj-pass2-constrained-exec.lisp and system/tests/defabsstobj-pass2-constrained-updater.lisp.
+
+Fixed a soundness bug that made unsound uses of the [proof-builder] by installing modifications to [untranslate]. See for example [community-books] system/tests/corollary-instructions-untranslate-hook.lisp and system/tests/defattach-instructions-untranslate-hook.lisp.
+
+Fixed a [stobj-let] soundness bug involving [stobj-table] fields of [stobj]s, by strengthening a check in each binding that the bound variable agrees with the key, so that the two are not merely congruent stobjs. Thanks to Eric Smith for supplying a fix from AI.
+
+Fixed a soundness bug caused by a stale entry, for a function that is no longer built into ACL2, in the list of built-in functions given special treatment for [invariant-risk]. See [community-book] system/tests/check-sum-inc-invariant-risk.lisp. Thanks to Eric Smith for supplying a fix from AI.
+
+Fixed soundness bugs from insufficient restrictions on the use of [non-exec] with [in-logic-mode] or [return-last]. See [community-books] system/tests/non-exec-in-logic-mode-load-time-value.lisp and system/tests/non-exec-return-last-load-time-value.lisp.
+
+Fixed a soundness bug in converting a goal term to a set of [clause]s. When the goal term involved a [lambda] application (typically from the use of [let] or [let*]) in which the HIDE function was used in the body, the variables inside the HIDE term were not instantiated when the lambda was applied. For more details see [community-book] system/tests/tautologyp-hide-in-lambda.lisp.
+
+Fixed a soundness bug in converting some goal terms involving double negations to a set of [clause]s. See system/tests/clausify-tautology-subsumption.lisp and system/tests/guard-theorem-nontheorem.lisp.
+
+Fixed a soundness bug by eliminating tautologies and cleaning up double negations and duplicate literals. For more details see [community-book] system/tests/clean-clause-set-by-hint.lisp; also see system/tests/clean-clause-set-clausify-direct.lisp.
+
+Fixed a soundness bug in [forward-chaining] that failed to account properly for free variables. For more details see [community-book] system/tests/fc-unbound-free-capture.lisp; also see system/tests/fc-forced-free-var.lisp.
+
+Fixed a soundness bug in determining when one set of first order clauses subsumes another. For more details see [community-book] system/tests/clause-set-subsumes-1-test.lisp.
+
+Calls of [verify] and [retrieve] are now illegal when made inside the [proof-builder]. This change avoids unsoundness: proofs of nil were possible due to the lack of those restrictions. See for example [community-books] files system/tests/verify-fn-pc-macro-book.lsp and system/tests/pc-macro-retrieve-fn-error-save.lsp.
+
+The termination analysis for some instances of [loop$-recursion] was faulty as demonstrated in the [community-books] system/tests/loop-in-let-double-subst-rejects-valid-defun.lisp, system/tests/loop-recursion-double-subst-clause-processor.lisp, system/tests/loop-recursion-plain-target-subst.lisp, and system/tests/loop-recursion-double-subst-do-guard.lisp, due to the inadvertent double application of substitutions intended to instantiate locally bound variables. This soundness bug has been fixed: corrected code is in source function termination-machine-rec with comments explaining the mistake.
+
+Fixed a soundness bug caused by execution of the raw-Lisp stobj creator during a proof about a [stobj-table]. See [community-book] system/tests/star1-stobj-let-creator-non-live.lisp.
+
+Fixed a soundness bug in [provisional-certification] that could occur when changing and recertifying a sub-book before the final certification takes place. For details see a comment in ACL2 source function include-book-alist-uncertified-books.
+
+Fixed a soundness bug in [tau] related to properly encoding the assumption that something is non-NIL when it is also assumed to be not equal to one or more numeric constants. See [community-books] system/tests/S-198-tau-neg-evgs-nil-first.lisp and system/tests/S-198-tau-neg-evgs-nil-first-lower-bound.lisp.
+
+Fixed a soundness bug in [tau] related to failing to detect that adding a new constraint to a tau produces a contradiction. See [community-books] system/tests/S-199-tau-bound-overwrites-pos-evg.lisp.
+
+Fixed a [tau] soundness bug related to the application of signature rules. When we apply a signature rule we have to check that the tau of the instance of each variable implies the tau of the hypothesis about that variable. But these two taus may be computed under different enabled structures and that can affect which tau predicates are known to be true or false for explicit constants. See [community-books] system/tests/tau-implies-disabled-exec.lisp, system/tests/tau-implies-pos-evg-ignores-interval.lisp, and system/tests/tau-implies-pos-evg-ignores-recognizers.lisp.
+
+The [tau] system represents the ``universal interval'' by nil. But sometimes it has to add a restriction to that interval's domain. However, that creates an ill-formed interval that could be exploited to prove nil. This was fixed by changing collect-bounder-args. See [community-books] system/tests/tau-bounder-nil-interval.lisp.
+
+Fixed two soundness bugs in [memoize-partial] by implementing the following prohibitions on its total function (the one with the ``limit'' variable as its last argument).
+
+Fixed a soundness bug that allowed a [table] event to supply arbitrary code to run for a function memoized with [memoize-partial] (or with the :total argument of [memoize]). For an example, see [community-book] system/tests/memoize-partial-table-def.lisp.
+
+Fixed a soundness bug caused by creation of a character that is not an ACL2 character. All ACL2 characters have codes less than 256, but the expression (char-code (char-upcase (code-char 255))) evaluated to 376 in ACL2 built on every host Lisp except GCL. Thanks to Eric McCarthy for {pointing out this bug as well as code relevant to a fix | https://acl2.zulip.kestrel.institute/#narrow/channel/19-general/topic/Non-ASCII.20characters.20in.20ACL2.20source.20files/near/40162}.
+
+Fixed a soundness bug in the macro channel-to-string, which is used in functions like [fms-to-string] (see [printing-to-strings]). Thanks to Grant Jurgensen for reporting this bug and providing a helpful analysis of it. The fix is to the constant *default-state*. In particular, the following is no longer provable by ACL2.
+
+(SBCL only) Soundness bugs were caused by SBCL compiler optimizations for calls of built-in functions having types with bounded integer return values. These bugs are now avoided by proclaiming those functions notinline. Thanks to Grant Jurgensen for reporting the use of AI to find these bugs; see [community-books] files system/tests/integer-length-bad-optimization.lisp and system/tests/length-bad-optimization.lsp. Thanks also to Stas Boukarev for suggesting the use of notinline, as our original solution was more complicated (by modifying function types), and to Eric Smith for pointing out a bug in our initial implementation.
+
+Fixed a soundness bug caused by permitting [ec-call] to be used with a function that is locally bound by [flet]. This now causes an error. See [community-book] system/tests/ec-call-under-flet.lisp.

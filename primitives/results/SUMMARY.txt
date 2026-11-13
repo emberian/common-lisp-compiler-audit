@@ -1,0 +1,242 @@
+== ccl ==
+  host Clozure Common Lisp Version 1.14 darwinarm64
+  acl2 ACL2 Version 8.7
+  depth-bound 6000 time-limit-seconds 2 max-timeouts-per-fn 40 max-fn-seconds 1800
+  binary-*-workaround T
+  function-symbols-in-world 6546
+  qualifying 1132
+  excluded 4842	program-mode
+  excluded 203	state formal or result
+  excluded 164	no-body: constrained
+  excluded 116	arity > 3
+  excluded 34	df formal or result (raw representation is a double-float)
+  excluded 31	no-body: primitive
+  excluded 2	no-fixed-output-signature (if / read-user-stobj-alist)
+  excluded 2	unsafe to call: changes host GC settings
+  excluded 2	non-executable
+  excluded 2	unsafe to call: raw code installs a world on a symbol's property list
+  excluded 2	unsafe to call: raw code allocates a hash table sized by an integer final cdr (exhausted a 12 GB heap)
+  excluded 1	unsafe to call: changes the global never-memoize table
+  excluded 1	unsafe to call: exits the Lisp process
+  excluded 1	unsafe to call: blocks for its argument in seconds
+  excluded 1	unsafe to call: changes a global debug flag
+  excluded 1	unsafe to call: applies the host garbage collector to arbitrary arguments
+  excluded 1	unsafe to call: prints a host backtrace
+  excluded 1	unsafe to call: runs an operating system command built from its arguments
+  excluded 1	unsafe to call: changes global memoization of the reader check
+  excluded 1	unsafe to call: enters the Lisp debugger
+  excluded 1	unsafe to call: sets process environment variables
+  universe-size 30
+  reader #c(1 0) is integer 1: T; #c(1/2 0) is 1/2: T
+  MODEL NFIX tuples-matching-hand-model=30 mismatches=0
+  MODEL LEN tuples-matching-hand-model=30 mismatches=0
+  MODEL BINARY-APPEND tuples-matching-hand-model=900 mismatches=0
+  functions swept: 1132  by status: {'OK': 1131, 'PARTIAL-timeouts': 1}
+  by arity: {'0': 22, '1': 548, '2': 410, '3': 152}
+  tuples evaluated: 4464475
+  logical outcome: value 4367644, error 39389, depth-bounded 57401, timed out 41
+  *1* with guard-checking :none (every non-bounded tuple): compared 4407014
+      equal values 4342382, neither side a value 37242, VALUE MISMATCH 0, actual aborted 25243, logical evaluator had no value 2147
+  raw apply$-prim dispatch, guard-checking :none (apply$ primitives only): compared 3816283
+      equal values 3785483, neither side a value 5471, VALUE MISMATCH 0, actual aborted 25243, logical evaluator had no value 86
+  *1* with guard-checking t (guard holds): compared 698488
+      equal values 670209, neither side a value 4634, VALUE MISMATCH 0, actual aborted 23451, logical evaluator had no value 194
+  raw function (guard holds, guard-verified): compared 615502
+      equal values 615308, neither side a value 0, VALUE MISMATCH 0, actual aborted 0, logical evaluator had no value 194
+  guard: true 698862, false 3708171, undetermined 0; logical guard vs *1* guard check disagree: 0
+  guard error raised for a callee although the guard holds (ec-call / :ideal; not a value): 356
+  actual-side timeouts: 56
+  swept functions whose source has separate raw Lisp code: 174
+  functions with a VALUE MISMATCH:
+  functions where the actual side aborted but the logic has a value:
+    FMX!-CW-FN/2 none=896 prim=896 t=0 raw=0
+    FMX-CW-FN/2 none=896 prim=896 t=0 raw=0
+    FAST-ALIST-FORK!/2 none=12 prim=12 t=12 raw=0
+    FAST-ALIST-FORK/2 none=12 prim=12 t=12 raw=0
+    P!/0 none=1 prim=1 t=1 raw=0
+    FLUSH-COMPRESS/1 none=25 prim=25 t=25 raw=0
+    NULL-BODY-ER/3 none=22620 prim=22620 t=22620 raw=0
+    THROW-OR-ATTACH-CALL/2 none=780 prim=780 t=780 raw=0
+    ABORT!/0 none=1 prim=1 t=1 raw=0
+  functions the logical evaluator could not evaluate (actual has a value):
+    EVISCERATE-DO$-ALIST/2 none=30 prim=0 t=3 raw=3
+    APPEND$+/3 none=90 prim=0 t=0 raw=0
+    APPEND$/2 none=3 prim=0 t=0 raw=0
+    APPEND$-AC/3 none=90 prim=0 t=0 raw=0
+    COLLECT$+/3 none=90 prim=0 t=0 raw=0
+    COLLECT$/2 none=3 prim=0 t=1 raw=1
+    COLLECT$-AC/3 none=90 prim=0 t=3 raw=3
+    THEREIS$+/3 none=90 prim=0 t=0 raw=0
+    THEREIS$/2 none=3 prim=0 t=1 raw=1
+    ALWAYS$+/3 none=90 prim=0 t=0 raw=0
+    ALWAYS$/2 none=3 prim=0 t=1 raw=1
+    SUM$+/3 none=90 prim=0 t=0 raw=0
+    SUM$/2 none=3 prim=0 t=0 raw=0
+    SUM$-AC/3 none=90 prim=0 t=0 raw=0
+    WHEN$+/3 none=90 prim=0 t=0 raw=0
+    WHEN$/2 none=3 prim=0 t=1 raw=1
+    WHEN$-AC/3 none=90 prim=0 t=3 raw=3
+    UNTIL$+/3 none=90 prim=0 t=0 raw=0
+    UNTIL$/2 none=3 prim=0 t=1 raw=1
+    UNTIL$-AC/3 none=90 prim=0 t=3 raw=3
+    APPLY$/2 none=30 prim=0 t=2 raw=2
+    APPLY$-PRIM/2 none=900 prim=0 t=89 raw=89
+    RIZE/1 none=13 prim=13 t=13 raw=13
+    TO-DF?-ARGS/1 none=1 prim=1 t=1 raw=1
+    TO-DF?-FN/1 none=13 prim=13 t=13 raw=13
+    STRING-EQUAL/2 none=1 prim=1 t=1 raw=1
+    CHAR-EQUAL/2 none=15 prim=15 t=15 raw=15
+    STRING-UPCASE/1 none=1 prim=1 t=1 raw=1
+    STRING-DOWNCASE/1 none=1 prim=1 t=1 raw=1
+    CHAR-DOWNCASE/1 none=3 prim=3 t=3 raw=3
+    CHAR-UPCASE/1 none=3 prim=3 t=3 raw=3
+    LOWER-CASE-P/1 none=3 prim=3 t=3 raw=3
+    UPPER-CASE-P/1 none=3 prim=3 t=3 raw=3
+    ALPHA-CHAR-P/1 none=3 prim=3 t=3 raw=3
+    TO-DFP/1 none=13 prim=13 t=13 raw=13
+    DFP/1 none=13 prim=13 t=13 raw=13
+  functions where logical guard and *1* guard check disagree:
+  functions not fully swept, or with bounded tuples:
+    STRING-PREFIXP-1/3 PARTIAL-timeouts after 2013 tuples
+    61 functions have depth-bounded or timed-out tuples (see bounded.tsv)
+  controls:
+    PSW-CTL-NEG: tuples=900 mismatch none=0 prim=0 t=0 raw=0 guard_div=0
+    PSW-CTL-POS-STAR1: tuples=30 mismatch none=1 prim=0 t=0 raw=0 guard_div=1
+    PSW-CTL-POS-GUARDED: tuples=30 mismatch none=0 prim=0 t=1 raw=1 guard_div=0
+    PSW-CTL-POS-RAW: tuples=900 mismatch none=1 prim=0 t=1 raw=1 guard_div=0
+
+== sbcl ==
+  host SBCL 2.6.10
+  acl2 ACL2 Version 8.7
+  depth-bound 6000 time-limit-seconds 2 max-timeouts-per-fn 40 max-fn-seconds 1800
+  binary-*-workaround T
+  function-symbols-in-world 6546
+  qualifying 1132
+  excluded 4842	program-mode
+  excluded 203	state formal or result
+  excluded 164	no-body: constrained
+  excluded 116	arity > 3
+  excluded 34	df formal or result (raw representation is a double-float)
+  excluded 31	no-body: primitive
+  excluded 2	unsafe to call: raw code installs a world on a symbol's property list
+  excluded 2	unsafe to call: changes host GC settings
+  excluded 2	unsafe to call: raw code allocates a hash table sized by an integer final cdr (exhausted a 12 GB heap)
+  excluded 2	no-fixed-output-signature (if / read-user-stobj-alist)
+  excluded 2	non-executable
+  excluded 1	unsafe to call: changes a global debug flag
+  excluded 1	unsafe to call: exits the Lisp process
+  excluded 1	unsafe to call: blocks for its argument in seconds
+  excluded 1	unsafe to call: sets process environment variables
+  excluded 1	unsafe to call: runs an operating system command built from its arguments
+  excluded 1	unsafe to call: applies the host garbage collector to arbitrary arguments
+  excluded 1	unsafe to call: enters the Lisp debugger
+  excluded 1	unsafe to call: prints a host backtrace
+  excluded 1	unsafe to call: changes the global never-memoize table
+  excluded 1	unsafe to call: changes global memoization of the reader check
+  universe-size 30
+  reader #c(1 0) is integer 1: T; #c(1/2 0) is 1/2: T
+  MODEL NFIX tuples-matching-hand-model=30 mismatches=0
+  MODEL LEN tuples-matching-hand-model=30 mismatches=0
+  MODEL BINARY-APPEND tuples-matching-hand-model=900 mismatches=0
+  functions swept: 1132  by status: {'OK': 1125, 'PARTIAL-timeouts': 6, 'PARTIAL-seconds': 1}
+  by arity: {'0': 22, '1': 548, '2': 410, '3': 152}
+  tuples evaluated: 4429704
+  logical outcome: value 4327427, error 41866, depth-bounded 60410, timed out 1
+  *1* with guard-checking :none (every non-bounded tuple): compared 4369158
+      equal values 4302074, neither side a value 39719, VALUE MISMATCH 0, actual aborted 25218, logical evaluator had no value 2147
+  raw apply$-prim dispatch, guard-checking :none (apply$ primitives only): compared 3778426
+      equal values 3745173, neither side a value 7948, VALUE MISMATCH 0, actual aborted 25219, logical evaluator had no value 86
+  *1* with guard-checking t (guard holds): compared 698312
+      equal values 670003, neither side a value 4685, VALUE MISMATCH 0, actual aborted 23430, logical evaluator had no value 194
+  raw function (guard holds, guard-verified): compared 615297
+      equal values 615103, neither side a value 0, VALUE MISMATCH 0, actual aborted 0, logical evaluator had no value 194
+  guard: true 698674, false 3670619, undetermined 0; logical guard vs *1* guard check disagree: 0
+  guard error raised for a callee although the guard holds (ec-call / :ideal; not a value): 356
+  actual-side timeouts: 276
+  swept functions whose source has separate raw Lisp code: 174
+  functions with a VALUE MISMATCH:
+  functions where the actual side aborted but the logic has a value:
+    FMX!-CW-FN/2 none=894 prim=894 t=0 raw=0
+    FMX-CW-FN/2 none=894 prim=894 t=0 raw=0
+    FAST-ALIST-FORK/2 none=3 prim=4 t=3 raw=0
+    P!/0 none=1 prim=1 t=1 raw=0
+    FLUSH-COMPRESS/1 none=25 prim=25 t=25 raw=0
+    NULL-BODY-ER/3 none=22620 prim=22620 t=22620 raw=0
+    THROW-OR-ATTACH-CALL/2 none=780 prim=780 t=780 raw=0
+    ABORT!/0 none=1 prim=1 t=1 raw=0
+  functions the logical evaluator could not evaluate (actual has a value):
+    EVISCERATE-DO$-ALIST/2 none=30 prim=0 t=3 raw=3
+    APPEND$+/3 none=90 prim=0 t=0 raw=0
+    APPEND$/2 none=3 prim=0 t=0 raw=0
+    APPEND$-AC/3 none=90 prim=0 t=0 raw=0
+    COLLECT$+/3 none=90 prim=0 t=0 raw=0
+    COLLECT$/2 none=3 prim=0 t=1 raw=1
+    COLLECT$-AC/3 none=90 prim=0 t=3 raw=3
+    THEREIS$+/3 none=90 prim=0 t=0 raw=0
+    THEREIS$/2 none=3 prim=0 t=1 raw=1
+    ALWAYS$+/3 none=90 prim=0 t=0 raw=0
+    ALWAYS$/2 none=3 prim=0 t=1 raw=1
+    SUM$+/3 none=90 prim=0 t=0 raw=0
+    SUM$/2 none=3 prim=0 t=0 raw=0
+    SUM$-AC/3 none=90 prim=0 t=0 raw=0
+    WHEN$+/3 none=90 prim=0 t=0 raw=0
+    WHEN$/2 none=3 prim=0 t=1 raw=1
+    WHEN$-AC/3 none=90 prim=0 t=3 raw=3
+    UNTIL$+/3 none=90 prim=0 t=0 raw=0
+    UNTIL$/2 none=3 prim=0 t=1 raw=1
+    UNTIL$-AC/3 none=90 prim=0 t=3 raw=3
+    APPLY$/2 none=30 prim=0 t=2 raw=2
+    APPLY$-PRIM/2 none=900 prim=0 t=89 raw=89
+    RIZE/1 none=13 prim=13 t=13 raw=13
+    TO-DF?-ARGS/1 none=1 prim=1 t=1 raw=1
+    TO-DF?-FN/1 none=13 prim=13 t=13 raw=13
+    STRING-EQUAL/2 none=1 prim=1 t=1 raw=1
+    CHAR-EQUAL/2 none=15 prim=15 t=15 raw=15
+    STRING-UPCASE/1 none=1 prim=1 t=1 raw=1
+    STRING-DOWNCASE/1 none=1 prim=1 t=1 raw=1
+    CHAR-DOWNCASE/1 none=3 prim=3 t=3 raw=3
+    CHAR-UPCASE/1 none=3 prim=3 t=3 raw=3
+    LOWER-CASE-P/1 none=3 prim=3 t=3 raw=3
+    UPPER-CASE-P/1 none=3 prim=3 t=3 raw=3
+    ALPHA-CHAR-P/1 none=3 prim=3 t=3 raw=3
+    TO-DFP/1 none=13 prim=13 t=13 raw=13
+    DFP/1 none=13 prim=13 t=13 raw=13
+  functions where logical guard and *1* guard check disagree:
+  functions not fully swept, or with bounded tuples:
+    SCAN-PAST-WHITESPACE/3 PARTIAL-timeouts after 5591 tuples
+    MEMBER-CHAR-STRINGP/3 PARTIAL-timeouts after 20407 tuples
+    STRING-PREFIXP-1/3 PARTIAL-seconds after 23522 tuples
+    DECIMAL-STRING-TO-NUMBER/3 PARTIAL-timeouts after 201 tuples
+    ALL-DOTS/2 PARTIAL-timeouts after 307 tuples
+    STANDARD-STRING-P1/2 PARTIAL-timeouts after 307 tuples
+    CHAR/2 PARTIAL-timeouts after 607 tuples
+    63 functions have depth-bounded or timed-out tuples (see bounded.tsv)
+  controls:
+    PSW-CTL-NEG: tuples=900 mismatch none=0 prim=0 t=0 raw=0 guard_div=0
+    PSW-CTL-POS-STAR1: tuples=30 mismatch none=1 prim=0 t=0 raw=0 guard_div=1
+    PSW-CTL-POS-GUARDED: tuples=30 mismatch none=0 prim=0 t=1 raw=1 guard_div=0
+    PSW-CTL-POS-RAW: tuples=900 mismatch none=1 prim=0 t=1 raw=1 guard_div=0
+
+== logical digests, ccl vs sbcl ==
+  functions in both: 1136; only in ccl: 0; only in sbcl: 0
+  identical logical digest: 1120; different: 9; not comparable (partial/crashed/timeouts): 7
+    DIFFERENT GSYM/3: 14FD5D5C90001AEE vs 9E0CD6BB2A8326B0
+    DIFFERENT THE-LIVE-VAR/1: D040CC72D0A9FC55 vs EE82931ADDF69BB1
+    DIFFERENT DF-EVENTS/2: 10FA1559AFD67A3A vs 30AEEBA0919E183A
+    DIFFERENT DF-EVENTS-1/2: 4B78183CC5521318 vs 054952C34DC82D09
+    DIFFERENT PACKN-POS/2: 103B50A723819FBF vs BFB3A427419EA33E
+    DIFFERENT RECORD-ACCESSOR-FUNCTION-NAME/2: 1ECF2638AF033B64 vs 12569DC14C43F4D6
+    DIFFERENT MAKE-VAR-LST/2: F94D035EF7B4DCAD vs A4A523C42FAF3604
+    DIFFERENT ADD-SUFFIX/2: FD6790361F00E1E0 vs 42D745872AFBA9A6
+    DIFFERENT WARRANT-NAME/1: 6B190AC8EDEF063D vs 75CE8798ED267131
+  *1* (:none) digests different across images: 10
+    DIFFERENT-ACTUAL GSYM/3
+    DIFFERENT-ACTUAL THE-LIVE-VAR/1
+    DIFFERENT-ACTUAL FMX-CW-FN/2
+    DIFFERENT-ACTUAL DF-EVENTS/2
+    DIFFERENT-ACTUAL DF-EVENTS-1/2
+    DIFFERENT-ACTUAL PACKN-POS/2
+    DIFFERENT-ACTUAL RECORD-ACCESSOR-FUNCTION-NAME/2
+    DIFFERENT-ACTUAL MAKE-VAR-LST/2
+    DIFFERENT-ACTUAL ADD-SUFFIX/2
+    DIFFERENT-ACTUAL WARRANT-NAME/1

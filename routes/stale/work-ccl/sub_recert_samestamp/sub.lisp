@@ -1,0 +1,6 @@
+(in-package "ACL2")
+(defconst *sk* 20)
+(defmacro sm (x) `(list ,x 'mb))
+(defun-inline si (x) (declare (xargs :guard t)) (list x 'ib))
+(defun sf (x) (declare (xargs :guard t)) (list x 'fb))
+(defun sh (x) (declare (xargs :mode :program)) (list x 'hb))

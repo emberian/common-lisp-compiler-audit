@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(encapsulate ()
+  (record-expansion (defun f () 2)
+                    (defun f () 1)))
+(defthm f-is-1 (equal (f) 1))

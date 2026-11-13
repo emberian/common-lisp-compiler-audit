@@ -1,0 +1,6 @@
+(in-package "ACL2")
+(cw "@Q lt ~x0~%" (list (lt 1) (lt2 1)))
+(cw "@Q q ~x0~%" (list (q 1) (q2 1) (q3 1) (qi 1) (lqm 1) *lqc*))
+(set-guard-checking :none)
+(cw "@N q ~x0~%" (list (q 1) (q2 1) (q3 1) (qi 1)))
+(cw "@END~%")

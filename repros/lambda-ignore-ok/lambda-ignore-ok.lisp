@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(set-ignore-ok t)
+(defun g (x)
+  (declare (xargs :verify-guards nil))
+  (apply$ (lambda$ (a) (let ((unused 1)) a)) (list x)))

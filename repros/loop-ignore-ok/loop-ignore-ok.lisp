@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(set-ignore-ok t)
+(defun f (x)
+  (declare (xargs :verify-guards nil))
+  (loop$ for k from 0 to 3 sum (let ((unused x)) k)))

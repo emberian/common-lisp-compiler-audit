@@ -1,0 +1,5 @@
+@Q pre (3 VA)
+@W vh ((CONS X (CONS 'VA 'NIL)) NIL)
+@W cls (:PROGRAM NIL)
+@S (:DIFF :DIFF)
+@END

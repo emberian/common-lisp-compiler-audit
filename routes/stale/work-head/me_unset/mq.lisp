@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(cw "@Q me ~x0~%" (list (me-g 3) (me-d 3) (me-w 3) *me-c*))
+(cw "@Q meh ~x0~%" (me-h 3))
+(cw "@W me ~x0~%" (list (getpropc 'me-g 'unnormalized-body nil (w state)) (getpropc 'me-d 'unnormalized-body nil (w state)) (getpropc 'me-w 'unnormalized-body nil (w state)) (getpropc '*me-c* 'const nil (w state))))
+(cw "@END~%")

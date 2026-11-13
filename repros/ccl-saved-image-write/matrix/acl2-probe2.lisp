@@ -1,0 +1,12 @@
+:q
+(in-package "ACL2")
+(defun pg (a) (logandc2 a 16383))
+(defun cvp (s) (and s (fboundp s) (not (macro-function s)) (format nil "~x" (pg (ccl::%address-of (ccl::uvref (symbol-function s) 0))))))
+(loop for (sn fld) in '((su8 au8) (sbt abt) (su16 au16) (su32 au32) (su64 au64) (ss8 as8) (ss32 as32) (ss64 as64) (sint aint) (sdf adf) (sch ach) (st at) (srs ars) (sil ail) (zst zar))
+      do (let* ((st (cdr (assoc sn *user-stobj-alist*))) (f (svref st 0))
+                (f (if (and (arrayp f) (not (typep f 'simple-array))) (ccl::array-data-and-offset f) f))
+                (upd (intern (format nil "UPDATE-~aI" fld) "ACL2")))
+           (format t "~&@field ~a type=~s page=~x upd=~a upd-code-page=~a *1*-code-page=~a~%" fld (type-of f) (pg (ccl::%address-of f))
+                   (if (macro-function upd) "macro" "function") (cvp upd) (cvp (find-symbol (symbol-name upd) "ACL2_*1*_ACL2")))))
+(finish-output)
+(ccl:quit 0)

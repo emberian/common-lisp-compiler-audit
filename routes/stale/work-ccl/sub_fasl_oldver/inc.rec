@@ -1,0 +1,10 @@
+@Q tf ((3 FA) (3 MB) (3 IB) 10)
+@Q tg ((1 FA) (1 MB))
+@Q tc ((1 FA) (1 MB))
+@Q sf ((3 FA) (3 MB) (3 IA) (3 HA) 10)
+@N tf ((3 FA) (3 MB) (3 IB) 10)
+@W tf 
+@W tc '((1 FA) (1 MB))
+@W sf (CONS X (CONS 'FB 'NIL))
+@S (:DIFF :DIFF)
+@END

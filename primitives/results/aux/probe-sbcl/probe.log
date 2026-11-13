@@ -1,0 +1,895 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Since PSW-B-IDENTITY is non-recursive, its admission is trivial.  We
+observe that the type of PSW-B-IDENTITY is described by the theorem
+(EQUAL (PSW-B-IDENTITY X) X).  
+
+Computing the guard conjecture for PSW-B-IDENTITY....
+
+The guard conjecture for PSW-B-IDENTITY is trivial to prove.  PSW-B-IDENTITY
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PSW-B-IDENTITY ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PSW-B-IDENTITY
+ACL2 !>
+Since PSW-B-LET-MV is non-recursive, its admission is trivial.  We
+observe that the type of PSW-B-LET-MV is described by the theorem 
+(AND (CONSP (PSW-B-LET-MV X Y)) (TRUE-LISTP (PSW-B-LET-MV X Y))). 
+We used primitive type reasoning.
+
+(PSW-B-LET-MV * *) => (MV * *).
+
+Computing the guard conjecture for PSW-B-LET-MV....
+
+The guard conjecture for PSW-B-LET-MV is trivial to prove.  PSW-B-LET-MV
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PSW-B-LET-MV ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PSW-B-LET-MV
+ACL2 !>
+The admission of PSW-B-REC is trivial, using the relation O< (which
+is known to be well-founded on the domain recognized by O-P) and the
+measure (ACL2-COUNT X).  We observe that the type of PSW-B-REC is described
+by the theorem (TRUE-LISTP (PSW-B-REC X)).  We used primitive type
+reasoning.
+
+Computing the guard conjecture for PSW-B-REC....
+
+The guard conjecture for PSW-B-REC is trivial to prove.  PSW-B-REC
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PSW-B-REC ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PSW-B-REC
+ACL2 !>
+Since PSW-B-MBE is non-recursive, its admission is trivial.  We could
+deduce no constraints on the type of PSW-B-MBE.
+
+Computing the guard conjecture for PSW-B-MBE....
+
+The guard conjecture for PSW-B-MBE is trivial to prove, given primitive
+type reasoning.  PSW-B-MBE is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PSW-B-MBE ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PSW-B-MBE
+ACL2 !>
+Exiting the ACL2 read-eval-print loop.  To re-enter, execute (LP).
+* #<PACKAGE "ACL2">
+* *PSW-OUTDIR*
+* T
+* 
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+
+
+HARD ACL2 ERROR in ASSERT$:  Assertion failed:
+(ASSERT$ (AND (STRINGP (CAR FN)) (ALISTP (CDR FN))) FN)
+
+@PSW probe done
+NIL
+* 

@@ -1,0 +1,20 @@
+zu8 | returned | @read (0 1 7 0) | 0 cleanup-note
+zbit | returned | @read (0 1 0 0) | 0 cleanup-note
+zu16 | returned | @read (0 1 0 0) | 0 cleanup-note
+zu32 | returned | @read (0 1 0 0) | 0 cleanup-note
+zu64 | returned | @read (0 1 0 0) | 0 cleanup-note
+zs8 | returned | @read (0 1 0 0) | 0 cleanup-note
+zs32 | returned | @read (0 1 0 0) | 0 cleanup-note
+zs64 | returned | @read (0 1 0 0) | 0 cleanup-note
+zint | returned | @read (0 1 0 0) | 0 cleanup-note
+zrs | returned | @read (0 1 0 0) | 0 cleanup-note
+zt | returned | @read (0 1 0 0) | 0 cleanup-note
+zdf | returned |  | 0 cleanup-note
+zch | returned | @read (# #\Z) | 0 cleanup-note
+zsc | returned | @read 6 | 0 cleanup-note
+zany | returned | @read (A B) | 0 cleanup-note
+zrs-resize | returned | @read (8 0) | 0 cleanup-note
+aset1 | returned | @read (9 7) | 0 cleanup-note
+compress1 | returned | @read (9 7) | 0 cleanup-note
+memo | returned | @read ((17 . 17) (18 . 18) (18 . 18)) | 0 cleanup-note
+hons | returned | @read ((1 2) T (3 4)) | 0 cleanup-note

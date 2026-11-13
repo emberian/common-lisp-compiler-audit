@@ -1,0 +1,15 @@
+@Q pre 1004
+@Q f 1004
+@Q k 1000
+@N f 1004
+@W f (BINARY-+ X (BINARY-+ '1000 '1))
+@W g NIL
+@W e NIL
+@W tz NIL
+@W k '1000
+@W big (NIL 0 NIL)
+@W fthm NIL
+@W cls (:COMMON-LISP-COMPLIANT NIL NIL)
+@S (:OK :DIFF :DIFF :DIFF :DIFF :DIFF :DIFF)
+@END
+@Q memo (1004 1005 NIL)

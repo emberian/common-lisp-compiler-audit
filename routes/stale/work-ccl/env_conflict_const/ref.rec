@@ -1,0 +1,11 @@
+@Q k 7
+@W f NIL
+@W g NIL
+@W e NIL
+@W tz NIL
+@W k '7
+@W big (NIL 0 NIL)
+@W fthm NIL
+@W cls (NIL NIL NIL)
+@S (:DIFF :DIFF :DIFF :DIFF :DIFF :DIFF :DIFF)
+@END

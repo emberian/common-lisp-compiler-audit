@@ -1,0 +1,18 @@
+(in-package "ACL2")
+; Memoization/congruent hash-table sibling of the 7.0 and 8.2 memoization bugs.
+(defstobj h1 (ht1 :type (hash-table eql)))
+(defstobj h2 (ht2 :type (hash-table eql)) :congruent-to h1)
+(defun rd (h1) (declare (xargs :stobjs h1)) (ht1-get 0 h1))
+(defun test ()
+  (with-local-stobj h2
+    (mv-let (val h2)
+      (let* ((h2 (ht1-put 0 3 h2))
+             (v1 (rd h2))
+             (h2 (ht2-rem 0 h2))
+             (v2 (rd h2)))
+        (mv (equal v1 v2) h2))
+      val)))
+(defthm true-prop (not (test)) :rule-classes nil)
+(memoize 'rd)
+(defthm false-prop (test) :rule-classes nil)
+(quit)

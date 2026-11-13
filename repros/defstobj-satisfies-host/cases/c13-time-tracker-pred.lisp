@@ -1,0 +1,5 @@
+(defun ptt (x) (declare (xargs :guard t)) (prog2$ (time-tracker :ptt :init :times '(1) :interval 1 :msg "x") (prog2$ (time-tracker :ptt :stop) (integerp x))))
+(defstobj st (fld :type (or null (satisfies ptt)) :initially nil))
+(cw "RESULT ~x0~%" (fld st))
+(defstobj st2 (fld2 :type (or null (satisfies ptt)) :initially nil))
+(cw "RESULT ~x0~%" (fld2 st2))

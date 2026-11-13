@@ -1,0 +1,8 @@
+(format t "~&PLAIN-CCL ~A (integer-length (ash 1 (1- (expt 2 60)))) = ~S~%" (lisp-implementation-version)
+        (integer-length (ash 1 (1- (expt 2 60)))))
+(format t "~&PLAIN-CCL notinline: ~S~%" (locally (declare (notinline ash integer-length)) (integer-length (ash 1 (1- (expt 2 60))))))
+(format t "~&PLAIN-CCL (ash 1 (expt 2 59)) => ~S~%" (handler-case (integer-length (ash 1 (expt 2 59))) (serious-condition (c) (list :condition (type-of c)))))
+(finish-output)
+(format t "~&PLAIN-CCL (< 0 (ash 1 (- (expt 2 60) 2))) => ~S~%" (handler-case (< 0 (ash 1 (- (expt 2 60) 2))) (serious-condition (c) (list :condition (type-of c)))))
+(finish-output)
+(quit)

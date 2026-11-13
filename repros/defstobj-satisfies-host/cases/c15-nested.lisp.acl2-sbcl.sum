@@ -1,0 +1,5 @@
+RESULT 3
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+CALLED pcw A
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+RESULT 3

@@ -1,0 +1,4 @@
+(defconst *reader-const* '(1 2))
+(ld "repro-reader-const-book.lisp")
+(reader-const-fn)
+(quit)

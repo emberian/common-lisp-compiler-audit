@@ -1,0 +1,7 @@
+(in-package "ACL2")
+(encapsulate ((dc-attach-f (x) t))
+  (local (defun dc-attach-f (x) x)))
+(defun dc-attach-g (x) (list 'attached x))
+(verify-guards dc-attach-g)
+(defattach dc-attach-f dc-attach-g)
+(defconst *dc-attach-value* (dc-attach-f 5))

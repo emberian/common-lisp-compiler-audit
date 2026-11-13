@@ -1,0 +1,6 @@
+(in-package :cl-user)
+(defun page (addr) (logandc2 addr 16383))
+(let* ((i (parse-integer (ccl:getenv "IDX"))) (ea (+ (ccl::%address-of *big-u8*) -4 i)))
+  (format t "@big idx=~d elt-page=~x code-page(fast-u8)=~x~%" i (page ea) (page (ccl::%address-of (ccl::uvref #'fast-u8 0)))) (finish-output)
+  (fast-u8 *big-u8* i 9)
+  (format t "@returned elt=~s nonzero=~s~%" (aref *big-u8* i) (count 0 *big-u8* :test-not #'eql)) (finish-output) (ccl:quit 0))

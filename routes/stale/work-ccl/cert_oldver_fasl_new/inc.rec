@@ -1,0 +1,34 @@
+@Q f 2005
+@Q g 9
+@Q h (3 . HB)
+@Q m (3 MB)
+@Q um (3 MB)
+@Q e (3 EB)
+@Q p (3 PB)
+@Q i (3 IB)
+@Q ui (3 IB)
+@Q ub (BB 6001 2007)
+@Q big (BB 6001 2007)
+@Q k 2000
+@Q rd 206
+@Q ev1 (TA FA)
+@Q tz 11
+@Q lpz 12
+@Q lm (3 . LB)
+@N f 2005
+@N g 9
+@N e (3 EB)
+@N ui (3 IB)
+@N tz 11
+@N lpz 12
+@N ev1 (TA FA)
+@W f (BINARY-+ X (BINARY-+ '1000 '1))
+@W g (IF (INTEGERP X) (BINARY-* '2 X) '0)
+@W e (CONS X (CONS 'EA 'NIL))
+@W tz (BINARY-+ X '7)
+@W k '2000
+@W big (BB 6001 2007)
+@W fthm (EQUAL (F '0) '1001)
+@W cls (:COMMON-LISP-COMPLIANT :IDEAL :PROGRAM)
+@S (:DIFF :DIFF :DIFF :DIFF :DIFF :OK :DIFF)
+@END

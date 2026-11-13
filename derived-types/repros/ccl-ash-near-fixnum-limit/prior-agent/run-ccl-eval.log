@@ -1,0 +1,39 @@
+Welcome to Clozure Common Lisp Version 1.14 darwinarm64!
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  19:52:12.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/ccl-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Since IL-ASH is non-recursive, its admission is trivial.  We observe
+that the type of IL-ASH is described by the theorem 
+(AND (INTEGERP (IL-ASH K)) (<= 0 (IL-ASH K))).  We used the :type-
+prescription rule INTEGER-LENGTH.
+
+Computing the guard conjecture for IL-ASH....
+
+The guard conjecture for IL-ASH is trivial to prove, given the :compound-
+recognizer rule NATP-COMPOUND-RECOGNIZER and the :type-prescription
+rule ASH.  IL-ASH is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN IL-ASH ...)
+Rules: ((:COMPOUND-RECOGNIZER NATP-COMPOUND-RECOGNIZER)
+        (:TYPE-PRESCRIPTION ASH)
+        (:TYPE-PRESCRIPTION INTEGER-LENGTH))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ IL-ASH
+ACL2 !>EVAL (il-ash 1152921504606846975) = -1152921504606846976
+NIL
+ACL2 !>Bye.

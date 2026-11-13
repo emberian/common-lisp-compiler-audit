@@ -1,0 +1,3 @@
+(include-book "repro-let-star-book" :load-compiled-file nil)
+(let-star-value 5)
+(quit)

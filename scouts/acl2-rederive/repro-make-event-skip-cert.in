@@ -1,0 +1,3 @@
+(certify-book "repro-make-event-skip-book")
+(list *me-skip-value* (read-me-skip-value))
+(quit)

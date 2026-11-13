@@ -1,0 +1,4 @@
+(include-book "repro-defconst-plain-book" :load-compiled-file nil)
+(list *dc-two-value* (dc-read-two)
+      (getpropc '*dc-two-value* 'const (w state)))
+(quit)

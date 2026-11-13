@@ -1,0 +1,2 @@
+seed 12 functions 12 queries 96 stobj-fields 2 kinds-enabled plain inline loop rec fold map loop$ st-upd st-loop st-read
+kinds loop 2, mutual 4, st-loop 2, st-read 1, rec 1, plain 2

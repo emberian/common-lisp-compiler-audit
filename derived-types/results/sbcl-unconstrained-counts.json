@@ -1,0 +1,43 @@
+{
+ "counts": {
+  "function:A-top": 6388,
+  "function:A-narrow": 144,
+  "function:B": 9,
+  "function:not-attempted": 1,
+  "macro:not-attempted": 1896
+ },
+ "narrow-result-not-in-typed-table": [
+  [
+   "RANDOM$",
+   "UNSIGNED-BYTE"
+  ],
+  [
+   "SLEEP",
+   "NULL"
+  ],
+  [
+   "ZP-BIG-N",
+   "BOOLEAN"
+  ],
+  [
+   "DECREMENT-BIG-N",
+   "(OR NUMBER (CONS NULL NULL))"
+  ],
+  [
+   "TO-DF",
+   "DOUBLE-FLOAT"
+  ],
+  [
+   "WORMHOLE-EVAL",
+   "NIL"
+  ],
+  [
+   "MV-LIST",
+   "CONS"
+  ]
+ ],
+ "macros-that-are-host-functions": 68,
+ "of-those-not-in-typed-table": [
+  "MAKE-LIST"
+ ]
+}

@@ -1,0 +1,8 @@
+(in-package "ACL2")
+(defun flet-ec-f (x)
+  (declare (xargs :guard t))
+  x)
+(defun flet-ec-g ()
+  (declare (xargs :verify-guards nil))
+  (flet ((flet-ec-f (x) (cons x x)))
+    (ec-call (flet-ec-f 3))))

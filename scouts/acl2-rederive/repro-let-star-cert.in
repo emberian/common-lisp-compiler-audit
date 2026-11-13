@@ -1,0 +1,3 @@
+(certify-book "repro-let-star-book")
+(let-star-value 5)
+(quit)

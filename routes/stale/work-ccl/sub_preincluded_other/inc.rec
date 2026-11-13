@@ -1,0 +1,5 @@
+@W tf NIL
+@W tc NIL
+@W sf (CONS X (CONS 'ZZ 'NIL))
+@S (:DIFF :DIFF)
+@END

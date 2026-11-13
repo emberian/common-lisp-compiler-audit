@@ -1,0 +1,4 @@
+(defconst *include-marker* 1)
+(include-book "repro-make-event-world-book" :load-compiled-file nil)
+(list *me-world-value* (read-me-world-value))
+(quit)

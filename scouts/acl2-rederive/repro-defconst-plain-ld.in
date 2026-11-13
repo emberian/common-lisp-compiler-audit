@@ -1,0 +1,4 @@
+(ld "repro-defconst-plain-book.lisp")
+(list *dc-two-value* (dc-read-two)
+      (getpropc '*dc-two-value* 'const (w state)))
+(quit)

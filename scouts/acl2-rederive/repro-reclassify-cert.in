@@ -1,0 +1,3 @@
+(certify-book "repro-reclassify-book")
+(list (symbol-class 'reclass-f (w state)) (reclass-f 3) (reclass-g 4))
+(quit)

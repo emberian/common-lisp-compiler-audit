@@ -1,0 +1,3 @@
+@Q rc (3 CCL)
+@W rc ((CONS X (CONS 'CCL 'NIL)) (EQUAL (RC '1) '(1 CCL)))
+@END

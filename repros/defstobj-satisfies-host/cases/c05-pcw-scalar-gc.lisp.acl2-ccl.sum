@@ -1,0 +1,20 @@
+  32 CALLED pcw NIL
+RESULT init NIL
+CALLED pcw 3
+RESULT after-3 3
+CALLED pcw A
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+CALLED pcw A
+RESULT stp T fldp NIL
+CALLED pcw 4
+CALLED pcw A
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+RESULT all 4
+CALLED pcw 5
+CALLED pcw A
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+RESULT nil 5
+CALLED pcw 6
+CALLED pcw A
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+RESULT none 6

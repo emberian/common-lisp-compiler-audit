@@ -1,0 +1,6 @@
+(ld "repro-defconst-mbe-vg-book.lisp")
+(list *mbe-vg-value*
+      (mbe-vg-choice)
+      (read-mbe-vg-choice)
+      (getpropc '*mbe-vg-value* 'const (w state)))
+(quit)

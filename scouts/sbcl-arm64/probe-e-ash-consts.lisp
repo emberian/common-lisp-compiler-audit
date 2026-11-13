@@ -1,0 +1,30 @@
+;; Probe E: (ash x m) for constant m, x fixnum / signed-word / unsigned-word,
+;; result boxed. Compare against notinline reference at boundary values.
+(load (merge-pathnames "harness.lisp" *load-truename*))
+
+(flet ((drive (type vals m)
+         (handler-case
+             (let ((f (compile nil `(lambda (x)
+                                      (declare (type ,type x)
+                                               (optimize (speed 3) (safety 0)))
+                                      (ash x ,m))))
+                   (g (compile nil `(lambda (x)
+                                      (declare (type ,type x)
+                                               (optimize (speed 3) (safety 0)))
+                                      (locally (declare (notinline ash))
+                                        (ash x ,m))))))
+               (dolist (v vals)
+                 (let ((r1 (multiple-value-list (ignore-errors (funcall f v))))
+                       (r2 (multiple-value-list (ignore-errors (funcall g v)))))
+                   (unless (equalp r1 r2)
+                     (format t "DIVERGE type=~a m=~d x=~s inline=~s ref=~s~%"
+                             type m v r1 r2))))
+               (format t "  ~a m=~d ok~%" type m))
+           (error (e) (format t "  type=~a m=~d ERROR: ~a~%" type m e)))))
+  (dolist (m '(1 30 61 62 63 64 65 66 67 70 100 127 128))
+    (drive 'fixnum *fixnums* m))
+  (dolist (m '(1 63 64 65 66 70 100 127 128))
+    (drive '(signed-byte 64) *s64* m))
+  (dolist (m '(1 63 64 65 66 70 100 127 128))
+    (drive '(unsigned-byte 64) *u64* m)))
+(format t "probe E done~%")

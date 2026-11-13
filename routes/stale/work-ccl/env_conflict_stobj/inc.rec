@@ -1,0 +1,11 @@
+@W f NIL
+@W g NIL
+@W e NIL
+@W tz NIL
+@W k NIL
+@W big (NIL 0 NIL)
+@W fthm NIL
+@W cls (NIL NIL NIL)
+@S (:DIFF :DIFF :DIFF :DIFF :DIFF :DIFF :DIFF)
+@END
+@Q fld (77 NIL)

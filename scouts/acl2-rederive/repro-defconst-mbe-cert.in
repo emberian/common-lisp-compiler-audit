@@ -1,0 +1,8 @@
+(certify-book "repro-defconst-mbe-book")
+(list *mbe-choice-value*
+      *mbe-direct-value*
+      (mbe-choice)
+      (read-mbe-choices)
+      (getpropc '*mbe-choice-value* 'const (w state))
+      (getpropc '*mbe-direct-value* 'const (w state)))
+(quit)

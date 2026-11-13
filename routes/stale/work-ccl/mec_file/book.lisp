@@ -1,0 +1,6 @@
+(in-package "ACL2")
+(make-event `(defun me-g (x) (declare (xargs :guard t)) (list x ',(if (boundp-global 'zg state) (f-get-global 'zg state) 'unset))) :check-expansion t)
+(make-event `(defun me-h (x) (declare (xargs :guard t)) (list x ',(f-get-global 'host-lisp state))) :check-expansion t)
+(make-event (mv-let (ch state) (open-input-channel "data.txt" :object state) (mv-let (eof obj state) (read-object ch state) (declare (ignore eof)) (let ((state (close-input-channel ch state))) (value `(defun me-d (x) (declare (xargs :guard t)) (list x ',obj)))))) :check-expansion t)
+(make-event `(defun me-w (x) (declare (xargs :guard t)) (list x ',(if (function-symbolp 'extra-fn (w state)) 'has-extra 'no-extra))) :check-expansion t)
+(make-event `(defconst *me-c* ',(if (boundp-global 'zg state) (f-get-global 'zg state) 'unset)) :check-expansion t)

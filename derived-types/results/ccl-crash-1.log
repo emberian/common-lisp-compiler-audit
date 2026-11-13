@@ -1,0 +1,3 @@
+? #<Package "ACL2">
+? Fatal error: Mach exception
+exception stack exhausted (deep nested faults)

@@ -1,0 +1,100 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Since PSW-CTL-POS-RAW is non-recursive, its admission is trivial. 
+We observe that the type of PSW-CTL-POS-RAW is described by the theorem
+(OR (EQUAL (PSW-CTL-POS-RAW X Y) 1) (CONSP (PSW-CTL-POS-RAW X Y))).
+We used primitive type reasoning.
+
+Computing the guard conjecture for PSW-CTL-POS-RAW....
+
+The guard conjecture for PSW-CTL-POS-RAW is trivial to prove.  
+PSW-CTL-POS-RAW is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PSW-CTL-POS-RAW ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PSW-CTL-POS-RAW
+ACL2 !>
+Since PSW-CTL-POS-GUARDED is non-recursive, its admission is trivial.
+We observe that the type of PSW-CTL-POS-GUARDED is described by the
+theorem (ACL2-NUMBERP (PSW-CTL-POS-GUARDED X)).  We used primitive
+type reasoning.
+
+Computing the guard conjecture for PSW-CTL-POS-GUARDED....
+
+The guard conjecture for PSW-CTL-POS-GUARDED is trivial to prove. 
+PSW-CTL-POS-GUARDED is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PSW-CTL-POS-GUARDED ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PSW-CTL-POS-GUARDED
+ACL2 !>
+Since PSW-CTL-POS-STAR1 is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PSW-CTL-POS-STAR1.
+
+Computing the guard conjecture for PSW-CTL-POS-STAR1....
+
+The guard conjecture for PSW-CTL-POS-STAR1 is trivial to prove.  
+PSW-CTL-POS-STAR1 is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PSW-CTL-POS-STAR1 ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PSW-CTL-POS-STAR1
+ACL2 !>
+Since PSW-CTL-NEG is non-recursive, its admission is trivial.  We could
+deduce no constraints on the type of PSW-CTL-NEG.
+
+Computing the guard conjecture for PSW-CTL-NEG....
+
+The guard conjecture for PSW-CTL-NEG is trivial to prove.  PSW-CTL-NEG
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PSW-CTL-NEG ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PSW-CTL-NEG
+ACL2 !>
+Exiting the ACL2 read-eval-print loop.  To re-enter, execute (LP).
+* #<PACKAGE "ACL2">
+* #<FUNCTION (LAMBDA (C H)) {8011628DAB}>
+* #<FUNCTION (LAMBDA (C H)) {8011628DAB}>
+* *PSW-OUTDIR*
+* T
+* (GSYM THE-LIVE-VAR DF-EVENTS DF-EVENTS-1 PACKN-POS
+      RECORD-ACCESSOR-FUNCTION-NAME MAKE-VAR-LST ADD-SUFFIX WARRANT-NAME)
+* WARNING: redefining ACL2::PSW-CTL-POS-RAW in DEFUN
+PSW-CTL-POS-RAW
+* WARNING: redefining ACL2::PSW-CTL-POS-GUARDED in DEFUN
+PSW-CTL-POS-GUARDED
+* #<FUNCTION (LAMBDA (X)) {8013CA5CEB}>
+* @PSW done
+NIL
+* 

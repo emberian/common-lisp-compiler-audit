@@ -1,0 +1,6 @@
+(include-book "repro-stobj-let-book")
+(mv-let (ans nest-mom)
+        (let ((nest-mom (nest-write nest-mom)))
+          (mv (nest-read nest-mom) nest-mom))
+        (mv ans nest-mom))
+(quit)

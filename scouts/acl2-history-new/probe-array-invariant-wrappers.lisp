@@ -1,0 +1,26 @@
+(in-package "ACL2")
+; NOTE-7-2 invariant-risk through logic/exec and return-last wrappers.
+(defconst *ab*
+  (list (compress1 'a '((:header :dimensions (4) :maximum-length 6
+                                 :default 0 :name a)
+                        (0 . 0) (1 . 0) (2 . 0) (3 . 0)))
+        (compress1 'b '((:header :dimensions (4) :maximum-length 6
+                                 :default 9 :name b)
+                        (0 . 9) (1 . 9) (2 . 9) (3 . 9)))))
+(defconst *b* (cadr *ab*))
+(defun poke-mbe (i v)
+  (declare (xargs :mode :program))
+  (mbe :logic nil :exec (aset1 'a (car *ab*) i v)))
+(value-triple (poke-mbe 10 'boom-mbe))
+(assert-event (equal (aref1 'b *b* 0) 9))
+(defun poke-ec (i v)
+  (declare (xargs :mode :program))
+  (ec-call (aset1 'a (car *ab*) i v)))
+(value-triple (poke-ec 10 'boom-ec))
+(assert-event (equal (aref1 'b *b* 0) 9))
+(defun poke-return-last (i v)
+  (declare (xargs :mode :program))
+  (return-last 'progn nil (aset1 'a (car *ab*) i v)))
+(value-triple (poke-return-last 10 'boom-return-last))
+(assert-event (equal (aref1 'b *b* 0) 9))
+(quit)

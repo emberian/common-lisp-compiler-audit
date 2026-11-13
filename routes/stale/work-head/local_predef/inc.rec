@@ -1,0 +1,4 @@
+@Q lt ((1 . LT) (1 . LT2))
+@Q q ((1 . MINE) (1 . MINE2) (1 . MINE3) (1 . MINE-INLINE) (1 77) 5)
+@N q ((1 . MINE) (1 . MINE2) (1 . MINE3) (1 . MINE-INLINE))
+@END

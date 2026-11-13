@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(defconst *k* 2)
+(defun f (x) (declare (xargs :guard t)) (cons x 'new))
+(defthm k-is-2 (equal *k* 2) :rule-classes nil)
+(defthm f-is-new (equal (f x) (cons x 'new)) :rule-classes nil)

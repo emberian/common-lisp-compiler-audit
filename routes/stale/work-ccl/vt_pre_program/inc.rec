@@ -1,0 +1,7 @@
+@Q pre (3 VA)
+@Q vh ((3 VA) (3 GA) ((3 VA) (3 GA)))
+@N vh ((3 VA) (3 GA) ((3 VA) (3 GA)))
+@W vh ((CONS X (CONS 'VA 'NIL)) (CONS X (CONS 'GA 'NIL)))
+@W cls (:COMMON-LISP-COMPLIANT :COMMON-LISP-COMPLIANT)
+@S (:OK :OK)
+@END

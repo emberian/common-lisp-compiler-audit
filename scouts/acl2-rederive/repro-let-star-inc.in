@@ -1,0 +1,4 @@
+(include-book "repro-let-star-book")
+(list (let-star-value 5)
+      (table-alist 'acl2-defaults-table (w state)))
+(quit)

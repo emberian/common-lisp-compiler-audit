@@ -1,0 +1,5 @@
+(defun pm (x) (declare (xargs :guard t)) (integerp x))
+(memoize 'pm)
+(defstobj st (fld :type (or null (satisfies pm)) :initially nil))
+(cw "RESULT ~x0~%" (fld st))
+(memsum)

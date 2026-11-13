@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(include-book "vt1")
+(verify-termination vh)
+(verify-guards vg)
+(defun vu (x) (declare (xargs :guard t)) (list (vh x) (vg x)))

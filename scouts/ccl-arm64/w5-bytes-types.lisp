@@ -1,0 +1,180 @@
+;;; Wave 5: exact-width checks, bytes, logical encoding, characters/lists.
+(in-package :cl-user)
+(defparameter *tests* 0)
+(defparameter *fails* 0)
+(defun vl= (a b)
+  (and (= (length a) (length b))
+       (loop for x in a for y in b always
+             (cond ((and (typep x 'condition) (typep y 'condition))
+                    (eq (class-name (class-of x)) (class-name (class-of y))))
+                   ((or (typep x 'condition) (typep y 'condition)) nil)
+                   (t (equal x y))))))
+(defun check (name fast-form ref-form arglists)
+  (let ((fast (if (symbolp fast-form) (symbol-function fast-form) (compile nil fast-form)))
+        (ref (compile nil ref-form)) (bad 0) (n 0))
+    (dolist (args arglists)
+      (incf n) (incf *tests*)
+      (let ((f (multiple-value-list (ignore-errors (apply fast args))))
+            (r (multiple-value-list (ignore-errors (apply ref args)))))
+        (unless (vl= f r)
+          (incf bad) (incf *fails*)
+          (format t "~&DIFF ~a args=~s fast=~s ref=~s~%" name args f r))))
+    (format t "~&RESULT ~a cases=~d diffs=~d~%" name n bad)))
+(defparameter *integers*
+  (list (- (expt 2 64)) (1+ (- (expt 2 64))) (- (expt 2 63)) (1+ (- (expt 2 63)))
+        most-negative-fixnum (1+ most-negative-fixnum) -65537 -65536 -65535 -32769 -32768 -32767
+        -257 -256 -255 -129 -128 -127 -2 -1 0 1 2 127 128 129 255 256 257
+        32767 32768 32769 65535 65536 65537 (1- (expt 2 32)) (expt 2 32)
+        (1- most-positive-fixnum) most-positive-fixnum (expt 2 60) (1+ (expt 2 60))
+        (1- (expt 2 63)) (expt 2 63) (1+ (expt 2 63)) (1- (expt 2 64))))
+
+;;; H22: checked exact-width conversions (safety 3 selects REQUIRE-* templates).
+(dolist (spec '((signed-byte 8) (unsigned-byte 8) (signed-byte 16) (unsigned-byte 16)
+                (signed-byte 32) (unsigned-byte 32) (signed-byte 64) (unsigned-byte 64)))
+  (check (format nil "checked-the-~s" spec)
+    `(lambda (x) (declare (optimize (speed 3) (safety 3))) (the ,spec x))
+    `(lambda (x) (if (typep x ',spec) x (error 'type-error :datum x :expected-type ',spec)))
+    (mapcar #'list *integers*)))
+
+;;; H23: natural logical operations, including high u64 and mixed fixnum operands.
+(dolist (op '(logand logior logxor))
+  (check (format nil "natural-logical-~a" op)
+    `(lambda (x y) (declare (type (unsigned-byte 64) x y) (optimize (speed 3) (safety 0))) (,op x y))
+    `(lambda (x y) (funcall (symbol-function ',op) x y))
+    (loop for x in (list 0 1 #x5555555555555555 #x3333333333333333
+                         (1- (expt 2 60)) (expt 2 60) (1- (expt 2 63)) (expt 2 63) (1- (expt 2 64)))
+          append (loop for y in (list 0 1 #x5555555555555555 #x0f0f0f0f0f0f0f0f
+                                      (expt 2 60) (expt 2 63) (1- (expt 2 64)))
+                       collect (list x y))))
+  (check (format nil "mixed-natural-fixnum-~a" op)
+    `(lambda (x y) (declare (type (unsigned-byte 64) x) (type (unsigned-byte 60) y)
+                            (optimize (speed 3) (safety 0))) (,op x y))
+    `(lambda (x y) (funcall (symbol-function ',op) x y))
+    (loop for x in (list 0 1 (expt 2 60) (expt 2 63) (1- (expt 2 64)))
+          append (loop for y in (list 0 1 255 (1- (expt 2 59)) (1- (expt 2 60)))
+                       collect (list x y)))))
+
+;;; H24: LDB/MASK-FIELD on general integers and on the fixnum-specific rewrite.
+(dolist (size '(0 1 2 7 8 16 31 32 59 60 61 62 63 64 65))
+  (dolist (position '(0 1 31 32 59 60 61 62 63 64))
+    (check (format nil "ldb-integer-s~d-p~d" size position)
+      `(lambda (x) (declare (type integer x) (optimize (speed 3) (safety 0)))
+         (ldb (byte ,size ,position) x))
+      `(lambda (x) (funcall (symbol-function 'ldb) (byte ,size ,position) x))
+      (mapcar #'list *integers*))
+    (check (format nil "ldb-fixnum-s~d-p~d" size position)
+      `(lambda (x) (declare (type fixnum x) (optimize (speed 3) (safety 0)))
+         (ldb (byte ,size ,position) x))
+      `(lambda (x) (funcall (symbol-function 'ldb) (byte ,size ,position) x))
+      (mapcar #'list (list most-negative-fixnum -65536 -256 -2 -1 0 1 2 255 65536 most-positive-fixnum)))
+    (check (format nil "mask-field-s~d-p~d" size position)
+      `(lambda (x) (declare (type integer x) (optimize (speed 3) (safety 0)))
+         (mask-field (byte ,size ,position) x))
+      `(lambda (x) (funcall (symbol-function 'mask-field) (byte ,size ,position) x))
+      (mapcar #'list *integers*))))
+
+;;; H25: DPB/DEPOSIT-FIELD with constant byte specs.
+(dolist (size '(0 1 2 8 31 32 59 60 61 63 64 65))
+  (dolist (position '(0 1 31 32 59 60 63 64))
+    (check (format nil "dpb-s~d-p~d" size position)
+      `(lambda (v x) (declare (type integer v x) (optimize (speed 3) (safety 0)))
+         (dpb v (byte ,size ,position) x))
+      `(lambda (v x) (funcall (symbol-function 'dpb) v (byte ,size ,position) x))
+      (loop for v in (list -1 0 1 127 255 (1- (expt 2 63)) (1- (expt 2 64)))
+            append (loop for x in (list -1 0 1 (expt 2 60) (1- (expt 2 64)))
+                         collect (list v x))))
+    (check (format nil "deposit-field-s~d-p~d" size position)
+      `(lambda (v x) (declare (type integer v x) (optimize (speed 3) (safety 0)))
+         (deposit-field v (byte ,size ,position) x))
+      `(lambda (v x) (funcall (symbol-function 'deposit-field) v (byte ,size ,position) x))
+      (loop for v in (list -1 0 1 255 (expt 2 60) (1- (expt 2 64)))
+            append (loop for x in (list -1 0 1 (expt 2 60)) collect (list v x))))))
+
+;;; H26: derived predicates and simple arithmetic around comparison/negation paths.
+(dolist (op '(abs signum evenp oddp zerop plusp minusp))
+  (check (format nil "unary-~a" op)
+    `(lambda (x) (declare (type fixnum x) (optimize (speed 3) (safety 0))) (,op x))
+    `(lambda (x) (funcall (symbol-function ',op) x))
+    (mapcar #'list (list most-negative-fixnum -65536 -256 -2 -1 0 1 2 255 65536 most-positive-fixnum))))
+(dolist (op '(min max))
+  (check (format nil "binary-~a" op)
+    `(lambda (x y) (declare (type fixnum x y) (optimize (speed 3) (safety 0))) (,op x y))
+    `(lambda (x y) (funcall (symbol-function ',op) x y))
+    (loop for x in (list most-negative-fixnum -1 0 1 most-positive-fixnum)
+          append (loop for y in (list most-negative-fixnum -1 0 1 most-positive-fixnum) collect (list x y)))))
+(check "logtest-fixnum"
+  '(lambda (x y) (declare (type fixnum x y) (optimize (speed 3) (safety 0))) (logtest x y))
+  '(lambda (x y) (funcall (symbol-function 'logtest) x y))
+  (loop for x in (list most-negative-fixnum -256 -2 -1 0 1 2 255 most-positive-fixnum)
+        append (loop for y in (list most-negative-fixnum -1 0 1 255 most-positive-fixnum) collect (list x y))))
+
+;;; H27: character conversions at every representation boundary.
+(check "char-code-code-char-roundtrip"
+  '(lambda (n) (declare (type (integer 0 #x10ffff) n) (optimize (speed 3) (safety 0)))
+     (char-code (code-char n)))
+  '(lambda (n) (funcall (symbol-function 'char-code)
+                        (funcall (symbol-function 'code-char) n)))
+  (mapcar #'list (list 0 1 2 7 8 9 10 31 32 65 127 128 255 256 #xd7fe #xd7ff
+                       #xe000 #xe001 #xfffe #xffff #x10000 #x10fffe #x10ffff)))
+(check "char-code-arithmetic"
+  '(lambda (c) (declare (type character c) (optimize (speed 3) (safety 0)))
+     (+ 1 (char-code c)))
+  '(lambda (c) (funcall (symbol-function '+) 1 (funcall (symbol-function 'char-code) c)))
+  (mapcar (lambda (n) (list (code-char n))) '(0 1 65 255 256 #xd7ff #xe000 #xffff #x10000 #x10ffff)))
+
+;;; H28: CONS/CAR/CDR/CONSP/ENDP on valid objects only.
+(check "list-access-and-predicates"
+  '(lambda (x) (declare (type cons x) (optimize (speed 3) (safety 0)))
+     (let ((y (cons (car x) (cdr x))))
+       (list (consp x) (consp (cdr x)) (endp nil) (endp (list 1))
+             (car y) (cdr y) (car x) (cdr x))))
+  '(lambda (x) (let ((y (funcall (symbol-function 'cons)
+                               (funcall (symbol-function 'car) x)
+                               (funcall (symbol-function 'cdr) x))))
+                 (list (funcall (symbol-function 'consp) x)
+                       (funcall (symbol-function 'consp) (funcall (symbol-function 'cdr) x))
+                       (funcall (symbol-function 'endp) nil)
+                       (funcall (symbol-function 'endp) (list 1))
+                       (funcall (symbol-function 'car) y) (funcall (symbol-function 'cdr) y)
+                       (funcall (symbol-function 'car) x) (funcall (symbol-function 'cdr) x))))
+  '(((1 . 2)) ((1 2)) ((nil)) ((a . nil)) ((nil . nil))))
+
+;;; H29: exhaustive contiguous-run patterns and rotations for logical immediates.
+(let ((bad 0) (encoded 0) (missing 0) (cases 0) (tagged-cases 0))
+  (dolist (size '(2 4 8 16 32 64))
+    (loop for ones from 1 below size do
+      (let ((run (1- (ash 1 ones))))
+        (dotimes (rotation size)
+          (let ((pattern 0))
+            (dotimes (rep (/ 64 size))
+              (setq pattern (logior pattern (ash run (* rep size)))))
+            (let* ((n (arm64::rotate-right-64 pattern rotation))
+                   (e (arm64::encode-logical-immediate n)))
+              (incf cases)
+              (when (zerop (logand n 7)) (incf tagged-cases))
+              (if (null e)
+                (incf missing)
+                (progn
+                  (incf encoded)
+                  (unless (eql n (arm64::decode-logical-immediate e))
+                    (incf bad)
+                    (when (<= bad 5)
+                      (format t "~&DIFF logical-encoding n=~s encoded=~s decoded=~s~%"
+                              n e (arm64::decode-logical-immediate e))))))))))))
+  (incf *tests* cases) (incf *fails* bad)
+  (format t "~&RESULT logical-immediate-roundtrip cases=~d encoded=~d missing=~d tagged-compatible=~d diffs=~d~%"
+          cases encoded missing tagged-cases bad))
+
+;;; H30: repeated high-u64 inline results (three-digit boxing and allocation reuse).
+(defun natural-add-stress (x y)
+  (declare (type (unsigned-byte 63) x y) (optimize (speed 3) (safety 0)))
+  (the (unsigned-byte 64) (+ x y)))
+(let ((bad 0) (x (1- (expt 2 63))) (want (- (expt 2 64) 2)))
+  (dotimes (i 10000)
+    (declare (ignore i))
+    (unless (= (natural-add-stress x x) want) (incf bad)))
+  (incf *tests* 10000) (incf *fails* bad)
+  (format t "~&RESULT high-u64-allocation-stress cases=10000 diffs=~d~%" bad))
+
+(format t "~&wave5 done: ~d tests, ~d diffs~%" *tests* *fails*)
+(quit)

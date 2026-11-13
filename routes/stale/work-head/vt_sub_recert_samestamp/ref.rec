@@ -1,0 +1,6 @@
+@Q vh ((3 VB) (3 GB) ((3 VB) (3 GB)))
+@N vh ((3 VB) (3 GB) ((3 VB) (3 GB)))
+@W vh ((CONS X (CONS 'VB 'NIL)) (CONS X (CONS 'GB 'NIL)))
+@W cls (:COMMON-LISP-COMPLIANT :COMMON-LISP-COMPLIANT)
+@S (:OK :OK)
+@END

@@ -1,0 +1,49 @@
+==== NOTE-8-2 ====
+Fixed a bug, probably a soundness bug (though we haven't tried to prove nil by exploiting it). The bug is in the computation of the ``immediate-canonical-ancestors'' of a function symbol, which is used in the implementations of [memoization] and [defattach], as well as in interactions between attachments and both [defaxiom] events and :[meta] rules. Thanks to Sol Swords for pointing out this bug and presenting a helpful example.
+
+==== NOTE-8-3 ====
+The function [meta-extract-formula] could return a non-trivial value (i.e., not 'T) when applied to a [program]-mode function. We thank Sol Swords for reporting this bug with a proof of nil that exploited it. This soundness bug has been fixed. That work led us to fix the following related bugs (which could also be soundness bugs, though we have not checked). First, the function [fncall-term] could similarly return a non-trivial value when applied to a program-mode function. Second, the utility [mfc-rw], as well as other such mfc-xx utilities in support of [extended-metafunctions] and [meta-extract-contextual-fact], could be called on terms containing program-mode function symbols.
+
+==== NOTE-8-4 ====
+A soundness bug, present since [loop$] was introduced, was fixed. The bug was manifested when the keyword :guard was used as the loop$ body, as in (loop$ for v in lst collect :guard). (Note: It's not clear that this bug could be used to prove nil.)
+
+A soundness bug was fixed by changing [defabsstobj] to avoid using [mbe] in the definitions generated for the logic. The problem was that the :logic and :exec forms are not actually equal (they correspond, in the sense of the correspondence predicate), and this can be exploited by using a :[guard-theorem] [lemma-instance]. For an example proof of nil in Version 8.3, see a comment about a defabsstobj bug in the form (defxdoc note-8-4 ...) in file books/system/doc/acl2-doc.lisp.
+
+A soundness bug was fixed in the functions that print to strings, such as fmt-to-string; see [printing-to-strings]. The bug was a dependence of the result on the ACL2 [state], even though state is not an argument to these functions. More specifically, the dependence was on the [current-package] and the global [evisc-table]. For examples see [community-books] books/system/tests/fmt-to-string.lisp and books/system/tests/fmt-to-string-pkg.lisp. Note: We also strengthened the [guard]s on these functions to require that the keys of the fmt-control-alist alist argument are all appropriate; in particular, the symbol current-package in the \"ACL2\" package is a suitable key, but for example the keyword :current-package is not.
+
+It was possible to prove nil by counterfeiting record-expansion calls, which are normally only created by the implementation in support of [make-event] calls. This soundness bug has been fixed. (The bug was perhaps impossible to hit in ordinary usage, where record-expansion is not used explicitly.) A proof of nil before this fix may be found in a comment in ACL2 source function, corresponding-encaps.
+
+The mechanism for tracking [warrant]s needed during a proof had a bug, which might be a soundness bug if one uses [apply$] or [loop$]. That bug has been fixed.
+
+==== NOTE-8-5 ====
+A soundness bug in [defstobj] has been fixed that allowed a field to contain the [type-spec] (SATISFIES pred) when pred has a [guard] other than t, which generated an unsound guard theorem. Thanks to Eric Smith for sending the following example.
+
+A soundness bug was due to incompleteness of the prohibition against [local] [portcullis] [command]s. For an example, see a comment in the form (defxdoc note-8-5 ...), [community-books] file books/system/doc/acl2-doc.lisp. This has been fixed by allowing local events among the portcullis commands (and treating them properly; see relevant discussion, including how [save-exec] may be helpful, in the ``New Features'' section above).
+
+==== NOTE-8-6 ====
+* Restrictions have been tightened a bit to avoid what could be considered a soundness bug. See discussion about that in the section on ``Bugs'' below.
+
+See [fast-cert] for a ``fast-cert'' mode for faster, but possibly unsound, book certification, in particular when using a saved executable that contains [local] events. Thanks to Sol Swords for requesting such a capability and for helpful design discussions.
+
+Fixed a soundness bug based on rules of class :[meta] or :[clause-processor] that would be exported from an [encapsulate] event with a non-nil [signature] list. A proof of nil in Version 8.5 may be found in the [community-books] file, books/system/tests/transparent-functions-input.lsp; search for this paragraph there.
+
+Fixed a soundness bug in [open-input-channel] and [open-output-channel]. The [guard] in each case required the first argument, a file name, to be a string; but these functions pass that argument to a function --- make-input-channel and make-output-channel, respectively --- that required the string to contain only standard characters (see [standard-char-p]). That was possible because open-input-channel and open-output-channel were invoked under [skip-proofs] in the ACL2 sources. This bug has been fixed, and those uses of skip-proofs eliminated, with removal of the restriction to standard characters for virtually all guards, including the guards for Common Lisp functions [char-downcase] and [char-upcase]. Thanks to Eric Smith for reporting this bug, including a proof of nil by giving a :use hint for an :instance of (:guard-theorem open-input-channel). Eric also supplied events, incorporated into ACL2 source file axioms.lisp, that removed the [skip-proofs] wrappers from five definitions.
+
+Fixed a soundness bug that exploited incorrect generation of raw Lisp code for the recognizer of a [stobj] field of a stobj. More precisely, the bug occurred when a concrete stobj has a field whose type is the name of either a concrete or abstract stobj. Here is an example.
+
+(in-package \"ACL2\") (include-book \"sub\") (defthm thm1 ; logically correct (hi-fldp '(nil)) :rule-classes nil :hints ((\"Goal\" :in-theory (disable (:e hi-fldp))))) (defthm thm2 ; \"proved\" by unsound execution (not (hi-fldp '(nil))) :rule-classes nil) (thm ; proof of nil nil :hints ((\"Goal\" :use (thm1 thm2))))
+
+It was probably a soundness bug to allow a [defaxiom] event to designate a rule of class :[meta] or :[clause-processor] in its :[rule-classes]. That is no longer allowed; [skip-proofs] may be used instead if one believes that the proposed formula is a theorem.
+
+The function [read-file-into-string] has been modified to avoid what might be considered a soundness bug. The change involves causing an error for two reads of the same file without first incrementing the file-clock of the [state]. See [read-file-into-string] for details, in particular for how to avoid that error by evaluating (increment-file-clock state) after calling read-file-into-string. Formerly the error was avoided if the write-date of the file didn't change between the two reads, but the following example shows how this permitted two calls with identical arguments to produce different results, logically causing read-file-into-string to violate the axiom x = x.
+
+Plugged a potential soundness hole in [defwarrant] (though we have not actually observed unsoundness), with changes that will probably be invisible to users. Thanks to Sol Swords for bringing this issue to our attention.
+
+* [Soundness] discusses what we can conclude when we use ACL2 to prove a formula or to compute the value of an expression.
+
+==== NOTE-8-7 ====
+Fixed a soundness bug in the [proof-builder] that could cause goals from [force]d hypotheses to be created incorrectly. (This bug has been around for at least 10 years and probably for 30 years!)
+
+Fixed a soundness bug based on the use of [swap-stobjs] on two [stobj]s of which one is ``live''. See [live-stobj-in-proof]. Thanks to Sol Swords for reporting this bug, including an example and analysis of possible fixes in his report. (Technical Note. We have added code to check for live [stobj]s in proofs, which was sufficient to fix the bug. But the situation described above is caught by a change to swap-stobjs, which now signals an error in the relevant case (exactly one live stobj input).)
+
+Fixed a soundness bug due to the interaction of [stobj]s and [defattach]. The fundamental problem was that defattach events can cause a stobj recognizer to become false; see [community-book] books/system/tests/stobj-attach-unsoundness.lisp. The solution is to disallow attachments for certain supporters of stobj primitives; see [stobj-attachment-restrictions]. Thanks to Sol Swords for reporting the bug, analyzing it quite thoroughly, contributing the book mentioned above, modifying other books as necessary, and providing preliminary code to fix the bug, and for helpful conversations.

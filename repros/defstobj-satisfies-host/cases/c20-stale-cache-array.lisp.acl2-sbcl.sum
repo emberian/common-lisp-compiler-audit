@@ -1,0 +1,4 @@
+RESULT g = NIL
+******** FAILED ********
+ACL2 Error in ( DEFTHM CONTRADICTION ...):  The object G-IS-NOT-NIL
+******** FAILED ********

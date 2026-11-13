@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(set-ignore-ok t)
+(defun f (x)
+  (declare (xargs :verify-guards nil))
+  (let ((unused 3)) (+ x 7)))

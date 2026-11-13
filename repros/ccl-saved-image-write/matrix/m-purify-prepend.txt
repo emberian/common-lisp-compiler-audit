@@ -1,0 +1,90 @@
+fast:bit | area=READONLY | same-page=YES | HANG | - | -
+safe:bit | area=READONLY | same-page=YES | HANG | - | -
+undecl:bit | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:bit | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:bit | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:bit | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:u8 | area=READONLY | same-page=YES | HANG | - | -
+safe:u8 | area=READONLY | same-page=YES | HANG | - | -
+undecl:u8 | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:u8 | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:u8 | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:u8 | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:u16 | area=READONLY | same-page=YES | HANG | - | -
+safe:u16 | area=READONLY | same-page=YES | HANG | - | -
+undecl:u16 | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:u16 | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:u16 | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:u16 | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:u32 | area=READONLY | same-page=YES | HANG | - | -
+safe:u32 | area=READONLY | same-page=YES | HANG | - | -
+undecl:u32 | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:u32 | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:u32 | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:u32 | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:u64 | area=READONLY | same-page=YES | HANG | - | -
+safe:u64 | area=READONLY | same-page=YES | HANG | - | -
+undecl:u64 | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:u64 | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:u64 | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:u64 | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:s8 | area=READONLY | same-page=YES | HANG | - | -
+safe:s8 | area=READONLY | same-page=YES | HANG | - | -
+undecl:s8 | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:s8 | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:s8 | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:s8 | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:s16 | area=READONLY | same-page=YES | HANG | - | -
+safe:s16 | area=READONLY | same-page=YES | HANG | - | -
+undecl:s16 | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:s16 | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:s16 | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:s16 | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:s32 | area=READONLY | same-page=YES | HANG | - | -
+safe:s32 | area=READONLY | same-page=YES | HANG | - | -
+undecl:s32 | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:s32 | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:s32 | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:s32 | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:s64 | area=READONLY | same-page=YES | HANG | - | -
+safe:s64 | area=READONLY | same-page=YES | HANG | - | -
+undecl:s64 | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:s64 | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:s64 | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:s64 | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:fix | area=READONLY | same-page=YES | HANG | - | -
+safe:fix | area=READONLY | same-page=YES | HANG | - | -
+undecl:fix | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:fix | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:fix | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:fix | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:sf | area=READONLY | same-page=YES | HANG | - | -
+safe:sf | area=READONLY | same-page=YES | HANG | - | -
+undecl:sf | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:sf | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:sf | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:sf | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:df | area=READONLY | same-page=YES | HANG | - | -
+safe:df | area=READONLY | same-page=YES | HANG | - | -
+undecl:df | area=READONLY | same-page=YES | returned | readback=OK | @after-gc OK
+generic:df | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:df | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:df | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:ch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+safe:ch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+undecl:ch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+generic:ch | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:ch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:ch | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:bch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+safe:bch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+undecl:bch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+generic:bch | area=READONLY | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:bch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+newarr:bch | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+fast:gv | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+safe:gv | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+undecl:gv | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+generic:gv | area=DYNAMIC-OR-OTHER | same-page=n/a | returned | readback=OK | @after-gc OK
+postfast:gv | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK
+newarr:gv | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK

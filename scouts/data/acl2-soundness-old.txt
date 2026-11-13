@@ -1,0 +1,174 @@
+==== NOTE-1-2 ====
+Hacker mode has been eliminated and [programming] mode has been added. [Programming] mode is unsound but does syntax checking and permits redefinitions of names. See :[doc] load-mode and :[doc] g-mode.
+
+==== NOTE-1-5 ====
+The color [events] --- (red), (pink), (blue), and (gold) --- may no longer be enclosed inside calls of [local], for soundness reasons. In fact, neither may any event that sets the [ACL2-defaults-table]. See [embedded-event-form].
+
+==== NOTE-1-8 ====
+An unsoundness relating [encapsulate] and :functional-instance [hints] has been remedied, with a few small effects visible at the user level. The main observable effect is that [defaxiom] and non-local [include-book] [events] are no longer allowed in the scope of any [encapsulate] event that has a non-empty [signature].
+
+==== NOTE-1-8-UPDATE ====
+See [generalized-booleans] for a discussion of a potential soundness problem for ACL2 related to the question: Which Common Lisp functions are known to return Boolean values?
+
+==== NOTE-2-3 ====
+Versions of ACL2 preceding this one contain a subtle soundness bug! We found a flaw in our detection of [subversive-recursions]. The bug allowed some subversive recursions to slip through undetected.
+
+==== NOTE-2-4 ====
+We corrected a soundness bug in Version 2.3 related to the handling of [immediate-force-modep]. The bad behavior was noticed by Robert Krug. Thanks!
+
+==== NOTE-2-5 ====
+We anticipate further changes to this aspect of books and consider the current mechanisms (for controlling whether warnings or errors are signaled) just a prototype. See also the discussion below of ``soundness related'' warnings. Your suggestions are welcome.
+
+A large number of bugs (some affecting soundness) were fixed, and many small new features were added. See below.
+
+Some warnings are now considered ``soundness related,'' namely, those that advise you that an uncertified book has been included or that a book containing DEFAXIOM or SKIP-PROOFS events. (Technically, DEFAXIOMs do not imperil soundness in the proof- theoretic sense, though they may imperil the validity of theorems. But you should know when a book has added an axiom to your logic!) In previous versions of ACL2, all warnings were inhibited if the token warning was included in the argument to [set-inhibit-output-lst]. Now, soundness related warnings are printed even if warnings have been inhibited. To inhibit all warnings, supply the token warning! to set-inhibit-output-lst.
+
+A soundness bug was fixed. The bug might have been exercised if you had an alternative definition (implies hyps (equiv (fn ...) body)) in which equiv is an equivalence relation other than EQUAL. In this case, calls of fn might have been expanded to body in places that were not equiv-hittable.
+
+An obscure soundness bug was fixed. The bug was exercised only if you had a metafunction with a computed hypothesis (i.e., a ``meta hypothesis function''), the hypothesis contained a free variable, i.e., a variable not involved in the term being rewritten, and the free variable occurred in the output of the metafunction. The possibility of this bug was brought to our attention by Robert Krug.
+
+==== NOTE-2-6-PROOFS ====
+Robert Krug found a soundness bug in our linear arithmetic package. The bug was caused by the derivation of an equation from two inequalities without taking adequate precautions to ensure that both sides of the inequalities were numeric. Robert also kindly provided a fix which we adopted. Thanks Robert!
+
+An obscure potential soundness hole has been fixed by redoing the way evaluation takes place in the ACL2 loop and during theorem proving. We expect that users will see no difference based on this change. (Those interested in the details can see the long comment ``Essay on Evaluation in ACL2'' in source file interface-raw.lisp.)
+
+==== NOTE-2-6-SYSTEM ====
+We modified the tracking of [skip-proofs] events and the use of [state] global ld-skip-proofsp in order to avoid some soundness issues. For example, [skip-proofs] events buried in locally-included books are now tracked. The ``Essay on Skip-proofs'' in source file axioms.lisp gives several examples of dicey behavior that is no longer supported.
+
+The notion of ACL2 version has been slightly modified to catch unsoundness due to implementation dependencies. See [version]. Another change to eliminate such unsoundness is that built-in symbols now have a [symbol-package-name] of \"COMMON-LISP\"; formerly, this string was \"LISP\" for ACL2 images built on GCL. See [symbol-package-name]. At a low level, the (undocumented) constant *main-lisp-package-name* is now \"COMMON-LISP\"; before, it was \"LISP\" for GCL.") (NOTE-2-6{R} (RELEASE-NOTES) "ACL2 Version 2.6(r) (November, 2001) Notes
+
+==== NOTE-2-7 ====
+* Three soundness bugs were fixed. These bugs were probably rarely hit, so users may well not notice these changes.
+
+==== NOTE-2-7-BUG-FIXES ====
+Francisco J. Martin-Mateos emailed us a soundness bug (!) in our handling of functional instantiation (for example see [functional-instantiation-example]). We are grateful for that email, which clearly illustrated the problem. It is included just below the definition of push-clause in ACL2 source file prove.lisp, where we have fixed the bug. This bug was fixed in a re-release of Version 2.6 in February, 2002.
+
+Rob Sumners emailed us a soundness bug (!) in function commutative-p1, which is used by the ACL2 [bdd] package. We are grateful for his help; his email gave a proof of nil and also pointed to the problem function. This bug was fixed in a re-release of Version 2.6 in February, 2002.
+
+We discovered and fixed a soundness bug illustrated by the book below, which was certifiable in Version 2.6 and ends in a proof of nil. The event (verify-guards foo) should have been rejected, because foo calls a function whose guards have not been verified, namely, bar. However, ACL2 did not notice the call of function bar in the body of foo because it was looking in the simplified (normalized) body of foo rather than in the original body of foo. During processing of the book below, the logical definition of zp is used before (verify-guards foo), and (zp -3) reduces to t in the logic. After (verify-guards foo), ACL2 simplifies (foo -3) by going into raw Lisp, where (zp -3) is evaluated and reduces to nil.
+
+The above bug exploited the fact that [zp] has a different definition in raw Lisp than in the logic for arguments that violate its guard). The following example caused a hard error in raw Lisp, though not a soundness error.
+
+Two modifications to [certify-book] now cause it to reflect natural expectations with respect to soundness. First, it now has default values of nil instead of t for keyword arguments :skip-proofs-okp and :defaxioms-okp. Thanks to Robert Krug for suggesting this change and the ACL2 seminar at the University of Texas for discussing it. Second, when :skip-proofs-okp (respectively, :defaxioms-okp) is nil, either explicitly or by default, then [skip-proofs] commands (respectively, [defaxiom] events) are disallowed inside any included books, regardless of the keyword parameters passed to [include-book]. This had not been the case for previous versions of ACL2, regardless of the values of :skip-proofs-okp or :defaxioms-okp passed to [include-book].
+
+==== NOTE-2-8 ====
+* Some soundness bugs were fixed.
+
+* The [include-book] event now has an additional (optional) keyword, :dir. In particular, (include-book \"foo/bar\" :dir :system) will include the indicated book after prepending the path of the built-in books/ directory. You will probably not find :dir :system to be useful if you move the executable image or distributed books; see [include-book], in particular its ``soundness warning''.
+
+==== NOTE-2-8-BUG-FIXES ====
+We have fixed a soundness bug in the tautology checker's handling of expressions of the form (not (not x)). This bug has gone back at least as far as Version_2.4. All of the regression tests passed after the fix, without modification. So we hope that this bug has rarely bitten anyone. Thanks to Qiang Zhang for sending us a proof of nil that led us to this fix: (thm (equal (and p q) (not (or (not p) (not q))))). And thanks to Matyas Sustik for an observation that led to an improvement of our initial fix.
+
+The preceding version (2.7) introduced a soundness bug in handling of ACL2 [arrays], in which functions [compress1] and [compress2] were returning the input alist rather than compressing it appropriately. Here is a proof of nil that no longer succeeds, based on a bug report from Warren Hunt, whom we thank for bringing this problem to our attention.
+
+Previous versions have had two soundness bugs that can occur when using the [proof-builder]:
+
+* The first bug pertains to the expand command, and hence x and x-dumb commands (which call expand); see [proof-builder-commands]. The bug can occur when applying the above commands when the current term is a call of a constrained function symbol for which there is a :[definition] rule. Now, the expand command will succeed only when the function symbol of the current term is a defined function symbol, in which case the original definition is always used, in analogy to how the :expand hint works in the prover; see [hints]. Thanks to John Erickson for sending an example that led us to wonder if there might be a soundness problem.
+
+A soundness bug could be provoked in some Lisps by applying [defpkg] to the empty string. This has been disallowed.
+
+We fixed a soundness bug related to packages caused by a failure to track axioms introduced [local]ly on behalf of [defpkg] events. See [hidden-death-package].
+
+We fixed a soundness bug caused by a failure to check that a :[type-prescription] rule can be processed when proofs are skipped or under a [defequiv] event. The former case can occur when processing an [encapsulate] or [include-book] event, where the rule could depend on a [local] :[compound-recognizer] rule preceding the proposed :[type-prescription] rule under the same [encapsulate] or [include-book] event. See [local-incompatibility] for such an example.
+
+We fixed a potential soundness bug relating to reclassifying a :program mode function to :logic mode (as done by [verify-termination] or the submission of an appropriate ``redundant'' definition) without adequate checking that [stobj] usage was identical. Allegedly redundant definitions must now preserve the stobjs declaration as well as the formals, body, guard and type declarations. We thank Vernon Austel for pointing out this problem.
+
+Thanks to Jared Davis for bringing this problem to our attention. We are particularly grateful to Jared because his example exploited this bug by applying it to a function defined using [mbe] (introduced in this same version, 2.8), in order to prove nil!
+
+==== NOTE-2-8-NEW-FUNCTIONALITY ====
+The [include-book] event now has an additional (optional) keyword, :dir. The value of :dir should be a keyword that is associated with an absolute directory pathname to be used in place of the current book directory (see [cbd]) for resolving the first argument of include-book to an absolute pathname. At start-up, the only such keyword is :system, so that for example (include-book \"arithmetic/top\" :dir :system) will include the book \"arithmetic/top\" under the \"books/\" directory of your ACL2 installation. But you can associate ``projects'' with keywords using [add-include-book-dir], e.g., (add-include-book-dir :my-project \"/u/smith/project0/\"). See [add-include-book-dir] and also see [delete-include-book-dir] and see [include-book]. Note: You will probably not find :dir :system to be useful if the distributed books are not placed in the path of their original location, pointed to by :dir :system, which will often happen if the executable image is obtained from another site. Also see [include-book], in particular its ``soundness warning''.
+
+==== NOTE-2-9 ====
+We fixed a soundness bug due to a conflict between user-supplied package names and internal package names (obtained by prepending a Lisp constant, *1*-package-prefix*) and user-supplied package names. For example, the form (defpkg \"ACL2_*1*_MYPKG\" ()) is no longer legal. Thanks to Robert Krug for asking a question that led directly to the discovery of this bug.
+
+We fixed a soundness bug that allows :[logic] mode functions to call :[program] mode functions. The fix furthermore prevents functions with [guard]s verified from calling functions with guards not verified. We had thought we already prevented all this, but there was a problem with the interaction of [local] definitions and redundancy checking (see [redundant-events]).
+
+We fixed a soundness bug that could occur when built-in functions were called during macroexpansion (a hole in so-called ``safe-mode'').
+
+Fixed a potential soundness bug in the linear arithmetic routines. Thanks to Jared Davis for noticing this problem and to Robert Krug for implementing the fix. (Technical details: We had been assuming that polynomials were being normalized --- see the definition of good-polyp in linear-a.lisp --- but this assumption was false.)
+
+==== NOTE-2-9-1 ====
+(GCL only) A bug in [symbol-package-name] has been fixed that could be exploited to prove nil, and hence is a soundness bug. Thanks to Dave Greve for sending us an example of a problem with [defcong] (see below) that led us to this discovery.
+
+==== NOTE-2-9-3 ====
+We fixed a soundness bug that exploited the ability to define :[program] mode functions that are improperly guarded, and then to use those functions in [defconst] forms. The fix is to evaluate [defconst] forms using the same ``safe-mode'' that is used in macroexpansion (see [guards-and-evaluation]). Here is a proof of nil that succeeded in Allegro Common Lisp (but not, for example, GCL). See also a long comment in source function defconst-fn for an example that does not require the use of :set-guard-checking.
+
+We fixed a soundness hole due to the fact that the \"LISP\" package does not exist in OpenMCL. We now explicitly disallow this package name as an argument to [defpkg]. Thanks to Bob Boyer and Warren Hunt for bringing an issue to our attention that led to this fix.
+
+==== NOTE-2-9-4 ====
+A soundness bug has been fixed that was due to inadequate checking of :[meta] rules in the presence of [local] [events]. Specifically, a local [defevaluator] event is insufficient for supporting a :meta rule (an example is shown in source function chk-acceptable-rules). Thanks to Dave Greve and Jared Davis for bringing this bug to our attention, by sending a proof of nil that exploited this bug. The fix is to check legality of :meta rules even when skipping proofs during an [include-book] event or the second pass of an [encapsulate] event.
+
+==== NOTE-2-9-5 ====
+Fixed a bug that was preventing the printing of [stobj] fields as constants instead of numbers in certain cases. (Note that this bug only affected printing, not soundness.) Thanks to Eric Smith for bringing this problem to our attention and providing the following example (which now works fine).
+
+We fixed a soundness bug that did not correctly detect [local] events. For example, the following event was admitted.
+
+==== NOTE-3-0 ====
+Please see [note-2-9-5] for a description of changes since Version 2.9.4. These include the new [make-event] feature, a soundness bug fix, an improvement for :expand [hints], evaluation in the logic by way of :[set-guard-checking] :none, and many other improvements.
+
+==== NOTE-3-0-1 ====
+Fixed a soundness bug, introduced in the previous release, due to a failure to disallow [table] [events] that set the [ACL2-defaults-table] in a [local] context. Here is a proof of nil that exploits the bug.
+
+==== NOTE-3-0-2 ====
+Fixed soundness bugs in the handling of primitive function [pkg-witness], and improved its documentation. (The executable counterpart returned an incorrect default value, and the axiom symbol-package-name-pkg-witness-name needed pkg-name to be other than \"\" in order to avoid the default value of \"ACL2\".) As fallout, a new built-in :[forward-chaining] rule, symbol-package-name-of-symbol-is-not-empty-string, now asserts that the [symbol-package-name] of a symbol is never \"\". Thanks to Mike Gordon for bringing these soundness bugs to our attention by attempting to prove translations of ACL2 axioms in HOL4.
+
+Fixed a soundness bug in linear arithmetic, due to incomplete tracking of forced assumptions while deriving inequalities. Thanks to Robert Krug for providing a fix and a proof of nil before the fix.
+
+Fixed a soundness bug in the redundancy criterion for [defun] events, which has been modified; see [redundant-events]. This bug is illustrated below. Thanks to Peter Dillinger and Jared Davis for contributions to an email thread that led us to discover this bug. The solution is that for a definition to be redundant with an earlier definition, ACL2 no longer ignores :[measure] [xargs] except when skipping proofs (e.g., during [include-book]). However, a new ``measure'', (:? v1 ... vk), is supported, for specifying a measured subset of the set of formals, i.e., a set of formals that serves as the set of parameters for some valid measure.
+
+We fixed what could be considered a soundness hole that could occur by exploiting redefinition in a particular way. Thanks to Peter Dillinger for raising a question that led to discovery of this hole.
+
+==== NOTE-3-2 ====
+Fixed a soundness bug that was allowing unknown packages to sneak into a book and wreak havoc. Thanks to Peter Dillinger for sending an interesting example that led us to an exploration resulting in finding this bug. (A comment in the source code for note-3-2 shows such an example.) That example led us to fix a couple of other bugs related to packages. See [hidden-death-package] if you are generally interested in such issues, and for associated examples, see comments in note-3-2 in the ACL2 source code.
+
+Fixed subtle soundness bugs related to :[meta] rules by restricting evaluators (see [defevaluator]), as discussed in a new documentation topic: see [evaluator-restrictions].
+
+Fixed a soundness bug that was allowing redefinition from :[logic] to :[program] mode. This prohibition had been in ACL2 for awhile but was accidentally removed in the preceding version.
+
+Fixed a soundness bug related to [trace$]. Thanks to Peter Dillinger for bringing it to our attention and for useful discussions, and providing a proof of nil, the essence of which is illustrated as follows:
+
+Closed a loophole that could be viewed as compromising soundness. It was possible to write files during book certification by exploiting [make-event] expansion, but that is no longer the case by default. A new function [open-output-channel!] is identical as a function to open-output-channel, except that the new function may be called even during [make-event] expansion and [clause-processor] [hints], but requires that there is an active trust tag (see [defttag]). Thanks to Peter Dillinger for producing a convincing example (forging a [certificate] during book certification; see [open-output-channel!]) and to him, Sandip Ray, and Jared Davis for useful discussions on the topic.
+
+==== NOTE-3-2-1 ====
+(OpenMCL and multi-threaded SBCL only) Fixed a soundness bug in the evaluation of [mbe] forms in the presence of Lisp feature :acl2-mv-as-values. Thanks to Sol Swords for reporting this problem and sending a simple proof of nil (which can be found in a comment in the ACL2 sources, in (deflabel note-3-2-1 ...)).
+
+==== NOTE-3-3 ====
+Fixed [set-inhibit-output-lst] so that all warnings are inhibited when warning! but not warning is included in the list. Formerly, only soundness-related warnings were inhibited in this case. Thanks to Eric Smith for bringing this bug to our attention.
+
+==== NOTE-3-4 ====
+Fixed a soundness bug related to the use of [mbe] inside [encapsulate] events. An example proof of nil (before the fix) is in a comment in (deflabel note-3-4 ...) in the ACL2 source code. We therefore no longer allow calls of [mbe] inside [encapsulate] events that have non-empty [signature]s.
+
+Fixed a bug related to the definition of a function supporting the macro [value-triple]. Although this bug was very unlikely to affect any user, it could be carefully exploited to make ACL2 unsound:
+
+Non-[local] definitions of functions or macros are no longer considered redundant with built-ins when the built-ins have special raw Lisp code, because ACL2 was unsound without this restriction! A comment about redundant definitions in source function chk-acceptable-defuns shows how one could prove nil without this new restriction. Note that system utility :[redef+] removes this restriction.
+
+Sandip Ray has contributed books that prove soundness and completeness of different proof strategies used in sequential program verification. Distributed directory books/proofstyles/ has three new directories comprising that contribution: soundness/, completeness/, and counterexamples/. The existing books/proofstyles/ directory has been moved to its subdirectory invclock/.
+
+==== NOTE-3-5 ====
+[Trace!] may now be used in raw Lisp (though please note that all soundness claims are off any time you evaluate forms in raw Lisp!). Thanks to Bob Boyer for feedback that led to this enhancement.
+
+The notion of redundancy (see [redundant-events]) has been made more restrictive for [mutual-recursion] events. Now, if either the old or new event is a [mutual-recursion] event, then redundancy requires that both are [mutual-recursion] events that define the same set of function symbols. Although we are not aware of any soundness bugs fixed by this modification, nevertheless we believe that it reduces the risk of soundness bugs in the future.
+
+Formerly, :[type-prescription] rules for new definitions inside [encapsulate] forms were sometimes added as [constraint]s. This is no longer the case. See also discussion of the ``soundness bug in the forming of constraints'', which is related.
+
+Fixed bugs in the handling of [flet] expressions, one of which had the capability of rendering ACL2 unsound. Thanks to Sol Swords for pointing out two issues and sending examples. One example illustrated how ACL2 was in essence throwing away outer [flet] bindings when processing an inner flet. We have exploited that example to prove a contradiction, as follows: this book was certifiable before this fix.
+
+Fixed a subtle soundness bug in the forming of constraints from deduced type prescriptions. As a result, when ACL2 prints a warning message labeling encapsulated functions as ``subversive'', ACL2 will no longer deduce :[type-prescription] rules for those functions. Examples that exploit the bug in ACL2 Version_3.4 may be found in comments in ACL2 source function convert-type-set-to-term (file other-processes.lisp) and especially in function putprop-type-prescription-lst (file defuns.lisp). For more on the general issue of ``subversive recursions,'' see [subversive-recursions].)
+
+Fixed a soundness bug in the handling of inequalities by the [type-set] mechanism, which was using the inequality database inside the body of a [lambda].
+
+Fixed a long-standing soundness bug in [compress1] and [compress2], whose raw Lisp code gave the logically incorrect result in the case of a single entry other than the [header], where that entry mapped an index to the [default] value. Also fixed soundness bugs in [compress1], in the case of :order >, where the raw Lisp code could drop the [header] from the result or, when the input alist had entries in ascending order, fail to return an alist in descending order. For example, the following book certified successfully.
+
+Fixed a soundness bug involving measured subsets and [verify-termination], by changing [verify-termination] so that it uses [make-event]. See [verify-termination], in particular the discussion about [make-event] near the end of that [documentation] topic. Peter Dillinger first raised the idea to us of making such a change; when we found this soundness bug, we were certainly happy to do so!
+
+Fixed a bug that could cause a hard Lisp error but not, apparently, unsoundness. The bug was in the lack of attention to the order of guard and type declarations when checking for redundancy. In the following example, the second definition was redundant during the first pass of the [encapsulate] form. The second definition, however, was stored on the second pass with a guard of (and (consp (car x)) (consp x)), which caused a hard Lisp error when evaluating (foo 3) due to a misguided attempt to evaluate (car 3) in raw Lisp. The fix is to restrict redundancy of definitions so that the guard and type declarations must be in the same order for the two definitions.
+
+A potential soundness bug in [encapsulate] was fixed. Specifically, when a classical, constrained function is instantiated with a lambda expression containing free variables, it may produce non-standard values depending on the values of the free variables. This means that the functional instantiation cannot be used to justify a non-classical theorem. For example, consider the following sequence:
+
+==== NOTE-3-6 ====
+Fixed a soundness bug related to redundancy of [encapsulate] events (see [redundant-events]) and [ruler-extenders]. A proof of nil in ACL2 Version 3.5 appears in a comment in (deflabel note-3-6 ...) in the ACL2 source code. The fix is to insist that in order for one [encapsulate] event to be redundant with another, they must be evaluated with the same [default-ruler-extenders]. Analogous to this issue of [default-ruler-extenders] for [encapsulate]s is an issue of the [default-verify-guards-eagerness], which has similarly been fixed.
+
+Fixed soundness bugs related to the handling of [subversive-recursions] for [constraint]s. Proofs of nil in ACL2 Version 3.5 appear in a comment in (deflabel note-3-6 ...) in the ACL2 source code.
+
+==== NOTE-3-6-1 ====
+Fixed a soundness bug in the handling of [ruler-extenders], specifically in the handling of [let]-expressions. Thanks to Pete Manolios, who sent us a proof of nil, essentially as follows. In the termination proof for foo below, the binding of x to (cons t x) was not substituted into the recursive call of foo for purposes of the termination proof.

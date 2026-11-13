@@ -1,0 +1,87 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Since F is non-recursive, its admission is trivial.  We observe that
+the type of F is described by the theorem (RATIONALP (F X)).  We used
+the :type-prescription rule BINARY-DF+.
+
+(F :DF) => :DF.
+
+Computing the guard conjecture for F....
+
+The guard conjecture for F is trivial to prove.  F is compliant with
+Common Lisp.
+
+Summary
+Form:  ( DEFUN F ...)
+Rules: ((:TYPE-PRESCRIPTION BINARY-DF+))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ F
+ACL2 !>           0:x(EXIT-BOOT-STRAP-MODE)
+ACL2 !>
+Since F is non-recursive, its admission is trivial.  We observe that
+the type of F is described by the theorem (ACL2-NUMBERP (F X)).  We
+used primitive type reasoning.
+
+Computing the guard conjecture for F....
+
+The guard conjecture for F is trivial to prove.  F is compliant with
+Common Lisp.
+
+Summary
+Form:  ( DEFUN F ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ F
+ACL2 !>
+Since G-GV is non-recursive, its admission is trivial.  We observe
+that the type of G-GV is described by the theorem (ACL2-NUMBERP (G-GV X)).
+We used primitive type reasoning.
+
+Computing the guard conjecture for G-GV....
+
+The guard conjecture for G-GV is trivial to prove, given the :type-
+prescription rule F.  G-GV is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN G-GV ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:TYPE-PRESCRIPTION F))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ G-GV
+ACL2 !>
+Since G-NOGV is non-recursive, its admission is trivial.  We observe
+that the type of G-NOGV is described by the theorem 
+(ACL2-NUMBERP (G-NOGV X)).  We used primitive type reasoning.
+
+Summary
+Form:  ( DEFUN G-NOGV ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ G-NOGV
+ACL2 !>RESULT guard-verified: 2361183241434822606850
+NIL
+ACL2 !>RESULT not guard-verified: 2361183241434822606850
+NIL
+ACL2 !>Bye.

@@ -1,0 +1,7 @@
+(in-package "ACL2")
+(encapsulate ((attach-f (x) t))
+  (local (defun attach-f (x) x)))
+(defun attach-g (x) (list 'attached x))
+(verify-guards attach-g)
+(defattach attach-f attach-g)
+(defun attach-h (x) (attach-f x))

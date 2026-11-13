@@ -1,0 +1,388 @@
+CCL compiler-table gap, 1 dump: ccl-dietz-20k.sexp
+reached/total: compiler-macros 66/195  constant-fold 55/91  nx1 68/221  rewrite 61/98  p2 93/243  vinsns 148/529
+
+== compiler macros (optimizers.lisp), expander never returned a new form: table 195, reached 66, unreached 129
+  -- integer (4)
+     %ILSR
+     LOGTEST
+     RATIOP
+     UNSIGNED-BYTE-P
+  -- list (59)
+     ADJOIN
+     APPEND
+     ASSEQL
+     ASSEQUAL
+     ASSOC
+     ASSQ
+     CAAAAR
+     CAAADR
+     CAAAR
+     CAADAR
+     CAADDR
+     CAADR
+     CAAR
+     CADAAR
+     CADADR
+     CADAR
+     CADDAR
+     CADDDR
+     CADDR
+     CADR
+     CDAAAR
+     CDAADR
+     CDAAR
+     CDADAR
+     CDADDR
+     CDADR
+     CDAR
+     CDDAAR
+     CDDADR
+     CDDAR
+     CDDDAR
+     CDDDDR
+     CDDDR
+     CDDR
+     CONS   (expander ran, declined)
+     CONSP
+     EVERY
+     FIND-IF
+     FIND-IF-NOT
+     GETF
+     LAST
+     LIST*
+     LISTP
+     MAPC
+     MAPCAR
+     MEMBER
+     MEMEQL
+     MEMEQUAL
+     MEMQ
+     NOTANY
+     NOTEVERY
+     NTH
+     NTHCDR
+     POSITION-IF
+     POSITION-IF-NOT
+     REMOVE-IF
+     REMOVE-IF-NOT
+     SOME
+     UNION
+  -- character (12)
+     %CHAR-CODE-CASE-FOLD
+     %CHAR-CODE-DOWNCASE
+     %CHAR-CODE-UPCASE
+     CHAR-DOWNCASE
+     CHAR-EQUAL
+     CHAR-UPCASE
+     CHAR/=
+     CHAR<
+     CHAR<=
+     CHAR=
+     CHAR>
+     CHAR>=
+  -- control (4)
+     FALSE
+     FUNCTIONP
+     SYMBOLP
+     TRUE
+  not listed: clos/struct 16 array/string 14 float 5 other 1 foreign 1 runtime 13
+
+== constant folding (nx-constant-fold), never folded: table 91, reached 55, unreached 36
+  -- integer (9)
+     %ILSL
+     %ILSR
+     BYTE-MASK
+     BYTE-POSITION
+     BYTE-SIZE
+     DEPOSIT-BYTE
+     LOAD-BYTE
+     LOGTEST
+     LSH
+  -- list (14)
+     ASSOC
+     CADR
+     CAR
+     CDDR
+     CDR
+     CONSP
+     GETF
+     LAST
+     LIST-LENGTH
+     LISTP
+     MEMBER
+     NTH
+     NTHCDR
+     RASSOC
+  -- character (5)
+     CHAR
+     CHAR-CODE
+     CHAR-INT
+     CHARACTER
+     CODE-CHAR
+  -- control (1)
+     NULL
+  not listed: array/string 3 float 2 other 2
+
+== nx1 handlers (defnx1), symbol -> handler: table 221, reached 68, unreached 153
+  -- integer (13)
+     %IASR                    NX1-BINOP
+     %ILSL                    NX1-BINOP
+     %ILSR                    NX1-BINOP
+     %WORD-TO-INT             NX1-UNARYOP
+     REQUIRE-FIXNUM           NX1-REQUIRE
+     REQUIRE-S16              NX1-REQUIRE
+     REQUIRE-S32              NX1-REQUIRE
+     REQUIRE-S64              NX1-REQUIRE
+     REQUIRE-S8               NX1-REQUIRE
+     REQUIRE-U16              NX1-REQUIRE
+     REQUIRE-U32              NX1-REQUIRE
+     REQUIRE-U64              NX1-REQUIRE
+     REQUIRE-U8               NX1-REQUIRE
+  -- list (15)
+     CAAR                     NX1-CXXR
+     CADR                     NX1-CXXR
+     CDAR                     NX1-CXXR
+     CDDR                     NX1-CXXR
+     CONSP                    NX1-CCEQ-UNARYOP
+     ENDP                     NX1-CCEQ-UNARYOP
+     LIST*                    NX1-LIST*
+     MAKE-LIST                NX1-MAKE-LIST
+     MULTIPLE-VALUE-LIST      NX1-MACRO-UNARYOP
+     NTH-VALUE                NX1-MACRO-BINOP
+     REQUIRE-LIST             NX1-REQUIRE
+     RPLACA                   NX1-RPLACX
+     RPLACD                   NX1-RPLACX
+     SET-CAR                  NX1-SET-CXR
+     SET-CDR                  NX1-SET-CXR
+  -- character (5)
+     BASE-CHAR-P              NX1-CCEQ-UNARYOP
+     CHAR-CODE                NX1-CHAR-CODE
+     CHARACTERP               NX1-CCEQ-UNARYOP
+     CODE-CHAR                NX1-CODE-CHAR
+     REQUIRE-CHARACTER        NX1-REQUIRE
+  -- control (5)
+     %APPLY-LEXPR             NX1-%APPLY-LEXPR
+     %INTERRUPT-POLL          NX1-NULLARYOP
+     ATOM                     NX1-ATOM
+     NEQ                      NX1-CCNE-BINARYOP
+     NULL                     NX1-NEGATION
+  not listed: clos/struct 5 array/string 25 float 21 foreign 43 runtime 21
+
+== acode-rewrite handlers (def-acode-rewrite), operator -> handler: table 98, reached 61, unreached 37
+  -- integer (8)
+     %ILOGAND2                ACODE-REWRITE-LOGAND
+     %ILOGIOR2                ACODE-REWRITE-LOGIOR
+     %ILOGXOR2                ACODE-REWRITE-LOGXOR
+     %ILSL                    ACODE-REWRITE-%ILSL
+     %IZEROP                  ACODE-REWRITE-%IZEROP
+     %NATURAL-LOGAND          ACODE-REWRITE-LOGAND
+     %NATURAL-LOGIOR          ACODE-REWRITE-LOGIOR
+     %NATURAL-LOGXOR          ACODE-REWRITE-LOGXOR
+  -- list (2)
+     CONSP                    ACODE-REWRITE-CONSP
+     LIST*                    ACODE-REWRITE-ARGLIST-FORM
+  -- character (2)
+     %CHAR-CODE               ACODE-REWRITE-CHAR-CODE
+     CHAR-CODE                ACODE-REWRITE-CHAR-CODE
+  -- control (8)
+     %INTERRUPT-POLL          REWRITE-NULLARY
+     FREE-REFERENCE           REWRITE-TRIVIAL-UNARY
+     GLOBAL-REF               REWRITE-TRIVIAL-UNARY
+     GLOBAL-SETQ              ACODE-REWRITE-SETQ-SPECIAL
+     INHERITED-ARG            REWRITE-TRIVIAL-UNARY
+     MULTIPLE-VALUE-BIND      ACODE-REWRITE-MULTIPLE-VALUE-BIND
+     SELF-CALL                ACODE-REWRITE-SELF-CALL
+     TYPE-ASSERTED-FORM       REWRITE-TYPE-ASSERTED-FORM
+  not listed: clos/struct 1 array/string 2 foreign 10 runtime 4
+
+== arm64 p2 handlers (defarm642), operator : result type: table 243, reached 93, unreached 150
+  -- integer (21)
+     %I+                      INTEGER                      ARM642-%I+
+     %I-                      INTEGER                      ARM642-%I-
+     %ILSR                    FIXNUM                       ARM642-%ILSR
+     %IZEROP                  BOOLEAN                      ARM642-%IZEROP
+     %NATURAL+                NATURAL                      ARM642-%NATURAL+
+     %NATURAL-                NATURAL                      ARM642-%NATURAL-
+     %NATURAL-LOGAND          NATURAL                      ARM642-%NATURAL-LOGAND
+     %NATURAL-LOGIOR          NATURAL                      ARM642-%NATURAL-LOGIOR
+     %NATURAL-LOGXOR          NATURAL                      ARM642-%NATURAL-LOGXOR
+     %WORD-TO-INT             FIXNUM                       ARM642-%WORD-TO-INT
+     FIXNUM-ASH               FIXNUM                       ARM642-FIXNUM-ASH
+     FIXNUM-OVERFLOW          INTEGER                      ARM642-FIXNUM-OVERFLOW
+     NATURAL-SHIFT-LEFT       NATURAL                      ARM642-NATURAL-SHIFT-LEFT
+     NATURAL-SHIFT-RIGHT      NATURAL                      ARM642-NATURAL-SHIFT-RIGHT
+     REQUIRE-S16              (SIGNED-BYTE 16)             ARM642-REQUIRE-S16
+     REQUIRE-S32              (SIGNED-BYTE 32)             ARM642-REQUIRE-S32
+     REQUIRE-S64              (SIGNED-BYTE 64)             ARM642-REQUIRE-S64
+     REQUIRE-S8               (SIGNED-BYTE 8)              ARM642-REQUIRE-S8
+     REQUIRE-U16              (UNSIGNED-BYTE 16)           ARM642-REQUIRE-U16
+     REQUIRE-U32              (UNSIGNED-BYTE 32)           ARM642-REQUIRE-U32
+     REQUIRE-U64              (UNSIGNED-BYTE 64)           ARM642-REQUIRE-U64
+  -- list (12)
+     %RPLACA                  :INFER                       ARM642-%RPLACA
+     %RPLACD                  :INFER                       ARM642-%RPLACD
+     CONSP                    BOOLEAN                      ARM642-CONSP
+     ENDP                     BOOLEAN                      ARM642-ENDP
+     LIST*                    :INFER                       ARM642-LIST*
+     MAKE-LIST                LIST                         ARM642-MAKE-LIST
+     MULTIPLE-VALUE-LIST      LIST                         ARM642-MULTIPLE-VALUE-LIST
+     NTH-VALUE                :INFER                       ARM642-NTH-VALUE
+     RPLACA                   CONS                         ARM642-RPLACA
+     RPLACD                   CONS                         ARM642-RPLACD
+     SET-CAR                  :INFER                       ARM642-SET-CAR
+     SET-CDR                  :INFER                       ARM642-SET-CDR
+  -- character (8)
+     %CHAR-CODE               (UNSIGNED-BYTE 8)            ARM642-%CHAR-CODE
+     %CODE-CHAR               CHARACTER                    ARM642-%CODE-CHAR
+     %VALID-CODE-CHAR         CHARACTER                    ARM642-%VALID-CODE-CHAR
+     BASE-CHAR-P              BOOLEAN                      ARM642-BASE-CHAR-P
+     CHAR-CODE                (MOD 1114112)                ARM642-CHAR-CODE
+     CHARACTERP               BOOLEAN                      ARM642-CHARACTERP
+     CODE-CHAR                CHARACTER                    ARM642-CODE-CHAR
+     REQUIRE-CHARACTER        CHARACTER                    ARM642-REQUIRE-CHARACTER
+  -- control (10)
+     FREE-REFERENCE           :INFER                       ARM642-FREE-REFERENCE
+     GLOBAL-REF               :INFER                       ARM642-GLOBAL-REF
+     GLOBAL-SETQ              :INFER                       ARM642-GLOBAL-SETQ
+     MULTIPLE-VALUE-BIND      :INFER                       ARM642-MULTIPLE-VALUE-BIND
+     NEQ                      BOOLEAN                      ARM642-NEQ
+     NIL                      NULL                         ARM642-NIL   (operator seen by the rewriter, handler never ran)
+     SELF-CALL                :INFER                       ARM642-SELF-CALL
+     SETQ-FREE                :INFER                       ARM642-SETQ-FREE
+     T                        BOOLEAN                      ARM642-T   (operator seen by the rewriter, handler never ran)
+     TYPE-ASSERTED-FORM       :INFER                       ARM642-TYPE-ASSERTED-FORM
+  not listed: clos/struct 5 array/string 21 float 37 foreign 25 runtime 11
+
+== acode operators with no arm64 p2 handler (25): TAG-LABEL SEQUENCE-TYPE %BADARG1 FF-CALL %COMPLEX-DOUBLE-FLOAT/-2 SYMBOL-NAME MEMQ ASSQ LENGTH LIST-LENGTH ENSURE-SIMPLE-STRING SET EQL %OLD-GVECTOR SCHAR SET-SCHAR SYMBOLP %QUO2 %COMPLEX-SINGLE-FLOAT/-2 %LISP-LOWBYTE-REF POWEROPEN-FF-CALL %SETF-SHORT-FLOAT EABI-FF-CALL %INTERRUPT-POLL I386-FF-CALL
+
+== arm64 vinsn templates (define-arm64-vinsn), name results args temps: table 529, reached 148, unreached 381
+  -- integer (60)
+     %IASR                          -> (:IMM)  <- (:IMM :IMM)  temps (:S64)
+     %ILSL                          -> (:IMM)  <- (:IMM :IMM)  temps (:S64)
+     %ILSR                          -> (:IMM)  <- (:IMM :IMM)  temps (:S64)
+     %ILSR-C                        -> (:IMM)  <- (:U8CONST :IMM)
+     %NATURAL+                      -> (:U64)  <- (:U64 :U64)
+     %NATURAL-                      -> (:U64)  <- (:U64 :U64)
+     %NATURAL-LOGAND                -> (:U64)  <- (:U64 :U64)
+     %NATURAL-LOGIOR                -> (:U64)  <- (:U64 :U64)
+     %NATURAL-LOGXOR                -> (:U64)  <- (:U64 :U64)
+     %UNBOX-U16                     -> (:U16)  <- (:LISP)
+     %UNBOX-U32                     -> (:U32)  <- (:LISP)
+     %UNBOX-U8                      -> (:U8)  <- (:LISP)
+     BOX-FIXNUM                     -> (:IMM)  <- (:S64)
+     FIXNUM->SIGNED-NATURAL         -> (:S64)  <- (:IMM)
+     FIXNUM-ASH                     -> (:LISP)  <- (:LISP :LISP)  temps (:S64)
+     FIXNUM-ASH-LEFT                -> (:LISP)  <- (:LISP :LISP)  temps (:S64)
+     GETS64                         -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     GETU64                         -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     NATURAL-SHIFT-LEFT             -> (:U64)  <- (:U64 :U8CONST)
+     NATURAL-SHIFT-RIGHT            -> (:U64)  <- (:U64 :U8CONST)
+     REQUIRE-S16                    -> NIL  <- (:LISP)  temps (:S64)
+     REQUIRE-S32                    -> NIL  <- (:LISP)  temps (:S64)
+     REQUIRE-S64                    -> NIL  <- (:LISP)  temps (:U64)
+     REQUIRE-S8                     -> NIL  <- (:LISP)  temps (:S64)
+     REQUIRE-U16                    -> NIL  <- (:LISP)
+     REQUIRE-U32                    -> NIL  <- (:LISP)
+     REQUIRE-U64                    -> NIL  <- (:LISP)  temps (:S64)
+     S16->FIXNUM                    -> (:IMM)  <- (:S16)
+     S16->S32                       -> (:S32)  <- (:S16)
+     S16->S64                       -> (:S64)  <- (:S16)
+     S32->FIXNUM                    -> (:IMM)  <- (:S32)
+     S64->INTEGER                   -> (:LISP)  <- (:S64)  temps (:U64)
+     S8->FIXNUM                     -> (:IMM)  <- (:S8)
+     S8->S16                        -> (:S16)  <- (:S8)
+     S8->S32                        -> (:S32)  <- (:S8)
+     S8->S64                        -> (:S64)  <- (:S8)
+     SHIFT-LEFT-VARIABLE-WORD       -> (:U32)  <- (:U32 :U32)
+     SIGN-EXTEND-HALFWORD           -> (:IMM)  <- (:IMM)
+     U16->FIXNUM                    -> (:IMM)  <- (:U16)
+     U16->S32                       -> (:S32)  <- (:U16)
+     U16->U32                       -> (:U32)  <- (:U16)
+     U16->U64                       -> (:U64)  <- (:U16)
+     U32->FIXNUM                    -> (:IMM)  <- (:U32)
+     U32LOGANDC2                    -> (:U32)  <- (:U32 :U32)
+     U32LOGIOR                      -> (:U32)  <- (:U32 :U32)
+     U64->INTEGER                   -> (:LISP)  <- (:U64)  temps (:U64)
+     U64-POPCOUNT                   -> (:U64)  <- (:U64)  temps (:DOUBLE-FLOAT)
+     U8->FIXNUM                     -> (:IMM)  <- (:U8)
+     U8->S16                        -> (:S16)  <- (:U8)
+     U8->S32                        -> (:S32)  <- (:U8)
+     U8->U16                        -> (:U16)  <- (:U8)
+     U8->U32                        -> (:U32)  <- (:U8)
+     U8->U64                        -> (:U64)  <- (:U8)
+     UNBOX-S16                      -> (:S16)  <- (:LISP)
+     UNBOX-S32                      -> (:S32)  <- (:LISP)
+     UNBOX-S64                      -> (:S64)  <- (:LISP)
+     UNBOX-S8                       -> (:S8)  <- (:LISP)
+     UNBOX-U16                      -> (:U16)  <- (:LISP)
+     UNBOX-U32                      -> (:U32)  <- (:LISP)
+     UNBOX-U8                       -> (:U8)  <- (:LISP)
+  -- list (11)
+     HEAP-CONS-REST-ARG             -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     HEAP-REST-ARG                  -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     LIST*                          -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     MAKE-STACK-LIST                -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     NTH-VALUE                      -> (:LISP)  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     REQ-HEAP-REST-ARG              -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     REQ-STACK-REST-ARG             -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     STACK-CONS-LIST*               -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     STACK-CONS-REST-ARG            -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     STACK-REST-ARG                 -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     TRAP-UNLESS-CONS               -> NIL  <- (:LISP)  temps (:U64)
+  -- character (10)
+     CHARACTER->FIXNUM              -> (:LISP)  <- (:LISP)
+     CODE-CHAR->CHAR                -> (:LISP)  <- (:IMM)
+     FIXNUM->CHAR                   -> (:LISP)  <- (:IMM)  temps (:U64)
+     LOAD-CHARACTER-CONSTANT        -> (:LISP)  <- (:U32CONST)
+     MASK-BASE-CHAR                 -> (:U32)  <- (:LISP)
+     REQUIRE-CHAR-CODE              -> NIL  <- (:LISP)  temps (:U64)
+     REQUIRE-CHARACTER              -> NIL  <- (:LISP)  temps (:U64)
+     TRAP-UNLESS-CHARACTER          -> NIL  <- (:LISP)  temps (:U64)
+     U32->CHAR                      -> (:LISP)  <- (:U32)
+     UNBOX-BASE-CHAR                -> (:U32)  <- (:LISP)
+  -- control (30)
+     ADD-VALUES                     -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     ADJUST-SP                      -> NIL  <- (:S16CONST)
+     BIND-INTERRUPT-LEVEL           -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     BIND-INTERRUPT-LEVEL-0         -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     BIND-INTERRUPT-LEVEL-0-INLINE  -> NIL  <- NIL  temps (:IMM :IMM :IMM :IMM :U64)
+     BIND-INTERRUPT-LEVEL-M1        -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     BIND-INTERRUPT-LEVEL-M1-INLINE -> NIL  <- NIL  temps (:IMM :IMM :IMM :IMM :IMM)
+     BIND-NIL                       -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     BIND-SELF                      -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     BIND-SELF-BOUNDP-CHECK         -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     CALL-KNOWN-SYMBOL-OOL          -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     CALL-LABEL                     -> NIL  <- (:LABEL)  (:CALL)
+     CHECK-EXACT-NARGS-LARGE        -> NIL  <- (:U16CONST)  temps (:U64)
+     CHECK-MAX-NARGS-LARGE          -> NIL  <- (:U16CONST)  temps (:U64)
+     CHECK-MIN-NARGS-LARGE          -> NIL  <- (:U16CONST)  temps (:U64)
+     COPY-LEXPR-ARGUMENT            -> NIL  <- NIL  temps (:LISP)
+     DEFAULT-1-ARG                  -> NIL  <- (:U16CONST)
+     DEFAULT-2-ARGS                 -> NIL  <- (:U16CONST)
+     DEFAULT-3-ARGS                 -> NIL  <- (:U16CONST)
+     FITVALS                        -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     LOAD-VFRAME-ADDRESS            -> (:IMM)  <- (:S16CONST)
+     REF-INTERRUPT-LEVEL            -> (:IMM)  <- NIL  temps (:IMM)
+     SAVE-LEXPR-ARGREGS             -> NIL  <- (:U16CONST)  temps (:U64 :U64 :U64)
+     SAVE-LISP-CONTEXT-LEXPR        -> NIL  <- NIL  temps (:IMM)
+     SETQSYM                        -> NIL  <- NIL  temps ((:U64 1))  (:CALL :SUBPRIM)
+     SYMBOL-REF                     -> (:LISP)  <- (:LISP :U32CONST)
+     TAIL-CALL-SYM-GEN              -> NIL  <- NIL  temps ((:U64 1))  (:JUMPLR)
+     TAIL-FUNCALL-SLIDE             -> NIL  <- NIL  temps ((:U64 1) (:LISP 12))  (:JUMPLR)
+     TAIL-FUNCALL-VSP               -> NIL  <- NIL  temps ((:U64 1) (:LISP 12))  (:JUMPLR)
+     VCELL-SET                      -> NIL  <- (:LISP :LISP)
+  not listed: clos/struct 3 array/string 82 float 111 other 1 foreign 60 runtime 13
+
+== synonyms (nx-transform, not instrumented): ((%GET-SIGNED-LONG %GET-LONG) (%GET-UNSIGNED-WORD %GET-WORD) (%GET-UNSIGNED-BYTE %GET-BYTE) (CHAR-INT CHAR-CODE) (NULL NOT) (FUNCTIONP LFUNP) (REST CDR) (FOURTH CADDDR) (THIRD CADDR) (SECOND CADR) (FIRST CAR))
+
+== p2 handlers reached at most 5 times (3 entries):
+   %%INEG:1 %NATURAL<>:3 FIXNUM-SUB-OVERFLOW:4
+
+== vinsn templates reached at most 5 times (10 entries):
+   TAIL-CALL-FN-GEN:1 LOGXOR-IMM:1 NEGATE-FIXNUM-NO-OVF:1 UNBOX-U64:3 SPREAD-LIST:3 MULTIPLY-IMMEDIATE:4 TAIL-FUNCALL-GEN:4 IJMP:5 NOP:5 SET-CARRY-IF-FIXNUM-IN-RANGE:5
+
+== acode-rewrite handlers reached at most 5 times (1 entries):
+   %INEG:5
+
+== compiler macros reached at most 5 times (0 entries):
+   

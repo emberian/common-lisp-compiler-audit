@@ -1,0 +1,36 @@
+(in-package :cl-user)
+(defun page (addr) (logandc2 addr 16383))
+(defun cpage (f) (page (ccl::%address-of (ccl::uvref f 0))))
+(defun show (tag obj f) (format t "~&@~a obj=~x obj-page=~x code-page=~x~%" tag (ccl::%address-of obj) (page (ccl::%address-of obj)) (cpage f)) (finish-output))
+(let ((c (ccl:getenv "CASE")))
+  (cond
+    ((string= c "special") (show c *a-u8* #'fast-special-u8) (fast-special-u8 1 9) (format t "@returned ~s~%" *a-u8*))
+    ((string= c "big-far")   ; element far from the code page
+     (show c *big-u8* #'fast-big)
+     (format t "@elt-page ~x~%" (page (+ (ccl::%address-of *big-u8*) 50000)))
+     (fast-big *big-u8* 50000 7)
+     (format t "@returned elt=~s nonzero-count=~s~%" (aref *big-u8* 50000) (count 0 *big-u8* :test-not #'eql)))
+    ((string= c "big-sweep") ; find which element pages share the code page, then write one such element
+     (show c *big-u8* #'fast-big)
+     (let* ((base (+ (ccl::%address-of *big-u8*) 4)) (cp (cpage #'fast-big))
+            (hit (loop for i from 0 below 100000 by 4096 when (= (page (+ base i)) cp) return i)))
+       (format t "@index-on-code-page ~s~%" hit) (finish-output)
+       ;; write everything NOT on the code page first, check, then the one that is
+       (loop for i from 0 below 100000 unless (= (page (+ base i)) cp) do (fast-big *big-u8* i 5))
+       (format t "@off-page-writes-done count5=~s of ~s~%" (count 5 *big-u8*) (length *big-u8*)) (finish-output)
+       (when hit (fast-big *big-u8* hit 5) (format t "@on-page-write returned~%"))))
+    ((string= c "fill") (show c *big-u8* #'fill-big) (fill-big *big-u8* 3) (format t "@returned count3=~s~%" (count 3 *big-u8*)))
+    ((string= c "cons") (show c *cons* #'fast-rplaca) (fast-rplaca *cons* 99) (format t "@returned ~s~%" *cons*))
+    ((string= c "string") (format t "@str-addr ~x~%" (ccl::%address-of *str*)) (setf (char *str* 1) #\Z) (replace *str* "QQ" :start1 4) (fill *str* #\x :start 6) (format t "@returned ~s~%" *str*))
+    ((string= c "struct") (format t "@pt-addr ~x~%" (ccl::%address-of *pt*)) (setf (pt-x *pt*) 5 (pt-d *pt*) 2.5d0) (ccl:gc) (format t "@returned ~s~%" *pt*))
+    ((string= c "hash") (setf (gethash "k" *ht*) 2 (gethash "j" *ht*) 3) (ccl:gc) (format t "@returned ~s ~s~%" (gethash "k" *ht*) (gethash "j" *ht*)))
+    ((string= c "addrs") (dolist (s '(*bignum* *boxed-df* *str* *cons* *pt* *ht* *big-u8*)) (format t "@addr ~a ~x~%" s (ccl::%address-of (symbol-value s)))))
+    ((string= c "resave")    ; generic-write pre-save data, then save a second-generation image
+     (setf (aref *a-u8* 1) 42) (setf (aref *big-u8* 50000) 43) (setf (char *str* 0) #\R)
+     (format t "@resave-wrote ~s~%" *a-u8*) (finish-output)
+     (ccl:save-application "img2" :prepend-kernel t))
+    ((string= c "resave-check")
+     (format t "@gen2 a-u8=~s big[50000]=~s str=~s  ~a~%" *a-u8* (aref *big-u8* 50000) *str*
+             (if (and (= (aref *a-u8* 1) 42) (= (aref *big-u8* 50000) 43) (char= (char *str* 0) #\R)) "OK" "WRONG")))))
+(finish-output)
+(ccl:quit 0)

@@ -1,0 +1,3 @@
+(certify-book "repro-warrant-book")
+(apply-warrant-sq 4)
+(quit)

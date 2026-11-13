@@ -1,0 +1,4 @@
+ACL2 Error in ( DEFUN F ...):  The body for F calls the function PNX,
+******** FAILED ********
+ACL2 Error [Translate] in TOP-LEVEL:  The symbol F (in package "ACL2")
+RESULT NIL

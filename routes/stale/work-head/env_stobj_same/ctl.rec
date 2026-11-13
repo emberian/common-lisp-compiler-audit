@@ -1,0 +1,26 @@
+@Q f 2005
+@Q g 9
+@Q h (3 . HB)
+@Q m (3 MB)
+@Q um (3 MB)
+@Q e (3 EB)
+@Q p (3 PB)
+@Q i (3 IB)
+@Q ui (3 IB)
+@Q ub (BB 6001 2007)
+@Q big (BB 6001 2007)
+@Q k 2000
+@N f 2005
+@N g 9
+@N e (3 EB)
+@N ui (3 IB)
+@W f (BINARY-+ X (BINARY-+ '2000 '2))
+@W g (IF (INTEGERP X) (BINARY-* '3 X) '0)
+@W e (CONS X (CONS 'EB 'NIL))
+@W tz NIL
+@W k '2000
+@W big (BB 6001 2007)
+@W fthm NIL
+@W cls (:COMMON-LISP-COMPLIANT :IDEAL :PROGRAM)
+@S (:OK :OK :OK :OK :DIFF :OK :OK)
+@END

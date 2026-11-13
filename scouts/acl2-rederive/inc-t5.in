@@ -1,0 +1,3 @@
+(include-book "t5-book")
+(f 1)
+(quit)

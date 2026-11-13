@@ -1,0 +1,568 @@
+APPLY$-WARRANT-DO$	no-body: constrained
+APPLY$-WARRANT-DO$-WITNESS	no-body: constrained
+APPLY$-WARRANT-DO$-HARD-ER	no-body: constrained
+APPLY$-WARRANT-DO$-HARD-ER-WITNESS	no-body: constrained
+APPLY$-WARRANT-LOOP$-DEFAULT-VALUES	no-body: constrained
+APPLY$-WARRANT-LOOP$-DEFAULT-VALUES-WITNESS	no-body: constrained
+APPLY$-WARRANT-LOOP$-DEFAULT-VALUES1	no-body: constrained
+APPLY$-WARRANT-LOOP$-DEFAULT-VALUES1-WITNESS	no-body: constrained
+APPLY$-WARRANT-EVISCERATE-DO$-ALIST	no-body: constrained
+APPLY$-WARRANT-EVISCERATE-DO$-ALIST-WITNESS	no-body: constrained
+APPLY$-WARRANT-STOBJ-PRINT-NAME	no-body: constrained
+APPLY$-WARRANT-STOBJ-PRINT-NAME-WITNESS	no-body: constrained
+APPLY$-WARRANT-LEXP	no-body: constrained
+APPLY$-WARRANT-LEXP-WITNESS	no-body: constrained
+APPLY$-WARRANT-LEX-FIX	no-body: constrained
+APPLY$-WARRANT-LEX-FIX-WITNESS	no-body: constrained
+APPLY$-WARRANT-NFIX-LIST	no-body: constrained
+APPLY$-WARRANT-NFIX-LIST-WITNESS	no-body: constrained
+APPLY$-WARRANT-L<	no-body: constrained
+APPLY$-WARRANT-L<-WITNESS	no-body: constrained
+APPLY$-WARRANT-D<	no-body: constrained
+APPLY$-WARRANT-D<-WITNESS	no-body: constrained
+APPLY$-WARRANT-MEMPOS	no-body: constrained
+APPLY$-WARRANT-MEMPOS-WITNESS	no-body: constrained
+APPLY$-WARRANT-APPEND$+	no-body: constrained
+APPLY$-WARRANT-APPEND$+-WITNESS	no-body: constrained
+APPLY$-WARRANT-APPEND$+-AC	no-body: constrained
+APPLY$-WARRANT-APPEND$+-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-APPEND$	no-body: constrained
+APPLY$-WARRANT-APPEND$-WITNESS	no-body: constrained
+APPLY$-WARRANT-APPEND$-AC	no-body: constrained
+APPLY$-WARRANT-APPEND$-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-COLLECT$+	no-body: constrained
+APPLY$-WARRANT-COLLECT$+-WITNESS	no-body: constrained
+APPLY$-WARRANT-COLLECT$+-AC	no-body: constrained
+APPLY$-WARRANT-COLLECT$+-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-COLLECT$	no-body: constrained
+APPLY$-WARRANT-COLLECT$-WITNESS	no-body: constrained
+APPLY$-WARRANT-COLLECT$-AC	no-body: constrained
+APPLY$-WARRANT-COLLECT$-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-THEREIS$+	no-body: constrained
+APPLY$-WARRANT-THEREIS$+-WITNESS	no-body: constrained
+APPLY$-WARRANT-THEREIS$	no-body: constrained
+APPLY$-WARRANT-THEREIS$-WITNESS	no-body: constrained
+APPLY$-WARRANT-ALWAYS$+	no-body: constrained
+APPLY$-WARRANT-ALWAYS$+-WITNESS	no-body: constrained
+APPLY$-WARRANT-ALWAYS$	no-body: constrained
+APPLY$-WARRANT-ALWAYS$-WITNESS	no-body: constrained
+APPLY$-WARRANT-SUM$+	no-body: constrained
+APPLY$-WARRANT-SUM$+-WITNESS	no-body: constrained
+APPLY$-WARRANT-SUM$+-AC	no-body: constrained
+APPLY$-WARRANT-SUM$+-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-SUM$	no-body: constrained
+APPLY$-WARRANT-SUM$-WITNESS	no-body: constrained
+APPLY$-WARRANT-SUM$-AC	no-body: constrained
+APPLY$-WARRANT-SUM$-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-WHEN$+	no-body: constrained
+APPLY$-WARRANT-WHEN$+-WITNESS	no-body: constrained
+APPLY$-WARRANT-WHEN$+-AC	no-body: constrained
+APPLY$-WARRANT-WHEN$+-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-WHEN$	no-body: constrained
+APPLY$-WARRANT-WHEN$-WITNESS	no-body: constrained
+APPLY$-WARRANT-WHEN$-AC	no-body: constrained
+APPLY$-WARRANT-WHEN$-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-UNTIL$+	no-body: constrained
+APPLY$-WARRANT-UNTIL$+-WITNESS	no-body: constrained
+APPLY$-WARRANT-UNTIL$+-AC	no-body: constrained
+APPLY$-WARRANT-UNTIL$+-AC-WITNESS	no-body: constrained
+APPLY$-WARRANT-UNTIL$	no-body: constrained
+APPLY$-WARRANT-UNTIL$-WITNESS	no-body: constrained
+APPLY$-WARRANT-UNTIL$-AC	no-body: constrained
+APPLY$-WARRANT-UNTIL$-AC-WITNESS	no-body: constrained
+DO$	arity > 3
+DO$-HARD-ER	arity > 3
+APPLY$-EQUIVALENCE	non-executable
+APPLY$-EQUIVALENCE-WITNESS	no-body: constrained
+BRR-NEAR-MISSP	no-body: constrained
+APPEND$+-AC	arity > 3
+COLLECT$+-AC	arity > 3
+SUM$+-AC	arity > 3
+WHEN$+-AC	arity > 3
+UNTIL$+-AC	arity > 3
+META-EXTRACT-GLOBAL-FACT+	state formal or result
+META-EXTRACT-CONTEXTUAL-FACT	state formal or result
+META-EXTRACT-RW+-TERM	state formal or result
+FROM-TO-BY-AC	arity > 3
+INCLUDE-BOOK-DIR	state formal or result
+DEFEVALUATOR-CHECK	state formal or result
+BUILT-IN-BRR-NEAR-MISSP	arity > 3
+MAKE-BUILT-IN-BRR-NEAR-MISS-MSG	arity > 3
+ENS	state formal or result
+THROW-NONEXEC-ERROR-P1	arity > 3
+CHK-ALL-BUT-NEW-NAME-CMP	arity > 3
+BIND-MACRO-ARGS	arity > 3
+BIND-MACRO-ARGS1	arity > 3
+BIND-MACRO-ARGS-OPTIONAL	arity > 3
+BIND-MACRO-ARGS-AFTER-REST	arity > 3
+BIND-MACRO-ARGS-KEYS	arity > 3
+BIND-MACRO-ARGS-KEYS1	arity > 3
+WARNING1-CW	arity > 3
+SILENT-ERROR	state formal or result
+ONE-WAY-UNIFY1-EQUAL	arity > 3
+ONE-WAY-UNIFY1-EQUAL1	arity > 3
+WARRANTS-FOR-SUITABLY-TAMEP-LISTP	arity > 3
+WARRANTS-FOR-TAMEP-FUNCTIONP	arity > 3
+WARRANTS-FOR-TAMEP	arity > 3
+SYNTACTICALLY-PLAUSIBLE-LAMBDA-OBJECTP1	arity > 3
+GENVAR	arity > 3
+GENVAR-GUARDP	arity > 3
+GENVAR1	arity > 3
+GENVAR1-GUARDP	arity > 3
+DEFSTOBJ-FNNAME	arity > 3
+OBSERVATION1-CW	arity > 3
+ERROR1-SAFE	state formal or result
+ERROR1	state formal or result
+STATE-P+	state formal or result
+ERROR1-STATE-P	state formal or result
+SAVED-OUTPUT-TOKEN-P	state formal or result
+PUSH-IO-RECORD	state formal or result
+ERROR-FMS	state formal or result
+STANDARD-CO	state formal or result
+ERROR-FMS-CHANNEL	state formal or result
+ER-OFF-P	state formal or result
+FMT-IN-CTX	state formal or result
+FMT-CTX	state formal or result
+FMT-ABBREV	state formal or result
+FMT-ABBREV1	state formal or result
+FMX-CW-MSG-1	arity > 3
+FMS!	state formal or result
+FMT!	state formal or result
+FMT1!	state formal or result
+FMS	state formal or result
+FMT	state formal or result
+FMT1	state formal or result
+FMT0	state formal or result
+FMT-TILDE-CAP-S	state formal or result
+FMT-TILDE-S	state formal or result
+SPELL-NUMBER	state formal or result
+FMT0&V	state formal or result
+FMT0*	state formal or result
+OUT-OF-TIME-THE2S	state formal or result
+SCAN-PAST-EMPTY-FMT-DIRECTIVES	arity > 3
+SCAN-PAST-EMPTY-FMT-DIRECTIVES1	arity > 3
+FMT-PPR	state formal or result
+GAG-MODE-EVISC-TUPLE	state formal or result
+TERM-EVISC-TUPLE	state formal or result
+ABBREV-EVISC-TUPLE	state formal or result
+WORLD-EVISCERATION-ALIST	state formal or result
+EVISC-TUPLE	arity > 3
+LEFT-PAD-WITH-BLANKS	state formal or result
+SPLAT1	state formal or result
+SPLAT	state formal or result
+SPLAT-STRING	state formal or result
+SPLAT-ATOM!	state formal or result
+SPLAT-ATOM	state formal or result
+FMT-VAR	arity > 3
+FMT-TILDE-CAP-S1	state formal or result
+FMT-TILDE-S1	state formal or result
+FIND-ALTERNATIVE-STOP	arity > 3
+FIND-ALTERNATIVE-START	arity > 3
+FMT-CHAR	arity > 3
+FIND-ALTERNATIVE-START1	arity > 3
+FIND-ALTERNATIVE-SKIP	arity > 3
+PPR	state formal or result
+PPR2	state formal or result
+PPR2-COLUMN	state formal or result
+PPR2-FLAT	state formal or result
+FLPR	state formal or result
+FLPR11	state formal or result
+FLPR1	state formal or result
+SPACES	state formal or result
+SPACES1	state formal or result
+WRITE-FOR-READ	state formal or result
+FMT-SOFT-RIGHT-MARGIN	state formal or result
+FMT-HARD-RIGHT-MARGIN	state formal or result
+NEWLINE	state formal or result
+PPR1-LST	state formal or result
+PPR1	state formal or result
+FLSZ	state formal or result
+FMT-STATE-P	state formal or result
+FLSZ1	state formal or result
+FLSZ-ATOM	state formal or result
+CONS-PPR1	arity > 3
+CONS-PPR1-GUARDP	arity > 3
+SPECIAL-TERM-NUM	state formal or result
+EVISCERATE-TOP	state formal or result
+EVISCERATE-TOP-STATE-P	state formal or result
+IPRINT-ORACLE-UPDATES?	state formal or result
+UPDATE-IPRINT-AR-FAL	state formal or result
+UPDATE-IPRINT-FAL	state formal or result
+ROLLOVER-IPRINT-AR	state formal or result
+INIT-IPRINT-FAL	state formal or result
+IPRINT-AR-AREF1	state formal or result
+IPRINT-BLOCKEDP	state formal or result
+IPRINT-ENABLEDP	state formal or result
+IPRINT-AR-ILLEGAL-INDEX	state formal or result
+IPRINT-LAST-INDEX	state formal or result
+IPRINT-SOFT-BOUND	state formal or result
+IPRINT-HARD-BOUND	state formal or result
+EVISCERATE-SIMPLE	arity > 3
+EVISCERATE	arity > 3
+EVISCERATE1P-LST	arity > 3
+EVISCERATE1P	arity > 3
+EVISCERATE1-LST	arity > 3
+EVISCERATE1	arity > 3
+UPDATE-IPRINT-ALIST-FAL	arity > 3
+MATCH-TESTS-AND-BINDINGS	arity > 3
+TRANSLATE-DECLARATION-TO-GUARD-GEN	arity > 3
+TRANSLATE-DECLARATION-TO-GUARD-GEN-LST	arity > 3
+TRANSLATE-DECLARATION-TO-GUARD-GEN-REC	arity > 3
+TRANSLATE-DECLARATION-TO-GUARD1-GEN	arity > 3
+TRANSLATE-DECLARATION-TO-GUARD/INTEGER-GEN	arity > 3
+SYSTEM-VERIFY-GUARDS-AUX	arity > 3
+NEW-VERIFY-GUARDS-FNS	state formal or result
+UNTAME-EV$	no-body: constrained
+UNTAME-APPLY$	no-body: constrained
+APPLY$-USERFN	no-body: constrained
+BADGE-USERFN	no-body: constrained
+SPLIT-SYSTEM-VERIFY-GUARDS-ALIST	arity > 3
+DF-PI	df formal or result (raw representation is a double-float)
+DF-ATANH-FN	df formal or result (raw representation is a double-float)
+DF-ACOSH-FN	df formal or result (raw representation is a double-float)
+DF-ASINH-FN	df formal or result (raw representation is a double-float)
+DF-TANH-FN	df formal or result (raw representation is a double-float)
+DF-COSH-FN	df formal or result (raw representation is a double-float)
+DF-SINH-FN	df formal or result (raw representation is a double-float)
+DF-ATAN-FN	df formal or result (raw representation is a double-float)
+DF-ACOS-FN	df formal or result (raw representation is a double-float)
+DF-ASIN-FN	df formal or result (raw representation is a double-float)
+DF-TAN-FN	df formal or result (raw representation is a double-float)
+DF-COS-FN	df formal or result (raw representation is a double-float)
+DF-SIN-FN	df formal or result (raw representation is a double-float)
+DF-ABS-FN	df formal or result (raw representation is a double-float)
+UNARY-DF-LOG	df formal or result (raw representation is a double-float)
+BINARY-DF-LOG	df formal or result (raw representation is a double-float)
+DF-SQRT-FN	df formal or result (raw representation is a double-float)
+DF-EXP-FN	df formal or result (raw representation is a double-float)
+DF-EXPT-FN	df formal or result (raw representation is a double-float)
+SUBSTRING-P	arity > 3
+DF-MINUS-1	df formal or result (raw representation is a double-float)
+DF1	df formal or result (raw representation is a double-float)
+DF0	df formal or result (raw representation is a double-float)
+DF/=-FN	df formal or result (raw representation is a double-float)
+DF=-FN	df formal or result (raw representation is a double-float)
+DF<-FN	df formal or result (raw representation is a double-float)
+DEFUN-DF-EVENTS	arity > 3
+WRITE-USER-STOBJ-ALIST	non-executable
+READ-USER-STOBJ-ALIST	no-fixed-output-signature (if / read-user-stobj-alist)
+FNCALL-TERM	state formal or result
+META-EXTRACT-FORMULA	state formal or result
+SET-LD-HISTORY-ENTRY-USER-DATA-DEFAULT	state formal or result
+LD-HISTORY	state formal or result
+ONCEP-TP	no-body: constrained
+PRINT-CLAUSE-ID-OKP	no-body: constrained
+RW-CACHE-DEBUG-ACTION-BUILTIN	arity > 3
+RW-CACHE-DEBUG-BUILTIN	arity > 3
+IDENTITY-WITH-STATE	state formal or result
+HONS-COPY-WITH-STATE	state formal or result
+ANCESTORS-CHECK	no-body: constrained
+ANCESTORS-CHECK1	arity > 3
+VAR-FN-COUNT-1	arity > 3
+FN-COUNT-1	arity > 3
+EARLIER-ANCESTOR-BIGGERP	arity > 3
+TERMINAL-SUBSTRINGP	arity > 3
+TERMINAL-SUBSTRINGP1	arity > 3
+TOO-MANY-IFS-PRE-REWRITE	no-body: constrained
+TOO-MANY-IFS1	arity > 3
+OCCUR-CNT-BOUNDED-LST	arity > 3
+OCCUR-CNT-BOUNDED	arity > 3
+TOO-MANY-IFS0	arity > 3
+TOO-MANY-IFS-POST-REWRITE	no-body: constrained
+DEFEVALUATOR-CHECK-MSG	arity > 3
+CBD-FN	state formal or result
+BRR-DATA-LST	state formal or result
+UPDATE-BRR-DATA-2-BUILTIN	arity > 3
+UPDATE-BRR-DATA-1-BUILTIN	arity > 3
+BRKPT2-BRR-DATA-ENTRY-BUILTIN	state formal or result
+BRKPT1-BRR-DATA-ENTRY-BUILTIN	state formal or result
+SYSTEM-BOOKS-DIR	state formal or result
+SET-FMT-SOFT-RIGHT-MARGIN	state formal or result
+SET-FMT-HARD-RIGHT-MARGIN	state formal or result
+PRINT-OBJECT$-PRESERVING-CASE	state formal or result
+PRINT-OBJECT$	state formal or result
+PRINT-OBJECT$-FN	state formal or result
+MFC-TS-TTREE	no-body: constrained
+MFC-TS-FN	no-body: constrained
+MFC-RW-TTREE	no-body: constrained
+MFC-RW-FN	no-body: constrained
+MFC-RW+-TTREE	no-body: constrained
+MFC-RW+-FN	no-body: constrained
+MFC-RELIEVE-HYP-TTREE	no-body: constrained
+MFC-RELIEVE-HYP-FN	no-body: constrained
+MFC-AP-FN	no-body: constrained
+MAGIC-EV-FNCALL	no-body: constrained
+CANONICAL-PATHNAME	no-body: constrained
+BRKPT2-BRR-DATA-ENTRY	no-body: constrained
+BRKPT1-BRR-DATA-ENTRY	no-body: constrained
+SET-LD-HISTORY-ENTRY-USER-DATA	no-body: constrained
+ACL2X-EXPANSION-ALIST	no-body: constrained
+FINALIZE-EVENT-USER	no-body: constrained
+INITIALIZE-EVENT-USER	no-body: constrained
+SET-PERSISTENT-WHS-AND-EPHEMERAL-WHS	state formal or result
+SYNC-EPHEMERAL-WHS-WITH-PERSISTENT-WHS	state formal or result
+SERIALIZE-READ-FN	state formal or result
+SERIALIZE-WRITE-FN	state formal or result
+HONS-ACONS!	unsafe to call: raw code allocates a hash table sized by an integer final cdr (exhausted a 12 GB heap)
+HONS-RESIZE-FN	arity > 3
+SET-BAD-LISP-CONSP-MEMOIZE	unsafe to call: changes global memoization of the reader check
+NEVER-MEMOIZE-FN	unsafe to call: changes the global never-memoize table
+MEMOIZE-FORM	arity > 3
+DEFUN-INLINE-FORM	arity > 3
+GET-REAL-TIME	state formal or result
+GET-CPU-TIME	state formal or result
+READ-FILE-INTO-STRING2	state formal or result
+INCREMENT-FILE-CLOCK	state formal or result
+READ-FILE-INTO-STRING2-LOGICAL	state formal or result
+READ-FILE-INTO-STRING1	state formal or result
+FILE-LENGTH$	state formal or result
+GC-STRATEGY	state formal or result
+SET-GC-STRATEGY-FN	unsafe to call: changes host GC settings
+MAKE-TAU-INTERVAL	arity > 3
+TIME-TRACKER-FN	arity > 3
+EV-FNCALL-W-GUARD	arity > 3
+SET-DEBUGGER-ENABLE-FN	state formal or result
+MAYBE-PRINT-CALL-HISTORY	state formal or result
+DEBUGGER-ENABLEDP	state formal or result
+PRINT-CALL-HISTORY	unsafe to call: prints a host backtrace
+BREAK$	unsafe to call: enters the Lisp debugger
+DEBUGGER-ENABLE	state formal or result
+DELETE-FILE$	state formal or result
+FILE-WRITE-DATE$	state formal or result
+GET-PERSISTENT-WHS	state formal or result
+GC-VERBOSE-FN	unsafe to call: changes host GC settings
+GC$-FN	unsafe to call: applies the host garbage collector to arbitrary arguments
+CPU-CORE-COUNT	state formal or result
+COUNT-FN	arity > 3
+COUNT-STRINGP	arity > 3
+SEARCH-FN	arity > 3
+SEARCH-FROM-END	arity > 3
+SEARCH-FROM-START	arity > 3
+SEARCH-FN-GUARD	arity > 3
+RESIZE-LIST-EXEC	arity > 3
+WORMHOLE-P	state formal or result
+WORMHOLE1	arity > 3
+GET-IN-THEORY-REDUNDANT-OKP	state formal or result
+RAW-INCLUDE-BOOK-DIR-P	state formal or result
+SET-INHIBITED-SUMMARY-TYPES-STATE	state formal or result
+DEFAULT-DEFUN-MODE-FROM-STATE	state formal or result
+SET-PORT-FILE-ENABLED	state formal or result
+SET-COMPILER-ENABLED	state formal or result
+LD-SKIP-PROOFSP	state formal or result
+CURRENT-PACKAGE	state formal or result
+PRIN1$	state formal or result
+SYMBOL-IN-CURRENT-PACKAGE-P	state formal or result
+KNOWN-PACKAGE-ALIST	state formal or result
+SET-PRINT-BASE-RADIX	state formal or result
+PRINT-TIMER	state formal or result
+PRINT-RATIONAL-AS-DECIMAL	state formal or result
+INCREMENT-TIMER	state formal or result
+ADD-TIMERS	state formal or result
+POP-TIMER	state formal or result
+PUSH-TIMER	state formal or result
+GET-TIMER	state formal or result
+SET-TIMER	state formal or result
+MAIN-TIMER	state formal or result
+SYS-CALL*	state formal or result
+SYS-CALL+	state formal or result
+SYS-CALL-STATUS	state formal or result
+SYS-CALL	unsafe to call: runs an operating system command built from its arguments
+IN-VERIFY	state formal or result
+RANDOM$	state formal or result
+SETENV$	unsafe to call: sets process environment variables
+GETENV$	state formal or result
+BRR-EVISC-TUPLE-ORACLE-UPDATE	state formal or result
+READ-ACL2-ORACLE@PAR	state formal or result
+READ-RUN-TIME	state formal or result
+READ-IDATE	state formal or result
+UPDATE-USER-STOBJ-ALIST	state formal or result
+USER-STOBJ-ALIST	state formal or result
+NEEDS-SLASHES	state formal or result
+PRIN1-WITH-SLASHES	state formal or result
+PRIN1-WITH-SLASHES1	state formal or result
+READ-OBJECT-SUPPRESS	state formal or result
+READ-OBJECT-WITH-CASE	state formal or result
+READ-OBJECT	state formal or result
+IPRINT-ORACLE-UPDATES	state formal or result
+READ-ACL2-ORACLE	state formal or result
+RAW-MODE-P	state formal or result
+READ-BYTE$	state formal or result
+PEEK-CHAR$	state formal or result
+READ-CHAR$	state formal or result
+MAYBE-FINISH-OUTPUT$	state formal or result
+CLOSE-OUTPUT-CHANNEL	state formal or result
+GET-OUTPUT-STREAM-STRING$-FN	state formal or result
+FMT-TO-COMMENT-WINDOW!+	arity > 3
+FMT-TO-COMMENT-WINDOW+	arity > 3
+FMT-TO-COMMENT-WINDOW!	arity > 3
+FMT-TO-COMMENT-WINDOW	arity > 3
+OPEN-OUTPUT-CHANNEL!	state formal or result
+OPEN-OUTPUT-CHANNEL	state formal or result
+CLOSE-INPUT-CHANNEL	state formal or result
+OPEN-INPUT-CHANNEL	state formal or result
+SET-SERIALIZE-CHARACTER-SYSTEM	state formal or result
+SET-SERIALIZE-CHARACTER	state formal or result
+SET-SERIALIZE-CHARACTER-FN	state formal or result
+GET-SERIALIZE-CHARACTER	state formal or result
+W	state formal or result
+WRITE-BYTE$	state formal or result
+PRINC$	state formal or result
+STRING-EQUAL1	arity > 3
+SET-INHIBIT-OUTPUT-LST-STATE	state formal or result
+SET-PRINT-RIGHT-MARGIN	state formal or result
+SET-PRINT-LINES	state formal or result
+SET-PRINT-LEVEL	state formal or result
+SET-PRINT-LENGTH	state formal or result
+SET-PRINT-READABLY	state formal or result
+SET-PRINT-RADIX	state formal or result
+SET-PRINT-PRETTY	state formal or result
+SET-PRINT-ESCAPE	state formal or result
+SET-PRINT-CIRCLE	state formal or result
+SET-PRINT-BASE	state formal or result
+SET-PRINT-CASE	state formal or result
+NON-FREE-VAR-RUNES	arity > 3
+OPEN-INPUT-CHANNEL-ANY-P	state formal or result
+OPEN-OUTPUT-CHANNEL-ANY-P	state formal or result
+OPEN-OUTPUT-CHANNEL-P	state formal or result
+OPEN-INPUT-CHANNEL-P	state formal or result
+PARSE-ARGS-AND-TEST	arity > 3
+MAKE-VAR-LST1	arity > 3
+PUT-GLOBAL	state formal or result
+GET-GLOBAL	state formal or result
+MAKUNBOUND-GLOBAL	state formal or result
+BOUNDP-GLOBAL	state formal or result
+GLOBAL-TABLE-CARS	state formal or result
+CREATE-STATE	state formal or result
+COERCE-OBJECT-TO-STATE	state formal or result
+COERCE-STATE-TO-OBJECT	state formal or result
+BUILD-STATE1	arity > 3
+STATE-P	state formal or result
+UPDATE-NTH-ARRAY	arity > 3
+ASET2	arity > 3
+COMPRESS21	arity > 3
+COMPRESS211	arity > 3
+AREF2	arity > 3
+ASET1-TRUSTED	arity > 3
+ASET1	arity > 3
+COMPRESS11	arity > 3
+THE-CHECK-FOR-*1*	arity > 3
+RETRACT-WORLD	unsafe to call: raw code installs a world on a symbol's property list
+EXTEND-WORLD	unsafe to call: raw code installs a world on a symbol's property list
+HAS-PROPSP	arity > 3
+PUTPROP	arity > 3
+SUBSTITUTE-AC	arity > 3
+LET*-MACRO	arity > 3
+LEGAL-LET*-P	arity > 3
+VALUE-TRIPLE-MACRO-FN	arity > 3
+SLEEP	unsafe to call: blocks for its argument in seconds
+?-FN	no-body: constrained
+DF-RATIONALIZE	df formal or result (raw representation is a double-float)
+CONSTRAINED-DF-PI	no-body: constrained
+CONSTRAINED-DF-ATANH-FN	no-body: constrained
+CONSTRAINED-DF-ACOSH-FN	no-body: constrained
+CONSTRAINED-DF-ASINH-FN	no-body: constrained
+CONSTRAINED-DF-TANH-FN	no-body: constrained
+CONSTRAINED-DF-COSH-FN	no-body: constrained
+CONSTRAINED-DF-SINH-FN	no-body: constrained
+CONSTRAINED-DF-ATAN-FN	no-body: constrained
+CONSTRAINED-DF-ACOS-FN	no-body: constrained
+CONSTRAINED-DF-ASIN-FN	no-body: constrained
+CONSTRAINED-DF-TAN-FN	no-body: constrained
+CONSTRAINED-DF-COS-FN	no-body: constrained
+CONSTRAINED-DF-SIN-FN	no-body: constrained
+CONSTRAINED-DF-ABS-FN	no-body: constrained
+CONSTRAINED-UNARY-DF-LOG	no-body: constrained
+CONSTRAINED-BINARY-DF-LOG	no-body: constrained
+CONSTRAINED-DF-SQRT-FN	no-body: constrained
+CONSTRAINED-DF-EXP-FN	no-body: constrained
+CONSTRAINED-DF-EXPT-FN	no-body: constrained
+DOPPELGANGER-APPLY$-USERFN	no-body: constrained
+DOPPELGANGER-BADGE-USERFN	no-body: constrained
+ALWAYS-DO-PROOFS-DURING-MAKE-EVENT-EXPANSION	no-body: constrained
+RETRACT-STOBJ-TABLES	no-body: constrained
+REMOVE-TRIVIAL-EQUIVALENCES-ENABLED-P	no-body: constrained
+CONJOIN-CLAUSE-SETS-BOUND	no-body: constrained
+RW-CACHEABLE-FAILURE-REASON	no-body: constrained
+RW-CACHE-DEBUG-ACTION	no-body: constrained
+RW-CACHE-DEBUG	no-body: constrained
+RELIEVE-HYP-FAILURE-ENTRY-SKIP-P-BUILTIN	arity > 3
+RELIEVE-HYP-FAILURE-ENTRY-SKIP-P	no-body: constrained
+UPDATE-BRR-DATA-2	no-body: constrained
+UPDATE-BRR-DATA-1	no-body: constrained
+HEAVY-LINEAR-P	no-body: constrained
+BEING-OPENEDP-LIMITED-FOR-NONREC	no-body: constrained
+REWRITE-IF-AVOID-SWAP	no-body: constrained
+QUICK-AND-DIRTY-SRS	no-body: constrained
+SIMPLIFIABLE-MV-NTH-P	no-body: constrained
+HIDE-WITH-COMMENT-P	no-body: constrained
+EV-FNCALL+-FNS	no-body: constrained
+ASSUME-TRUE-FALSE-AGGRESSIVE-P	no-body: constrained
+USE-ENHANCED-RECOGNIZER	no-body: constrained
+WORSE-THAN-OR-EQUAL	no-body: constrained
+WORSE-THAN	no-body: constrained
+ERSATZ-MV-SETQ	no-body: constrained
+ERSATZ-LOOP-FINISH	no-body: constrained
+ERSATZ-RETURN	no-body: constrained
+ERSATZ-SETQ	no-body: constrained
+ERSATZ-PROG2	no-body: constrained
+UNTRANSLATE-LAMBDA-OBJECT-P	no-body: constrained
+EV-FNCALL-REC-LOGICAL-UNKNOWN-CONSTRAINTS	no-body: constrained
+REMOVE-GUARD-HOLDERS-LAMP	no-body: constrained
+REMOVE-GUARD-HOLDERS-BLOCKED-BY-HIDE-P	no-body: constrained
+ZP-BIG-N	no-body: constrained
+DECREMENT-BIG-N	no-body: constrained
+BIG-N	no-body: constrained
+BINARY-DF/	df formal or result (raw representation is a double-float)
+BINARY-DF*	df formal or result (raw representation is a double-float)
+UNARY-DF/	df formal or result (raw representation is a double-float)
+UNARY-DF-	df formal or result (raw representation is a double-float)
+BINARY-DF+	df formal or result (raw representation is a double-float)
+CONSTRAINED-DF-RATIONALIZE	no-body: constrained
+DF-ROUND	no-body: constrained
+FROM-DF	df formal or result (raw representation is a double-float)
+TO-DF	df formal or result (raw representation is a double-float)
+CONSTRAINED-TO-DF	no-body: constrained
+DF-STRING	df formal or result (raw representation is a double-float)
+CONSTRAINED-DF-STRING	no-body: constrained
+GOOD-BYE-FN	unsafe to call: exits the Lisp process
+HONS-ACONS	unsafe to call: raw code allocates a hash table sized by an integer final cdr (exhausted a 12 GB heap)
+SET-ABSSTOBJ-DEBUG-FN	unsafe to call: changes a global debug flag
+SGETPROP	arity > 3
+FGETPROP	arity > 3
+CHAR-UPCASE-NON-STANDARD	no-body: constrained
+CHAR-DOWNCASE-NON-STANDARD	no-body: constrained
+LOWER-CASE-P-NON-STANDARD	no-body: constrained
+UPPER-CASE-P-NON-STANDARD	no-body: constrained
+ALPHA-CHAR-P-NON-STANDARD	no-body: constrained
+SYMBOLP	no-body: primitive
+SYMBOL-PACKAGE-NAME	no-body: primitive
+SYMBOL-NAME	no-body: primitive
+STRINGP	no-body: primitive
+REALPART	no-body: primitive
+RATIONALP	no-body: primitive
+PKG-WITNESS	no-body: primitive
+PKG-IMPORTS	no-body: primitive
+NUMERATOR	no-body: primitive
+INTERN-IN-PACKAGE-OF-SYMBOL	no-body: primitive
+INTEGERP	no-body: primitive
+IMAGPART	no-body: primitive
+IF	no-fixed-output-signature (if / read-user-stobj-alist)
+EQUAL	no-body: primitive
+DENOMINATOR	no-body: primitive
+CONSP	no-body: primitive
+CONS	no-body: primitive
+COERCE	no-body: primitive
+COMPLEX-RATIONALP	no-body: primitive
+COMPLEX	no-body: primitive
+CODE-CHAR	no-body: primitive
+CHARACTERP	no-body: primitive
+CHAR-CODE	no-body: primitive
+CDR	no-body: primitive
+CAR	no-body: primitive
+<	no-body: primitive
+UNARY-/	no-body: primitive
+UNARY--	no-body: primitive
+BINARY-+	no-body: primitive
+BINARY-*	no-body: primitive
+BAD-ATOM<=	no-body: primitive
+ACL2-NUMBERP	no-body: primitive

@@ -1,0 +1,11 @@
+; Modern NOTE-2-9-3 sibling: safe DEFCONST evaluation of PROGRAM/MBE.
+(defun foo ()
+  (declare (xargs :mode :program))
+  (mbe :logic t :exec nil))
+(defconst *a* (foo))
+(cw "DEFCONST-VALUE ~x0~%" *a*)
+(defthm a-is-nil (equal *a* nil) :rule-classes nil)
+(defthm a-is-t-before-vt (equal *a* t) :rule-classes nil)
+(verify-termination foo)
+(defthm a-is-t-after-vt (equal *a* t) :rule-classes nil)
+(quit)

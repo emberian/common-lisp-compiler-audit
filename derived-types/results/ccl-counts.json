@@ -1,0 +1,42 @@
+{
+ "host": "ccl",
+ "operators": 264,
+ "rows": 35608,
+ "class-counts": {
+  "CONTROL": 10,
+  "A-top": 19197,
+  "A-narrow": 16395,
+  "B": 16
+ },
+ "class-B-by-rule": {
+  "result < 2^60 (LEN)": 16
+ },
+ "tuple-checks": 6974697,
+ "guard-satisfying-tuples": 675515,
+ "reference-timeouts": 219,
+ "slow-tuples-membership-only": 149,
+ "operators-run-on-reduced-universe": [
+  "UNSIGNED-BYTE-P",
+  "SIGNED-BYTE-P",
+  "ASH"
+ ],
+ "host-crash-operators": [],
+ "excluded": {
+  "(MAKE-LIST 1)": "allocates a list of the requested length; derived type recorded in stage 1 only",
+  "HONS-GET": "an alist that is not fast enters the debugger (slow-alist action)",
+  "HONS-ACONS": "raw code allocates a hash table sized by an integer final cdr",
+  "FAST-ALIST-FREE": "an alist that is not fast enters the debugger (slow-alist action)",
+  "SLEEP": "blocks for its argument in seconds",
+  "READ-CHAR$": "takes a stobj or state",
+  "PEEK-CHAR$": "takes a stobj or state",
+  "READ-BYTE$": "takes a stobj or state",
+  "RANDOM$": "takes a stobj or state",
+  "HONS-ACONS!": "raw code allocates a hash table sized by an integer final cdr",
+  "FAST-ALIST-LEN": "an alist that is not fast enters the debugger (slow-alist action)"
+ },
+ "value-mismatch-rows": [
+  "(COUNT 2) (STRING CONS)",
+  "(COUNT 2) (STRING T)"
+ ],
+ "control-violations": 39
+}

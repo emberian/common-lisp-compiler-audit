@@ -1,0 +1,5 @@
+(include-book "t2-book")
+(table-alist 'acl2-defaults-table (w state))
+(defun g (x) (let ((unused 1)) x))
+(g 5)
+(quit)

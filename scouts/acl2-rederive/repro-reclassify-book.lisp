@@ -1,0 +1,6 @@
+(in-package "ACL2")
+(defun reclass-f (x)
+  (declare (xargs :mode :program))
+  (cons x x))
+(verify-termination reclass-f)
+(defun reclass-g (x) (reclass-f x))

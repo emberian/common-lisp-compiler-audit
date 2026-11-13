@@ -1,0 +1,3 @@
+(certify-book "repro-oneify-constructs-book")
+(oneify-control-values 5)
+(quit)

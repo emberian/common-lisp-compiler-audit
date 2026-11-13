@@ -1,0 +1,4 @@
+(program)
+(include-book "repro-default-mode-book")
+(list (symbol-class 'default-mode-f (w state)) (default-mode-f 3))
+(quit)

@@ -1,0 +1,6 @@
+************ ABORTING from raw Lisp ***********
+Error:  NIL doesn't match array element type of #*0000.
+ACL2 Error in TOP-LEVEL:  Global variables, such as TS, are not allowed.
+ACL2 Error [Translate] in TOP-LEVEL:  Function (and macro) applications
+************ ABORTING from raw Lisp ***********
+Error:  Reader error on #<SYNONYM-STREAM to *TERMINAL-IO* #x302004C5BB4C>, within "ory nil)))

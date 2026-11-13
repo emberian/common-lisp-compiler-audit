@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(defconst *lqc* 9)
+(defmacro lqm (x) `(list ,x 'local-macro))
+(defun q (x) (declare (xargs :guard t)) (cons x 'local))
+(defun-inline qi (x) (declare (xargs :guard t)) (cons x 'local-inline))

@@ -1,0 +1,3 @@
+(include-book "repro-apply-builtin-book" :load-compiled-file nil)
+(list (apply-builtin-car '(4 5)) (apply-builtin-lambda '(4 5)))
+(quit)

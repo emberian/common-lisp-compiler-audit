@@ -1,0 +1,7 @@
+(ld "df-floor.lisp")
+(cw "@CLASS ~x0~%" (getpropc 'zdf-floor 'symbol-class nil (w state)))
+(cw "@RAT ~x0~%" (zrat-floor 5/2))
+(cw "@LET ~x0~%" (zdf-floor-let (to-df 5/2)))
+(cw "@TAIL ~x0~%" (zdf-floor (to-df 5/2)))
+(thm (equal (zdf-floor (to-df 5/2)) 2))
+(cw "@END~%")

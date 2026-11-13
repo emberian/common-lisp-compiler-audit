@@ -1,0 +1,5 @@
+(in-package "ACL2")
+(defstub cst (x) t)
+(defun impl-new (x) (declare (xargs :guard t)) (list x 'new))
+(defattach cst impl-new)
+(defun call-cst (x) (declare (xargs :guard t)) (list (cst x) 'ca))

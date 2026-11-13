@@ -1,0 +1,33 @@
+# id	class	tamper	disposition (for every scenario whose observed class is outside the claim's three classes)
+# class: soundness = wrong value or accepted contradiction; robustness = error; documented = ACL2's documentation or source says so
+# tamper: none = only ACL2 commands, edits and time-preserving copies; mtime = a file time was set by hand; content = a trusted file's content was replaced
+fasl_oldver_cp_p	soundness	none	F10. repros/stale-compiled-file/run.sh. A compiled file is tied to its book only by "write date >= certificate's" (load-compiled-book, interface-raw.lisp).
+cert_otherhost_oldfasl_natural	soundness	none	F10, race variant. repros/stale-compiled-file/race.sh. certify-book on the other host deletes only its own compiled file; dates have 1 s resolution.
+fasl_oldver_newer	soundness	mtime	F10 with the time set by hand. :DOC book-hash's own example says to "update the write-date on the compiled file ... if you want to avoid a warning".
+fasl_oldver_same_mtime	soundness	mtime	F10 with the time set by hand.
+fasl_oldver_eq_cert	soundness	mtime	F10 with the time set by hand (equal dates are accepted).
+fasl_oldver_checksum	soundness	mtime	F10; checksum book-hashes do not cover the compiled file.
+fasl_oldver_lcf_t	soundness	mtime	F10; :load-compiled-file t adds no check.
+cert_otherhost_oldfasl	soundness	mtime	F10, cross-host, time set by hand.
+sub_fasl_oldver	soundness	mtime	F10 for a sub-book's compiled file.
+sub_top_fasl_oldver	soundness	mtime	F10 for the top book's compiled file after a sub-book changed.
+syn_fasl_mutant	soundness	mtime	F10 on a generated book (residues change, no warning).
+exp_oldver	soundness	mtime	Same date rule for book@expansion.lsp (:DOC book-compiled-file: the expansion file "can be loaded if the compiled file is missing"); a [Compiled file] warning is printed but the stale expansion file is what gets loaded.
+exp_oldver_comp	soundness	mtime	As exp_oldver; :load-compiled-file :comp turns the stale expansion file into a compiled file that later includes load silently.
+src_body_samelen	documented	mtime	:DOC book-hash: the default book-hash is file length and write date ("decreased security"); checksum mode refuses (src_body_samelen_checksum). Observed in addition: the certificate's cert-data supplies the translated bodies and theorem formulas, so :pe shows the new text while the logical body, the theorem and the code are the old ones.
+src_guard_samelen	documented	mtime	As src_body_samelen; the old guard check in the compiled *1* function rejects a call that the new declaration allows (error, not a wrong value).
+syn_src_mutant_samestamp	documented	mtime	As src_body_samelen, generated book.
+cert_oldver_fasl_new	documented	content	Old certificate with matching length and date: cert-data from the certificate overrides the source's bodies and theorems in the world. :DOC book-hash (certificate contents are not hashed by book-hash alists).
+sub_recert_samestamp	documented	mtime	:DOC book-hash, as src_body_samelen but for a sub-book: top's certificate still matches, top's compiled file carries the old macro expansions, inline bodies and constant.
+sub_src_edited	documented	none	O1. repros/uncertified-top-stale-compiled/. [Uncertified] warning, yet the stale compiled file of the uncertified book is loaded. :DOC uncertified-books: "all bets are off", "quiet logical inconsistency".
+sub_recert	documented	none	O1, as sub_src_edited (the sub-book is recertified, the top book is not).
+sub_recert_samestamp_checksum	documented	mtime	O1; with checksums the mismatch is detected and warned about, the stale compiled file is still loaded.
+me_global	documented	none	:DOC make-event: the expansion "is recorded in the book's certificate and re-used during a subsequent include-book".
+me_unset	documented	none	As me_global.
+me_file	documented	none	As me_global.
+me_world	documented	none	As me_global.
+me_host	documented	none	As me_global (the expansion made by the other host is used).
+rc_host	soundness	none	F12. repros/cross-host-reader-conditional/. Only a source comment covers it (acl2.lisp, Remarks on *acl2-readtable*: *features* must be the same "throughout all phases"); certificates record neither host nor features.
+rc_host_fasl	soundness	none	F12 with this host's own compiled file: no warning at all.
+img_reinclude	documented	none	:DOC redundant-events: "An include-book event is redundant if the book has already been included"; the image keeps the version it was saved with.
+port_other_uncert	documented	content	:DOC uncertified-books: for an uncertified book with a .port file, "the forms in B.port [are] evaluated before the forms in B.lisp"; a foreign .port adds its package to the session.

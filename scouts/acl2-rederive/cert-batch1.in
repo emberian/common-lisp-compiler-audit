@@ -1,0 +1,5 @@
+(certify-book "t2-book")
+(certify-book "t3-book")
+(certify-book "t4-book")
+(certify-book "t5-book")
+(quit)

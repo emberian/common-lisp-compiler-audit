@@ -1,0 +1,15 @@
+fast:bit | area=READONLY | same-page=YES | HANG | - | -
+fast:u8 | area=READONLY | same-page=YES | HANG | - | -
+fast:u16 | area=READONLY | same-page=YES | HANG | - | -
+fast:u32 | area=READONLY | same-page=YES | HANG | - | -
+fast:u64 | area=READONLY | same-page=YES | HANG | - | -
+fast:s8 | area=READONLY | same-page=YES | HANG | - | -
+fast:s16 | area=READONLY | same-page=YES | HANG | - | -
+fast:s32 | area=READONLY | same-page=YES | HANG | - | -
+fast:s64 | area=READONLY | same-page=YES | HANG | - | -
+fast:fix | area=READONLY | same-page=YES | HANG | - | -
+fast:sf | area=READONLY | same-page=YES | HANG | - | -
+fast:df | area=READONLY | same-page=YES | HANG | - | -
+fast:ch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+fast:bch | area=READONLY | same-page=no | returned | readback=OK | @after-gc OK
+fast:gv | area=DYNAMIC-OR-OTHER | same-page=no | returned | readback=OK | @after-gc OK

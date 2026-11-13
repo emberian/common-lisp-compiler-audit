@@ -1,0 +1,4 @@
+(ld "repro-world-macro-book.lisp")
+(world-sensitive-fn state)
+(thm (equal (world-sensitive-fn state) 'base))
+(quit)

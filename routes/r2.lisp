@@ -1,0 +1,6 @@
+(in-package "ACL2")
+(set-inhibit-output-lst (remove1 'comment *valid-output-names*))
+(include-book "rb")
+(cw "@book ~x0~%" (mv-let (a b) (rt-top -777) (list a b *rt-const*)))
+(cw "@bookraw ~x0~%" (let ((x (rt-step 5 9))) x))
+(quit)

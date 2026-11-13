@@ -1,0 +1,3 @@
+(certify-book "repro-make-event-world-book")
+(list *me-world-value* (read-me-world-value))
+(quit)

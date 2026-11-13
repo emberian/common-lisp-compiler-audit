@@ -1,0 +1,7 @@
+(in-package "ACL2")
+(include-book "sub")
+(local (include-book "lsub"))
+(defun tf (x) (declare (xargs :guard t)) (list (sf x) (sm x) (si x) *sk*))
+(defconst *tc* (list (sf 1) (sm 1)))
+(defun tg () (declare (xargs :guard t)) *tc*)
+(defthm top-thm (consp (tf x)) :rule-classes nil)

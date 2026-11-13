@@ -1,0 +1,6 @@
+(defstub p (x) t)
+(defun p1 (x) (declare (xargs :guard t)) (prog2$ (cw "CALLED p1 ~x0~%" x) (integerp x)))
+(defattach p p1)
+(defun f (x) (declare (type (or null (satisfies p)) x)) x)
+(cw "RESULT ~x0~%" (f nil))
+(cw "RESULT ~x0~%" (f 3))

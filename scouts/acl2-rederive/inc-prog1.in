@@ -1,0 +1,4 @@
+(include-book "prog1-book")
+(symbol-class 'f (w state))
+(f 3)
+(quit)

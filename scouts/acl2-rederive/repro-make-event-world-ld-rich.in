@@ -1,0 +1,4 @@
+(defconst *include-marker* 1)
+(ld "repro-make-event-world-book.lisp")
+(list *me-world-value* (read-me-world-value))
+(quit)

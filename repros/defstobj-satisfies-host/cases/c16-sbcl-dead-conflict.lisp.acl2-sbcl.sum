@@ -1,0 +1,6 @@
+RESULT 1
+ACL2 Error [Evaluation] in TOP-LEVEL:  The guard for the function call
+RESULT "int"
+ACL2 Error in ( DEFSTOBJ ST ...):  The value specified by the :initially
+******** FAILED ********
+RESULT NIL NIL

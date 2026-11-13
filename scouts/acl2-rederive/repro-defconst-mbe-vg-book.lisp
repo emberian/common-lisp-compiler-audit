@@ -1,0 +1,6 @@
+(in-package "ACL2")
+(defun mbe-vg-choice ()
+  (mbe :logic 'logical :exec 'executive))
+(verify-guards mbe-vg-choice)
+(defconst *mbe-vg-value* (mbe-vg-choice))
+(defun read-mbe-vg-choice () *mbe-vg-value*)
