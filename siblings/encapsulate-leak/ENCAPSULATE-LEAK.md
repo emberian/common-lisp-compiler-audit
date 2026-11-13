@@ -121,19 +121,103 @@ anchor of the family.)
   for a signature function `g` of the same encapsulate is rejected as illegal, so
   no attachment can leak. Both hosts.
 
-## Not tested
+## Not tested (batch 1)
 
-- **apply$ / quoted-lambda ancestry gap (cross-cutting).** Both
-  `bogus-exported-compliants`/`exports-with-sig-ancestors` and `subversive-cliquep`
-  compute signature-function ancestry with `all-fnnames` / `instantiable-ancestors`,
-  which (as used here) do not obviously descend into *quoted* lambda objects
-  applied via `apply$`. A signature function appearing only inside a quoted lambda
-  in a guard-verified body, or inside a quoted lambda in a governing test, is a
-  plausible second hole in exactly the same family. Constructing it needs a badge
-  / warrant for the constrained function and a guard-verified lambda object; I did
-  not build it. Flagged as the most likely next finding.
-- `defabsstobj` correspondence/preservation theorems and nested/local stobjs
-  (channel 10 beyond the already-reported `satisfies`-in-field family).
-- `defchoose` / `defun-sk` witness obligations inside encapsulate.
 - make-event expansions whose recorded value depends on local *state* (channel 9)
   beyond confirming it only conduits to channels 1-8.
+- nested/local stobjs beyond the already-reported `satisfies`-in-field family.
+
+(The apply$/quoted-lambda gap, `defchoose`/`defun-sk`, and `defabsstobj` are
+resolved in batch 2 below.)
+
+---
+
+# Batch 2: the apply$/quoted-lambda ancestry gap, and defchoose/defun-sk/defabsstobj
+
+## 1. The ancestry walks DO have the gap — but it is unreachable for signature fns
+
+Confirmed in source that all three export-surface checks compute
+signature-function dependence with walks that **stop at `(fquotep x)`** and so do
+NOT descend into quoted lambda objects:
+
+- `all-fnnames1` (`translate.lisp:4274-4275`): `((variablep x) acc) ((fquotep x) acc)`
+  — used by `bogus-exported-compliants` (`(all-fnnames (guard name))`) and by
+  `bogus-exported-measures` (`all-fnnames` of measure/mp/rel), and by
+  `subversivep`'s test walk (`all-fnnames-lst`) and `selected-all-fnnames-lst`.
+- `instantiable-ffn-symbs` (`history-management.lisp:11531`): `((fquotep term) ans)`
+  — the basis of `immediate-instantiable-ancestors` → `constrained-functions`,
+  which computes `exports-with-sig-ancestors`.
+
+The descending variant **`all-fnnames!`** (`translate.lisp:4933`, `where-flg`
+`:both`/`:inside`, which unquotes `:FN` slots and recurs into well-formed quoted
+lambda bodies) **exists but none of the three checks call it.** So a signature
+function hidden inside a quoted lambda would be invisible to the export checks.
+
+**But the gap is unreachable for the leak**, blocked upstream on BOTH hosts:
+
+- A lambda object body (or guard) applied via `apply$`/`loop$`/`lambda$` must be
+  *fully badged*. `lambda-ancestry/probe1.lsp` (probe A) and `probe4.lsp` (probe E):
+  with signature `g`, `(apply$ '(lambda (y) (g y)) ...)` and the `:guard (g y)`
+  variant are both rejected at translate time — *"the body of a LAMBDA object …
+  should be fully badged but G is used in (G Y) and has no badge"* (both hosts).
+- A constraint-free signature function can never acquire a badge: ACL2's own
+  source forbids it by design — `apply.lisp:2563` *"Do not extend the functionality
+  of defwarrant by making constrained functions warrantable!"* and `apply.lisp:2674`
+  the same for `defbadge`. A signature in the encapsulate declaring `:badge` is
+  also rejected as illegal (`probe2.lsp`, probe D2).
+
+A quoted lambda is therefore either well-formed (then its functions are badged, so
+no *constraint-free* signature function can be in it — nothing to leak) or not
+well-formed (then it is dead data generating no obligation). Either way the walk
+gap cannot carry a signature-function dependence. The gap is a latent
+code-hygiene issue (the checks should use `all-fnnames!` for robustness), not a
+reachable soundness hole, and the termination layer is NOT bypassed this way.
+
+## 2. defchoose / defun-sk — sound (`lambda-ancestry/probe4.lsp`)
+
+Both fold a signature-function dependence into the logical constraint, so nothing
+leaks (both hosts):
+- `defchoose fch w (x) (and (g x) (equal w x))` with local `g ≡ nil`: `(g x)` is
+  NOT provable afterward — the choice axiom gives no usable fact about `g`.
+- `defun-sk all-g2 () (forall x (g2 x))`: `g2`'s constraint is extended with
+  `(implies (not (g2 x)) (not (all-g2)))` — the dependence is captured, not leaked.
+
+## 3. defabsstobj — the coordinator's hypothesis, realized and ALREADY FIXED (ISSUE B18)
+
+This is the quoted-lambda hypothesis realized through a different unchecked slot:
+the **`:EXEC` function** of a `defabsstobj` export. `defabsstobj-fn1`
+(`other-events.lisp:24984-25016`) does not prove the `{correspondence}`/`{preserved}`/
+`{guard-thm}` lemmas; it only checks they already exist, and historically skipped
+that check whenever `ld-skip-proofsp = include-book` — which is also encapsulate
+pass 2. A signature function used as an export's `:EXEC`, with the supporting
+lemmas made `local`, was thus installed in pass 2 without them; a later
+`(defattach h …)` made raw execution of the export diverge from its `:LOGIC`
+function, provable to `NIL` via a metafunction. `bogus-exported-compliants` only
+inspects logical bodies/guards and the stobj-attachment restrictions cover only
+ancestors of the recognizer and correspondence function — not the `:EXEC` slot.
+
+The ACL2 developers found this (ISSUE B18; two reproducers in
+`books/system/tests/defabsstobj-pass2-constrained-{exec,updater}.lisp`, produced by
+Claude, passed along by Eric Smith) and **fixed it before ACL2 Version 8.8**. The
+fix (`other-events.lisp:24194-24198`) uses `:skip-missing-chk` only for a genuine
+`include-book` or when *not* inside a non-trivial encapsulate; inside encapsulate
+pass 2 the missing-events check is enforced — *"we must check for missing events
+inside a non-trivial encapsulate, even in pass 2."*
+
+`defabsstobj-pass2/test.lsp` runs the B18-a encapsulate verbatim (minus the absent
+`must-fail` book) in this tree: pass 2 correctly REJECTS it ("The following events
+must be admitted before the given defabsstobj event"), `erp = T`, and none of
+`stp`/`fld`/`h` are installed — on **both** SBCL and CCL. So this channel is a
+real member of the family but is already closed here; it is **distinct from the
+batch-1 split-types leak** (different slot: `:EXEC`/defabsstobj vs
+`split-types-term`/guard-theorem, and already fixed).
+
+## Still untested after batch 2
+
+- Whether a *badged, defined* (non-constrained) function routed through a quoted
+  lambda can still defeat a check via the `all-fnnames!` gap in some other export
+  obligation — the gap is real; only the *constraint-free signature* exploit is
+  ruled out.
+- `defabsstobj` leaks through slots other than `:EXEC` after the B18 fix
+  (e.g. nested abstract stobjs), and the attachment-restriction coverage.
+- make-event whose expansion depends on local *state* (batch-1 channel 9).
