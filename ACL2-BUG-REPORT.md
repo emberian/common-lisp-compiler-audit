@@ -149,23 +149,39 @@ which `live-stobjp` rejects. `(s8p s8)` evaluates to `NIL`, so `h-is-nil` holds 
 executable counterpart while `h-is-t` holds by the logic, and `contradiction` proves
 `NIL` on both SBCL and CCL.
 
-### S5 — guard-verified `count` uses `eql`, its logical definition uses `equal`
+### S5 — `count` and `search`: guard-verified raw code uses `eql`, the logic uses `equal`
 
-`derived-types/repros/count-eql-vs-equal/` (`run.sh [ccl|sbcl]`). Both hosts. Re-run by the reporter.
+`derived-types/repros/count-eql-vs-equal/`, `siblings/eql-equal/` (`run.sh [ccl|sbcl]`).
+Both hosts. Re-run by the reporter.
 ```lisp
 (defun cnt-gv   (item lst) (declare (xargs :guard (true-listp lst)))                     (count item lst))
 (defun cnt-nogv (item lst) (declare (xargs :guard (true-listp lst) :verify-guards nil))  (count item lst))
-(cnt-gv   (list 1) (list (list 1)))   ; => 0
-(cnt-nogv (list 1) (list (list 1)))   ; => 1
+(cnt-gv   (list 1) (list (list 1)))   ; => 0    (raw cl:count, eql)
+(cnt-nogv (list 1) (list (list 1)))   ; => 1    (logical count-fn, equal)
+;; and the same split for search:
+(defun srch-gv   (x y) (declare (xargs :guard (and (true-listp x) (true-listp y))))                    (search x y))
+(defun srch-nogv (x y) (declare (xargs :guard (and (true-listp x) (true-listp y)) :verify-guards nil)) (search x y))
+(srch-gv   (list (list 1)) (list (list 1)))   ; => NIL   (raw cl:search, eql)
+(srch-nogv (list (list 1)) (list (list 1)))   ; => 1     (logical search-fn, equal)  — and NIL vs 1 proves nil in the logic
 ```
-`count` is a macro for the logical `count-fn` only under `#+acl2-loop-only`
-(`axioms.lisp`), so raw code calls `cl:count`, which compares with `eql`; the logical
-`count-fn` compares with `equal`. The item `(1)` is `equal` but not `eql` to the `(1)`
-inside the list, so the guard-verified function (raw path) returns 0 while its own
-logical definition returns 1. Guard verification succeeds under the plain
-`(true-listp lst)` guard; no redefinition, trust tag or `skip-proofs`. Both hosts.
-(A one-line `NIL` proof from this divergence is being confirmed separately; the two
-differing values above are firsthand.)
+`count` and `search` are macros that expand to the logical `count-fn`/`search-fn` only
+under `#+acl2-loop-only` (`axioms.lisp`); in raw Lisp the macro is absent, so
+guard-verified code calls `cl:count`/`cl:search`, which compare with `eql`, while the
+logic compares with `equal`. An item that is `equal` but not `eql` to its match (a freshly
+built cons or string) therefore reads differently on the two paths. Guard verification
+succeeds under the plain `true-listp` guards — crucially, neither `count-fn` nor
+`search-fn` forces `eqlablep` on the compared item — so no redefinition, trust tag or
+`skip-proofs` is involved, and `search`'s `NIL`-vs-`1` split proves `NIL`.
+
+**This class is exactly these two.** An enumeration of all 244 symbols defined only under
+`#+acl2-loop-only`, intersected with the Common Lisp functions whose default `:test` is
+`eql` and the `:test`-dispatching macros, and filtered by whether the image actually
+guard-verifies them on unconstrained (aliasing-capable) inputs, leaves only `count` and
+`search`. Every other candidate (`member`, `assoc`, `position`, `remove`,
+`remove-duplicates`, `subsetp`, `rassoc`, …) carries an `eqlablep` guard on its eql `:exec`
+path and cannot be guard-verified on inputs where `eql` and `equal` diverge; the
+`:test 'equal` variants agree. So the fix is local to `count-fn`/`search-fn` and the vein
+has no open tail.
 
 ### S6 — a `double-float` ftype proclamation is never retracted when its function goes away (CCL)
 
