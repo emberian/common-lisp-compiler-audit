@@ -1,0 +1,301 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Since SRCH-GV is non-recursive, its admission is trivial.  We observe
+that the type of SRCH-GV is described by the theorem 
+(OR (INTEGERP (SRCH-GV X Y)) (EQUAL (SRCH-GV X Y) NIL)).  We used the
+:type-prescription rule SEARCH-FN.
+
+Computing the guard conjecture for SRCH-GV....
+
+The non-trivial part of the guard conjecture for SRCH-GV is
+
+Goal
+(IMPLIES (AND (TRUE-LISTP Y) (TRUE-LISTP X))
+         (SEARCH-FN-GUARD X Y NIL 'EQUAL
+                          0 0 NIL NIL NIL NIL)).
+Goal'
+
+Splitter note (see :DOC splitter) for Goal' (2 subgoals).
+  if-intro: ((:DEFINITION SEARCH-FN-GUARD))
+
+Subgoal 2
+Subgoal 1
+
+Q.E.D.
+
+That completes the proof of the guard theorem for SRCH-GV.  SRCH-GV
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN SRCH-GV ...)
+Rules: ((:COMPOUND-RECOGNIZER NATP-COMPOUND-RECOGNIZER)
+        (:DEFINITION LENGTH)
+        (:DEFINITION NOT)
+        (:DEFINITION SEARCH-FN-GUARD)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART MEMBER-EQUAL)
+        (:EXECUTABLE-COUNTERPART NATP)
+        (:EXECUTABLE-COUNTERPART TAU-SYSTEM)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:TYPE-PRESCRIPTION LEN)
+        (:TYPE-PRESCRIPTION SEARCH-FN))
+Splitter rules (see :DOC splitter):
+  if-intro: ((:DEFINITION SEARCH-FN-GUARD))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  282
+ SRCH-GV
+ACL2 !>
+Since SRCH-NOGV is non-recursive, its admission is trivial.  We observe
+that the type of SRCH-NOGV is described by the theorem 
+(OR (INTEGERP (SRCH-NOGV X Y)) (EQUAL (SRCH-NOGV X Y) NIL)).  We used
+the :type-prescription rule SEARCH-FN.
+
+Summary
+Form:  ( DEFUN SRCH-NOGV ...)
+Rules: ((:TYPE-PRESCRIPTION SEARCH-FN))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ SRCH-NOGV
+ACL2 !>
+Since SRCH-FE-GV is non-recursive, its admission is trivial.  We observe
+that the type of SRCH-FE-GV is described by the theorem 
+(OR (INTEGERP (SRCH-FE-GV X Y)) (EQUAL (SRCH-FE-GV X Y) NIL)).  We
+used the :type-prescription rule SEARCH-FN.
+
+Computing the guard conjecture for SRCH-FE-GV....
+
+The non-trivial part of the guard conjecture for SRCH-FE-GV is
+
+Goal
+(IMPLIES (AND (TRUE-LISTP Y) (TRUE-LISTP X))
+         (SEARCH-FN-GUARD X Y T 'EQUAL
+                          0 0 NIL NIL NIL NIL)).
+Goal'
+
+Splitter note (see :DOC splitter) for Goal' (2 subgoals).
+  if-intro: ((:DEFINITION SEARCH-FN-GUARD))
+
+Subgoal 2
+Subgoal 1
+
+Q.E.D.
+
+That completes the proof of the guard theorem for SRCH-FE-GV.  SRCH-FE-GV
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN SRCH-FE-GV ...)
+Rules: ((:COMPOUND-RECOGNIZER NATP-COMPOUND-RECOGNIZER)
+        (:DEFINITION LENGTH)
+        (:DEFINITION NOT)
+        (:DEFINITION SEARCH-FN-GUARD)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART MEMBER-EQUAL)
+        (:EXECUTABLE-COUNTERPART NATP)
+        (:EXECUTABLE-COUNTERPART TAU-SYSTEM)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:TYPE-PRESCRIPTION LEN)
+        (:TYPE-PRESCRIPTION SEARCH-FN))
+Splitter rules (see :DOC splitter):
+  if-intro: ((:DEFINITION SEARCH-FN-GUARD))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  282
+ SRCH-FE-GV
+ACL2 !>
+Since SRCH-FE-NOGV is non-recursive, its admission is trivial.  We
+observe that the type of SRCH-FE-NOGV is described by the theorem 
+(OR (INTEGERP (SRCH-FE-NOGV X Y)) (EQUAL (SRCH-FE-NOGV X Y) NIL)).
+We used the :type-prescription rule SEARCH-FN.
+
+Summary
+Form:  ( DEFUN SRCH-FE-NOGV ...)
+Rules: ((:TYPE-PRESCRIPTION SEARCH-FN))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ SRCH-FE-NOGV
+ACL2 !>
+Since SRCH-EQ-GV is non-recursive, its admission is trivial.  We observe
+that the type of SRCH-EQ-GV is described by the theorem 
+(OR (INTEGERP (SRCH-EQ-GV X Y)) (EQUAL (SRCH-EQ-GV X Y) NIL)).  We
+used the :type-prescription rule SEARCH-FN.
+
+Computing the guard conjecture for SRCH-EQ-GV....
+
+The non-trivial part of the guard conjecture for SRCH-EQ-GV is
+
+Goal
+(IMPLIES (AND (TRUE-LISTP Y) (TRUE-LISTP X))
+         (SEARCH-FN-GUARD X Y NIL 'EQUAL
+                          0 0 NIL NIL NIL NIL)).
+Goal'
+
+Splitter note (see :DOC splitter) for Goal' (2 subgoals).
+  if-intro: ((:DEFINITION SEARCH-FN-GUARD))
+
+Subgoal 2
+Subgoal 1
+
+Q.E.D.
+
+That completes the proof of the guard theorem for SRCH-EQ-GV.  SRCH-EQ-GV
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN SRCH-EQ-GV ...)
+Rules: ((:COMPOUND-RECOGNIZER NATP-COMPOUND-RECOGNIZER)
+        (:DEFINITION LENGTH)
+        (:DEFINITION NOT)
+        (:DEFINITION SEARCH-FN-GUARD)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART MEMBER-EQUAL)
+        (:EXECUTABLE-COUNTERPART NATP)
+        (:EXECUTABLE-COUNTERPART TAU-SYSTEM)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:TYPE-PRESCRIPTION LEN)
+        (:TYPE-PRESCRIPTION SEARCH-FN))
+Splitter rules (see :DOC splitter):
+  if-intro: ((:DEFINITION SEARCH-FN-GUARD))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  282
+ SRCH-EQ-GV
+ACL2 !>
+Since SRCH-EQ-NOGV is non-recursive, its admission is trivial.  We
+observe that the type of SRCH-EQ-NOGV is described by the theorem 
+(OR (INTEGERP (SRCH-EQ-NOGV X Y)) (EQUAL (SRCH-EQ-NOGV X Y) NIL)).
+We used the :type-prescription rule SEARCH-FN.
+
+Summary
+Form:  ( DEFUN SRCH-EQ-NOGV ...)
+Rules: ((:TYPE-PRESCRIPTION SEARCH-FN))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ SRCH-EQ-NOGV
+ACL2 !>RESULT cons guard-verified: NIL
+NIL
+ACL2 !>RESULT cons not guard-verified: 1
+NIL
+ACL2 !>RESULT string guard-verified: NIL
+NIL
+ACL2 !>RESULT string not guard-verified: 0
+NIL
+ACL2 !>RESULT from-end guard-verified: NIL
+NIL
+ACL2 !>RESULT from-end not guard-verified: 1
+NIL
+ACL2 !>RESULT control :test 'equal guard-verified: 1
+NIL
+ACL2 !>RESULT control :test 'equal not guard-verified: 1
+NIL
+ACL2 !>
+ACL2 Warning [Non-rec] in ( DEFTHM SRCH-GV-VALUE ...):  A :REWRITE
+rule generated from SRCH-GV-VALUE will be triggered only by terms containing
+the function symbol SRCH-GV, which has a non-recursive definition.
+Unless this definition is disabled, this rule is unlikely ever to be
+used.
+
+
+ACL2 Warning [Subsume] in ( DEFTHM SRCH-GV-VALUE ...):  The previously
+added rule SRCH-GV subsumes a newly proposed :REWRITE rule generated
+from SRCH-GV-VALUE, in the sense that the old rule rewrites a more
+general target.  Because the new rule will be tried first, it may nonetheless
+find application.
+
+Goal'
+
+([ A key checkpoint:
+
+Goal'
+NIL
+
+A goal of NIL, Goal', has been generated!  Obviously, the proof attempt
+has failed.
+
+])
+
+Summary
+Form:  ( DEFTHM SRCH-GV-VALUE ...)
+Rules: ((:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART SRCH-GV))
+Warnings:  Subsume and Non-rec
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  7
+
+---
+The key checkpoint goal, below, may help you to debug this failure.
+See :DOC failure and see :DOC set-checkpoint-summary-limit.
+---
+
+*** Key checkpoint at the top level
+    before generating a goal of NIL (see :DOC nil-goal): ***
+
+Goal'
+NIL
+
+ACL2 Error [Failure] in ( DEFTHM SRCH-GV-VALUE ...):  See :DOC failure.
+
+******** FAILED ********
+ACL2 !>RESULT theorem srch-gv-value admitted: NIL
+NIL
+ACL2 !>
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM SRCH-GV-EVALUATED ...)
+Rules: ((:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART SRCH-GV))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  5
+ SRCH-GV-EVALUATED
+ACL2 !>Goal'
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM SRCH-GV-LOGICAL ...)
+Rules: ((:DEFINITION MV-NTH)
+        (:DEFINITION SEARCH-FN)
+        (:DEFINITION SRCH-GV)
+        (:EXECUTABLE-COUNTERPART <)
+        (:EXECUTABLE-COUNTERPART BINARY-+)
+        (:EXECUTABLE-COUNTERPART CONS)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART LENGTH)
+        (:EXECUTABLE-COUNTERPART SEARCH-FROM-START)
+        (:EXECUTABLE-COUNTERPART SUBSEQ)
+        (:EXECUTABLE-COUNTERPART UNARY--))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  117
+ SRCH-GV-LOGICAL
+ACL2 !>Goal'
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM SRCH-NIL ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Hint-events: ((:USE SRCH-GV-EVALUATED)
+              (:USE SRCH-GV-LOGICAL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ SRCH-NIL
+ACL2 !>RESULT theorems admitted: evaluated T logical T nil T
+NIL
+ACL2 !>Bye.

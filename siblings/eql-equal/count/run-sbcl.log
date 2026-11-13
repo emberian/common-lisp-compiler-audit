@@ -1,0 +1,104 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Since CNT-GV is non-recursive, its admission is trivial.  We observe
+that the type of CNT-GV is described by the theorem 
+(AND (INTEGERP (CNT-GV ITEM LST)) (<= 0 (CNT-GV ITEM LST))).  We used
+the :type-prescription rule COUNT-FN.
+
+Computing the guard conjecture for CNT-GV....
+
+The guard conjecture for CNT-GV is trivial to prove, given the :executable-
+counterparts of NATP and NULL.  CNT-GV is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN CNT-GV ...)
+Rules: ((:EXECUTABLE-COUNTERPART NATP)
+        (:EXECUTABLE-COUNTERPART NULL)
+        (:TYPE-PRESCRIPTION COUNT-FN))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ CNT-GV
+ACL2 !>
+Since CNT-NOGV is non-recursive, its admission is trivial.  We observe
+that the type of CNT-NOGV is described by the theorem 
+(AND (INTEGERP (CNT-NOGV ITEM LST)) (<= 0 (CNT-NOGV ITEM LST))).  We
+used the :type-prescription rule COUNT-FN.
+
+Summary
+Form:  ( DEFUN CNT-NOGV ...)
+Rules: ((:TYPE-PRESCRIPTION COUNT-FN))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ CNT-NOGV
+ACL2 !>RESULT cons guard-verified: 0
+NIL
+ACL2 !>RESULT cons not guard-verified: 1
+NIL
+ACL2 !>RESULT string guard-verified: 0
+NIL
+ACL2 !>RESULT string not guard-verified: 1
+NIL
+ACL2 !>
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM CNT-GV-EVALUATED ...)
+Rules: ((:EXECUTABLE-COUNTERPART CNT-GV)
+        (:EXECUTABLE-COUNTERPART EQUAL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  5
+ CNT-GV-EVALUATED
+ACL2 !>Goal'
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM CNT-GV-LOGICAL ...)
+Rules: ((:DEFINITION CNT-GV)
+        (:DEFINITION COUNT-FN)
+        (:EXECUTABLE-COUNTERPART <)
+        (:EXECUTABLE-COUNTERPART BINARY-+)
+        (:EXECUTABLE-COUNTERPART COUNT-LISTP)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART LENGTH)
+        (:EXECUTABLE-COUNTERPART NTHCDR)
+        (:EXECUTABLE-COUNTERPART STRINGP)
+        (:EXECUTABLE-COUNTERPART UNARY--))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  48
+ CNT-GV-LOGICAL
+ACL2 !>Goal'
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM CNT-NIL ...)
+Rules: ((:EXECUTABLE-COUNTERPART EQUAL)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Hint-events: ((:USE CNT-GV-EVALUATED)
+              (:USE CNT-GV-LOGICAL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ CNT-NIL
+ACL2 !>RESULT theorems admitted: evaluated T logical T nil T
+NIL
+ACL2 !>Bye.
