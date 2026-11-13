@@ -137,10 +137,34 @@ general CCL 1.14 compiler bug, not backend-specific.
 (identity (values 5 6))  ; CCL => (5 6)  ** wrong
 ```
 
-Root cause (`compiler/optimizers.lisp`): `(define-compiler-macro identity (form) form)`
-(line 584) and the `logand`/`logior`/`logxor` identity-element elimination in
-`transform-logop` (line 1468) rewrite a form to its operand — `(logior 0 x)`→`(logior x)`
-→`(require-type x 'integer)`, and CCL's `require-type` forwards *all* of its argument's
-values — without coercing to one value. **Sibling of, but distinct from,** the reported
-unary `truncate/floor/round/ceiling` bug (optimizers.lisp:1397–1437, which returns too
-*few* values); this one returns too *many*.
+Root cause (`compiler/optimizers.lisp`): a compiler-macro rewrites a call to its operand
+via `require-type`, and the `require-type` macro (line 999) returns its argument **bare**
+when the type is statically known, forwarding *all* of the argument's values instead of
+coercing to one. `identity` (line 584) and the `logand`/`logior`/`logxor` identity-element
+elimination in `transform-logop` (line 1468) are two entries; a full sweep of the file
+(`CCL-OPTIMIZERS.md`) found the **same single defect on 13 operators** — all confirmed
+firsthand on arm64, `(speed 3)(safety 0)` only, SBCL correct throughout:
+
+| operator (one-arg / identity-element form) | line | example | CCL | SBCL |
+|---|---|---|---|---|
+| `identity` | 584 | `(identity (values 5 6))` | `(5 6)` | `(5)` |
+| `logand -1` / `logior 0` / `logxor 0` | 1468 | `(logior 0 (round x 10))` | `(4 -3)` | `(4)` |
+| `+` | 1369 | `(+ (floor 23 10))` | `(2 3)` | `(2)` |
+| `*` | 1385 | `(* (floor 23 10))` | `(2 3)` | `(2)` |
+| `=` `/=` | 1343/1350 | `(= (floor 23 10))` | `(2 3)` | `(T)` |
+| `< > <= >=` | 292 | `(< (floor 23 10))` | `(2 3)` | `(T)` |
+| `max` `min` | 1779/1805 | `(max (floor 23 10))` | `(2 3)` | `(2)` |
+| `nthcdr 0` | 968 | `(nthcdr 0 (floor 23 10))` | `(2 3)` | `(2)` |
+| `ash _ 0` | 323 | `(ash (floor 23 10) 0)` | `(2 3)` | `(2)` |
+
+For the comparison operators (`= /= < > <= >=`) the leak is also a plain **wrong value**:
+`(< (floor 23 10))` must be `T`, but CCL returns `(2 3)`.
+
+**Distinct from** the reported unary `truncate/floor/round/ceiling` bug (optimizers.lisp
+1397–1437), which returns too *few* values (one instead of two). That bug, too, was found
+to span the **whole four-operator family** (the reported case was `ceiling`; a non-constant
+fixnum argument exposes `truncate`/`floor`/`round` as well, which constant-folding otherwise
+masks). So CCL's division/optimizer layer has exactly two root-cause defects here — values
+forwarded (this CCL-3) and values dropped (the unary-division bug) — each spanning a family
+of operators. Reproducers: `repros/ccl-opt-require-type-values-leak/`,
+`repros/ccl-opt-truncate-family-values/`, `repros/ccl-x86-differential/`.
