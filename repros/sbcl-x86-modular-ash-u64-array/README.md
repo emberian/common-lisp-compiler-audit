@@ -44,3 +44,58 @@ built on the affected SBCL.
 
 Likely area: the modular-arithmetic transform of `ASH` (mod-2^64) interacting
 with elimination of the unread `(unsigned-byte 64)` array initial-contents stores.
+
+
+## Persistence across SBCL versions
+
+Checked 2026-11-13 on hbox (x86-64 Linux, i9-12900) against the official SBCL
+binary releases plus a source bisect. The 2.2.9 and 2.6.8 rows re-confirm the
+original finding with the same harness (`repro.lisp`, VERDICT line).
+
+| SBCL | arch | result |
+|---|---|---|
+| 2.2.9 | x86-64 | correct |
+| 2.6.8 | x86-64 | **WRONG (0)** |
+| 2.6.9 | x86-64 | correct |
+| **2.6.10 (current release)** | x86-64 | **correct** |
+
+**Current-SBCL verdict: CORRECT on 2.6.10 x86-64** (the latest SBCL release as
+of 2026-11-13). The repro no longer diverges, so there is nothing to report to
+sbcl-devel *as written*.
+
+### Fix window (bisect)
+
+`git bisect` over the 290 commits in `sbcl-2.6.8..sbcl-2.6.9`, building each
+candidate with a 2.2.9 host and classifying by the repro's VERDICT line, pins
+the transition to a single commit:
+
+- last BUGGY: `d1b2b076bc95d36d046bd8cadcecc7506e4204bc`
+- first FIXED: **`e938a68479153d11479ff77071e88e08768dfb0f`** — Stas Boukarev,
+  2026-08-30, *"(aref (vector a) 0) => a"*, `src/compiler/generic/vm-tran.lisp`.
+
+### What the fix actually does — caveat: it MASKS, it does not root-fix
+
+The commit adds a `deftransform` on `data-vector-ref-with-offset` (x86/x86-64;
+`data-vector-ref` on other arches): when the array is an `initialize-vector`
+combination (what `make-array` + a constant `:initial-contents` lowers to) **and
+the index is a constant**, it splices the element expression out directly —
+`(aref (vector a b c) 1) => b` — eliminating the vector allocation and every
+store. Our repro reads a *constant* index (1) of a freshly built vector, so
+after this transform there is no array and no dead stores at all, and the buggy
+dead-store-elimination / modular-`ASH` code path is simply never reached.
+
+Evidence this is a peephole, not a soundness fix: the commit's only added test
+(`:aref-vector-fold` in `tests/compiler-ir.pure.lisp`) asserts the vector folds
+to *zero* IR calls — an optimization assertion, not a value-correctness one —
+and the change is **not listed in the 2.6.9 NEWS** as a bug fix.
+
+**Implication for the upstream report.** The underlying miscompilation of a
+variable-shift modular `ASH` under dead-store elimination of unread
+`(unsigned-byte 64)` array stores is very likely still latent on current SBCL;
+this commit only removed the one shape our reduced repro happened to use. A
+shape that does **not** fold to the new transform (e.g. a non-constant `aref`
+index, an array that escapes, or an array read through a path the transform
+cannot see) could still trigger it. That was **not** re-verified here —
+constructing a non-foldable repro and testing it on current x86-64 SBCL is the
+right next step before concluding the hazard is gone. The introduction window
+(2.2.9 correct → 2.6.8 wrong) was also not bisected.
