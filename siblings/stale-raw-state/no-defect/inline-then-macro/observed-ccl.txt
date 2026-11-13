@@ -1,0 +1,2 @@
+ACL2 !>RESULT guard-verified: 4
+ACL2 !>RESULT not guard-verified: 4

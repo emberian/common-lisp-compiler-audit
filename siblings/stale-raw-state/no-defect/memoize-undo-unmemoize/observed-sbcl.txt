@@ -1,0 +1,3 @@
+ACL2 !>RESULT populate (f 1): 2
+ACL2 !>RESULT guard-verified: 4
+ACL2 !>RESULT not guard-verified: 4

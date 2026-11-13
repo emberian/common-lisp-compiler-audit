@@ -1,0 +1,2 @@
+ACL2 !>RESULT guard-verified: 1.0e-323
+ACL2 !>RESULT not guard-verified: 2361183241434822606850
