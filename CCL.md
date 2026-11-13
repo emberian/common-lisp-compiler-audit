@@ -117,3 +117,30 @@ A pure-CL form with no ACL2 (for the Clozure issue):
 ```lisp
 (integer-length (ash 1 (1- (expt 2 60))))   ; CCL 1.14 arm64: negative; should signal
 ```
+
+---
+
+## CCL-3 — identity-element / `identity` folding leaks an operand's extra values (soundness; arm64 + x86-64)
+
+Found in the x86-64 audit (full writeup and reproducers: `X86-CCL.md`,
+`repros/ccl-x86-differential/`); **confirmed on darwin arm64 as well**, so it is a
+general CCL 1.14 compiler bug, not backend-specific.
+
+`(logior 0 (round x 10))` must return exactly one value (logior is single-valued). Under
+`(speed 3)(safety 0)` CCL returns **two** — the inner `round`'s remainder leaks:
+
+```lisp
+(multiple-value-list (funcall (compile nil '(lambda (x) (declare (integer x) (optimize (speed 3)(safety 0))) (logior 0 (round x 10)))) 37))
+;; CCL => (4 -3)   ** wrong      ;  CCL (safety 3) and SBCL => (4)
+;; arm64 darm64cl: x=37=>(4 -3) x=-17=>(-2 3) x=100=>(10 0) x=3=>(0 3)
+(logior 0 (values 5 6))  ; CCL => (5 6)  ** wrong (operand need not be a division)
+(identity (values 5 6))  ; CCL => (5 6)  ** wrong
+```
+
+Root cause (`compiler/optimizers.lisp`): `(define-compiler-macro identity (form) form)`
+(line 584) and the `logand`/`logior`/`logxor` identity-element elimination in
+`transform-logop` (line 1468) rewrite a form to its operand — `(logior 0 x)`→`(logior x)`
+→`(require-type x 'integer)`, and CCL's `require-type` forwards *all* of its argument's
+values — without coercing to one value. **Sibling of, but distinct from,** the reported
+unary `truncate/floor/round/ceiling` bug (optimizers.lisp:1397–1437, which returns too
+*few* values); this one returns too *many*.

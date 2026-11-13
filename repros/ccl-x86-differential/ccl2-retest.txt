@@ -1,0 +1,20 @@
+CCL-2 x86-64 re-test transcript (Clozure Common Lisp Version 1.14 (v1.14) linuxx8664)
+
+# ash near 2^60 -- correct signalling (arm64 returns malformed negative integer):
+k=1152921504606846975  STORAGE-CONDITION: SIMPLE-STORAGE-CONDITION
+k=1152921504606846976  ERROR: SIMPLE-ERROR
+k=1152921504606846977  ERROR: SIMPLE-ERROR
+k=1152921504606846974  STORAGE-CONDITION: SIMPLE-STORAGE-CONDITION
+k=2305843009213693951  ERROR: SIMPLE-ERROR
+Clozure Common Lisp Version 1.14 (v1.14) linuxx8664
+
+For more information about CCL, please see https://ccl.clozure.com.
+
+CCL is free software.
+It is distributed under the terms of the Apache License, Version 2.0.
+? 
+
+# repo plain-ccl.lisp form 1 (unmodified):
+> Error of type CCL::SIMPLE-STORAGE-CONDITION: Memory allocation request failed.
+  #:G157691: (ERROR)
+  CCL::%HANDLERS%: ((ERROR) (PROCESS-RESET))
