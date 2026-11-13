@@ -37,34 +37,39 @@ signals an error in the `ash` case.
 
 ---
 
-## The one boundary worth a maintainer's eye (examined; NOT a confirmed bug)
+## The one boundary examined in depth — resolved SAFE
 
 The derived-type oracle checked, for each primitive, whether the type SBCL *infers* for
 a call under ACL2's compilation policy `(safety 0) (speed 3)` can exclude a value the
 function can logically return — the class that could let ACL2 (which trusts those
 derivations) prove `NIL`. It found **zero** such rows that exclude a *constructible*
-value. Two inferred bounds are narrower than the mathematical range but were classed as
-safe because a witness cannot be built:
+value. The one bound I would not sign off on by eye, `integer-length` deriving roughly
+`(unsigned-byte 38)` for an unconstrained integer input, was then traced through the
+SBCL sources and confirmed sound (`derived-types/INTEGER-LENGTH.md`):
 
-- `integer-length` of an integer argument derives a result in roughly `(unsigned-byte 38)`.
-- `length` derives roughly `(unsigned-byte 45)`.
+- Bounded inputs follow their own range: the derive-type optimizer
+  (`src/compiler/srctran.lisp` ~3359–3386) sets the upper bound to
+  `(max (integer-length lo) (integer-length hi))` — never a flat cap (e.g.
+  `(integer 0 (expt 2 100))` → `(mod 102)`).
+- An unbounded input falls through to the `defknown` type `bit-index`
+  (`fndb.lisp:543`), which is **not** arbitrary: `bit-index` =
+  `(integer 0 ((1+ maximum-bignum-length)·n-word-bits − 1))`
+  (`vm-type.lisp:73–74`), and `maximum-bignum-length = #xFFFFFFFF` (`early-vm.lisp`),
+  giving exactly `2^38 − 1` = `(unsigned-byte 38)`.
+- Soundness: the largest representable integer occupies `2^32 − 1` words of 64 bits, so
+  its `integer-length` is at most `(2^32 − 1)·64 − 1 = 2^38 − 65`, **strictly below**
+  the cap `2^38 − 1`. The derived type over-approximates by 64 and contains every value
+  SBCL can represent. A witness exceeding it would need `integer-length ≥ 2^38`
+  (≈ 32 GiB), which also exceeds `maximum-bignum-length`; SBCL errors before building
+  it. Unconstructible in principle — the same situation as `length`/`(unsigned-byte 45)`
+  bounded by `array-dimension-limit`.
 
-`length` is unquestionably safe: a list or vector of length ≥ 2^45 would need ~2^45
-elements and cannot exist. `integer-length` is the **one edge** I would not swear is
-unreachable: a value with `integer-length ≥ 2^38` is a bignum of ≥ 2^38 bits ≈ 32 GiB.
-That is at the very limit of what a large-memory machine could allocate, not obviously
-impossible the way a 2^45-element list is. We could **not** construct a witness on this
-hardware, so there is no reproducer and no confirmed bug — but if SBCL genuinely derives
-`integer-length ⊆ (unsigned-byte 38)` for an *unconstrained* integer input (rather than
-one whose own range already bounds it), that is the question worth asking `sbcl-devel`:
+So this is confirmed safe, not merely "no witness found." No open SBCL lead remains from
+the derived-type pass.
 
-> Under `(speed 3) (safety 0)`, what result type does the compiler derive for
-> `(integer-length x)` with `x` of type `integer` (no range), and is it bounded below
-> `(integer-length most-positive-bignum)`? If so, is that intentional given that a
-> ≥ 32 GiB bignum is in principle allocatable?
+## Still to do (SBCL has only been tested on arm64)
 
-To turn this into either a real report or a clean dismissal, the next step (not yet
-done) is to read SBCL's `integer-length` deftransform / `derive-type` method in
-`src/compiler/` directly and see whether the bound is tied to the input's own bounds
-(safe) or is a flat constant (potentially not). That inspection, plus an attempt to
-allocate the witness on a big-memory box, is what would settle it.
+Everything above ran on SBCL 2.6.10, Apple-Silicon (arm64). SBCL's x86-64 backend is a
+different VOP/codegen path and has **not** been exercised by this audit yet; that work
+is in progress on an x86-64 host (see the project notes). A clean arm64 result is not a
+clean x86-64 result.
