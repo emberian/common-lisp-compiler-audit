@@ -1,0 +1,19 @@
+### host image: ccl-worktree
+book certified: yes
+control certified: yes
+control-nottag certified: yes
+book.cert records a real expansion (VALUE-TRIPLE/NIL-PROVED)?  0 (0 = suppressed)
+control.cert records a real expansion?                        1
+--- ANCHOR include (book): expect nil-proved installed = 'NIL ---
+@TAG installed-theorem 'NIL
+@TAG ttags-seen 
+@TAG skip-proofs-seen NIL
+@TAG derive-nil-theorem 'NIL
+ACL2 Warning [Compiled file]
+ACL2 Warning [Ttags]
+ttag note
+TTAG NOTE (for included book): Adding ttag :ME-TRUST from book /Users/ember/dev/compiler-audit/siblings/make-event-trust/expansion-trust-bsf/book.
+--- CONTROL include (ttag, no bsf): expect nil-proved :UNDEFINED ---
+@TAG controlA-nil-proved :UNDEFINED
+--- CONTROL include (no ttag): expect nil-proved :UNDEFINED ---
+@TAG controlB-nil-proved :UNDEFINED

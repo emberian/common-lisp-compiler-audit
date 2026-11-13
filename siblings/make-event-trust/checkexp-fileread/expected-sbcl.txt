@@ -1,0 +1,3 @@
+### host image: head-worktree
+bdef: cert=yes | include payload='@TAG bdef payload CERT_VALUE' | refused=no
+bchk: cert=yes | include payload='' | refused=YES

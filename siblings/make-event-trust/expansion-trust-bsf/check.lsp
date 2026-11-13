@@ -1,0 +1,7 @@
+(include-book "book")
+(cw "@TAG installed-theorem ~x0~%" (getpropc 'nil-proved 'theorem :NONE (w state)))
+(cw "@TAG ttags-seen ~x0~%" (global-val 'ttags-seen (w state)))
+(cw "@TAG skip-proofs-seen ~x0~%" (global-val 'skip-proofs-seen (w state)))
+(defthm derive-nil nil :rule-classes nil :hints (("Goal" :use nil-proved)))
+(cw "@TAG derive-nil-theorem ~x0~%" (getpropc 'derive-nil 'theorem :NONE (w state)))
+(quit)
