@@ -29,7 +29,7 @@ fi
 PORT=""; [ -f portcullis.lisp ] && PORT='(ld "portcullis.lisp")'
 if [ -f sub.lisp ]; then
   printf '(in-package "ACL2")\n(certify-book "sub" 0 t :skip-proofs-okp t)\n(quit)\n' > s0.lisp
-  nice -n 15 timeout 900 "$ACL2" < s0.lisp > s0.out 2>&1
+  nice -n 15 timeout -k 20 900 "$ACL2" < s0.lisp > s0.out 2>&1
 fi
 
 # The same queries with guard checking T and :NONE (first line of the file sets the mode).
@@ -95,11 +95,11 @@ $QUIET
 (quit)
 EOF
 
-nice -n 15 timeout 1500 "$ACL2" < s1.lisp > s1.out 2>&1
-nice -n 15 timeout 900 "$ACL2" < s2.lisp > s2.out 2>&1
-nice -n 15 timeout 900 "$ACL2" < s3.lisp > s3.out 2>&1
+nice -n 15 timeout -k 20 1500 "$ACL2" < s1.lisp > s1.out 2>&1
+nice -n 15 timeout -k 20 900 "$ACL2" < s2.lisp > s2.out 2>&1
+nice -n 15 timeout -k 20 900 "$ACL2" < s3.lisp > s3.out 2>&1
 # IMG_TIMEOUT: the restarted CCL image can hang in a stobj array store (finding F3).
-if [ -x zimg ]; then nice -n 15 timeout ${IMG_TIMEOUT:-900} ./zimg < s4.lisp > s4.out 2>&1; else : > s4.out; fi
+if [ -x zimg ]; then nice -n 15 timeout -k 20 ${IMG_TIMEOUT:-900} ./zimg < s4.lisp > s4.out 2>&1; else : > s4.out; fi
 rm -f zimg zimg.core zimg.*   # the saved image is large and only needed for s4
 
 cat s1.out s3.out s4.out | grep -o '@[A-Z]* .*\|@END' |

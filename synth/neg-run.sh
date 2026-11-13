@@ -9,7 +9,7 @@ mkdir -p "$W" && cd "$W" || exit 2
 timeout 600 /opt/homebrew/bin/sbcl --script /Users/ember/dev/compiler-audit/synth/neg.lisp "$SEED" "$N" "$W/" | tail -1
 { echo "(set-inhibit-output-lst (set-difference-eq *valid-output-names* '(comment error)))"
   echo '(ld "neg.lisp" :ld-error-action :continue)'; } > n1.lisp
-nice -n 15 timeout ${NT:-3000} "$ACL2" < n1.lisp > n1.$HOST.out 2>&1
+nice -n 15 timeout -k 20 ${NT:-3000} "$ACL2" < n1.lisp > n1.$HOST.out 2>&1
 grep -o '@[A-Z]* .*\|@NEND' n1.$HOST.out > neg.$HOST.rec
 R=neg.$HOST.rec
 n=$(grep -c '^@N ' $R)

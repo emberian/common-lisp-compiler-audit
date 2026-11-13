@@ -8,7 +8,7 @@ cd "$D" || exit 2
   [ -f portcullis.lisp ] && echo '(ld "portcullis.lisp")'
   echo '(ld "book.lisp")'
   echo '(ld "queries.lisp" :ld-error-action :continue)'; } > q1.lisp
-nice -n 15 timeout ${QT:-600} "$ACL2" < q1.lisp > q1.$HOST.out 2>&1
+nice -n 15 timeout -k 20 ${QT:-600} "$ACL2" < q1.lisp > q1.$HOST.out 2>&1
 rc=$?
 grep -o '@[A-Z]* .*\|@END' q1.$HOST.out > q.$HOST.rec
 R=q.$HOST.rec

@@ -1,0 +1,531 @@
+reached: 195 of 1067 transforms, 407 of 1024 VOPs
+
+class                        reachable T-all   T-unhit V-all   V-unhit
+cl-function-not-in-acl2      no            225     214       0       0
+single-float                 no            168     164      85      84
+complex-float                no             17      17      34      34
+ffi                          no             62      62      88      87
+simd                         no              1       1      20      20
+concurrency                  no              2       1      28      28
+safety                       no             22      16      69      63
+bignum-runtime               no              1       1      27      25
+runtime-objects              no             48      43     145     130
+float-internals              no              4       4      12      11
+double-float                 yes            85      79      35      16
+character                    yes            13       8      21       8
+string                       yes            39      35       6       2
+specialised-array            yes            41      37      76      28
+sequence-internals           yes            39      37       0       0
+integer-and-rational         yes           300     153     378      81
+
+unreached entries in classes an ACL2 book cannot reach: 1005
+unreached entries in classes it can reach: 484
+
+cl-function-not-in-acl2: deftransform of a Common Lisp function that is not an ACL2 function or macro (sequence, array, I/O, pathname, transcendental ... functions); an ACL2 definition cannot call it
+single-float: ACL2 has no single-floats (df is double-float only)
+complex-float: ACL2 complex numbers are complex rationals; specialised complex-float code never applies
+ffi: no foreign memory or foreign calls in ACL2 code
+simd: no SIMD objects in ACL2
+concurrency: no atomic operations, barriers or interrupts in ACL2 code
+safety: emitted only when checks or instrumentation are compiled in; ACL2 compiles at safety 0
+bignum-runtime: used only inside SBCL's own bignum implementation, never in compiled user code
+runtime-objects: structure instances, closures, code objects, special-variable cells, stack and allocator internals: not expressible in ACL2 definitions
+float-internals: float decoding, bit access and transcendental kernels: reachable only through ACL2's constrained df-sin, df-exp ..., which have no logical value to compare against; not generated
+
+Unreached, reachable classes:
+
+[double-float] ACL2 df arithmetic (df+ df* df/ df< df-sqrt to-df from-df), inlined in raw Lisp
+  T:(* "(FUNCTION (DOUBLE-FLOAT (SB-INT:CONSTANT-ARG (OR (DOUBLE-FLOAT -1.0 -1.0) (DOUBLE-FLOAT 1.0 1.0)))) *)" "optimize multiplication by one")
+  T:(* "(FUNCTION (DOUBLE-FLOAT NUMBER) *)" "optimize")
+  T:(* "(FUNCTION (NUMBER DOUBLE-FLOAT) *)" "optimize")
+  T:(+ "(FUNCTION (DOUBLE-FLOAT (SB-INT:CONSTANT-ARG (OR (MEMBER 0.0 0.0f0) (INTEGER 0 0)))) *)" "optimize")
+  T:(+ "(FUNCTION (DOUBLE-FLOAT NUMBER) *)" "optimize")
+  T:(+ "(FUNCTION (NUMBER DOUBLE-FLOAT) *)" "optimize")
+  T:(- "(FUNCTION (DOUBLE-FLOAT (SB-INT:CONSTANT-ARG (OR (MEMBER 0.0 0.0f0) (INTEGER 0 0)))) *)" "optimize")
+  T:(- "(FUNCTION (DOUBLE-FLOAT NUMBER) *)" "optimize")
+  T:(- "(FUNCTION (NUMBER DOUBLE-FLOAT) *)" "optimize")
+  T:(/ "(FUNCTION (DOUBLE-FLOAT NUMBER) *)" "optimize")
+  T:(/ "(FUNCTION (NUMBER DOUBLE-FLOAT) *)" "optimize")
+  T:(< "(FUNCTION ((INTEGER -16777216 16777216) FLOAT) *)" "optimize")
+  T:(< "(FUNCTION (DOUBLE-FLOAT RATIONAL) *)" "open-code FLOAT to RATIONAL comparison")
+  T:(< "(FUNCTION (FLOAT (INTEGER -16777216 16777216)) *)" "optimize")
+  T:(< "(FUNCTION (FLOAT (SB-INT:CONSTANT-ARG FLOAT)) *)" "optimize")
+  T:(< "(FUNCTION (RATIONAL (SB-INT:CONSTANT-ARG FLOAT)) *)" "open-code RATIONAL to FLOAT comparison")
+  T:(<= "(FUNCTION ((INTEGER -16777216 16777216) FLOAT) *)" "optimize")
+  T:(<= "(FUNCTION (DOUBLE-FLOAT RATIONAL) *)" "open-code FLOAT to RATIONAL comparison")
+  T:(<= "(FUNCTION (FLOAT (INTEGER -16777216 16777216)) *)" "optimize")
+  T:(<= "(FUNCTION (FLOAT (SB-INT:CONSTANT-ARG FLOAT)) *)" "optimize")
+  T:(<= "(FUNCTION (RATIONAL (SB-INT:CONSTANT-ARG FLOAT)) *)" "open-code RATIONAL to FLOAT comparison")
+  T:(= "(FUNCTION ((INTEGER -16777216 16777216) FLOAT) *)" "optimize")
+  T:(= "(FUNCTION (DOUBLE-FLOAT RATIONAL) *)" "open-code FLOAT to RATIONAL comparison")
+  T:(= "(FUNCTION (FLOAT (INTEGER -16777216 16777216)) *)" "optimize")
+  T:(= "(FUNCTION (FLOAT (SB-INT:CONSTANT-ARG FLOAT)) *)" "optimize")
+  T:(= "(FUNCTION (RATIONAL (SB-INT:CONSTANT-ARG FLOAT)) *)" "open-code RATIONAL to FLOAT comparison")
+  T:(= "(FUNCTION (REAL (SB-INT:CONSTANT-ARG REAL)) *)" "optimize")
+  T:(> "(FUNCTION ((INTEGER -16777216 16777216) FLOAT) *)" "optimize")
+  T:(> "(FUNCTION (DOUBLE-FLOAT RATIONAL) *)" "open-code FLOAT to RATIONAL comparison")
+  T:(> "(FUNCTION (FLOAT (INTEGER -16777216 16777216)) *)" "optimize")
+  T:(> "(FUNCTION (FLOAT (SB-INT:CONSTANT-ARG FLOAT)) *)" "optimize")
+  T:(> "(FUNCTION (RATIONAL (SB-INT:CONSTANT-ARG FLOAT)) *)" "open-code RATIONAL to FLOAT comparison")
+  T:(> "(FUNCTION (REAL (SB-INT:CONSTANT-ARG (OR (FLOAT 0.0f0 0.0f0) (INTEGER 0 0)))) *)" "optimize")
+  T:(>= "(FUNCTION ((INTEGER -16777216 16777216) FLOAT) *)" "optimize")
+  T:(>= "(FUNCTION (DOUBLE-FLOAT RATIONAL) *)" "open-code FLOAT to RATIONAL comparison")
+  T:(>= "(FUNCTION (FLOAT (INTEGER -16777216 16777216)) *)" "optimize")
+  T:(>= "(FUNCTION (FLOAT (SB-INT:CONSTANT-ARG FLOAT)) *)" "optimize")
+  T:(>= "(FUNCTION (RATIONAL (SB-INT:CONSTANT-ARG FLOAT)) *)" "open-code RATIONAL to FLOAT comparison")
+  T:(ABS "(FUNCTION ((OR (OR (MEMBER -0.0 -0.0f0) (FLOAT * (0.0f0))) (RATIONAL * 0))) *)" "optimize")
+  T:(ABS "(FUNCTION ((OR (OR (MEMBER 0.0 0.0f0) (FLOAT (0.0f0))) (RATIONAL 0))) *)" "optimize")
+  T:(CEILING "(FUNCTION ((OR (FLOAT (-1.0f0) (0.0f0)) (AND (RATIONAL (-1) (0)) (NOT INTEGER))) (INTEGER 1)) *)" "optimize")
+  T:(CEILING "(FUNCTION ((OR (FLOAT (0.0f0) (1.0f0)) (AND (RATIONAL (0) (1)) (NOT INTEGER))) (INTEGER * -1)) *)" "optimize")
+  T:(CEILING "(FUNCTION (DOUBLE-FLOAT &OPTIONAL (OR FLOAT INTEGER)) *)" "optimize")
+  T:(CEILING "(FUNCTION (DOUBLE-FLOAT REAL) *)" "optimize")
+  T:(CEILING "(FUNCTION (REAL DOUBLE-FLOAT) *)" "optimize")
+  T:(COMPLEX "(FUNCTION (DOUBLE-FLOAT REAL) *)" "optimize")
+  T:(COMPLEX "(FUNCTION (DOUBLE-FLOAT) *)" "optimize")
+  T:(COMPLEX "(FUNCTION (REAL DOUBLE-FLOAT) *)" "optimize")
+  T:(CONJUGATE "(FUNCTION (REAL) *)" "optimize")
+  T:(EQ "(FUNCTION (REAL (SB-INT:CONSTANT-ARG REAL)) *)" "optimize")
+  T:(EQL "(FUNCTION (DOUBLE-FLOAT DOUBLE-FLOAT) *)" "optimize")
+  T:(EQL "(FUNCTION (REAL (SB-INT:CONSTANT-ARG REAL)) *)" "optimize")
+  T:(EXPT "(FUNCTION ((OR REAL (COMPLEX RATIONAL)) (SB-INT:CONSTANT-ARG (OR (INTEGER -1 -1) (INTEGER 1 1)))) *)" "optimize")
+  T:(EXPT "(FUNCTION ((SB-INT:CONSTANT-ARG (REAL -1 -1)) INTEGER) *)" "recode as an ODDP check")
+  T:(EXPT "(FUNCTION (DOUBLE-FLOAT DOUBLE-FLOAT) (VALUES DOUBLE-FLOAT &REST T))" "optimize")
+  T:(EXPT "(FUNCTION (DOUBLE-FLOAT INTEGER) (VALUES DOUBLE-FLOAT &REST T))" "optimize")
+  T:(EXPT "(FUNCTION (T (SB-INT:CONSTANT-ARG REAL)) *)" "recode as multiplication or sqrt")
+  T:(FLOOR "(FUNCTION ((OR (FLOAT (-1.0f0) (0.0f0)) (AND (RATIONAL (-1) (0)) (NOT INTEGER))) (INTEGER * -1)) *)" "optimize")
+  T:(FLOOR "(FUNCTION ((OR (FLOAT (0.0f0) (1.0f0)) (AND (RATIONAL (0) (1)) (NOT INTEGER))) (INTEGER 1)) *)" "optimize")
+  T:(FLOOR "(FUNCTION (DOUBLE-FLOAT &OPTIONAL (OR FLOAT INTEGER)) *)" "optimize")
+  T:(FLOOR "(FUNCTION (DOUBLE-FLOAT REAL) *)" "optimize")
+  T:(FLOOR "(FUNCTION (REAL DOUBLE-FLOAT) *)" "optimize")
+  T:(IMAGPART "(FUNCTION (FLOAT) *)" "optimize")
+  T:(REALPART "(FUNCTION ((COMPLEX RATIONAL)) *)" "optimize")
+  T:(REALPART "(FUNCTION (REAL) *)" "optimize")
+  T:(ROUND "(FUNCTION (DOUBLE-FLOAT &OPTIONAL (OR FLOAT INTEGER)) *)" "optimize")
+  T:(ROUND "(FUNCTION (DOUBLE-FLOAT REAL) *)" "optimize")
+  T:(ROUND "(FUNCTION (REAL DOUBLE-FLOAT) *)" "optimize")
+  T:(SB-KERNEL:%DOUBLE-FLOAT "(FUNCTION ((OR DOUBLE-FLOAT (SIGNED-BYTE 64))) *)" "optimize")
+  T:(SB-KERNEL:%DOUBLE-FLOAT "(FUNCTION ((OR DOUBLE-FLOAT (UNSIGNED-BYTE 64))) *)" "optimize")
+  T:(SB-KERNEL:%DOUBLE-FLOAT "(FUNCTION (DOUBLE-FLOAT) *)" "optimize")
+  T:(SB-KERNEL:%DOUBLE-FLOAT "(FUNCTION (FLOAT) *)" "optimize")
+  T:(SB-KERNEL:%DOUBLE-FLOAT "(FUNCTION (RATIONAL) *)" "optimize")
+  T:(SB-KERNEL:%UNARY-TRUNCATE "(FUNCTION (DOUBLE-FLOAT) *)" "optimize")
+  T:(SB-KERNEL:UNARY-TRUNCATE "(FUNCTION (DOUBLE-FLOAT) *)" "optimize")
+  T:(SLEEP "(FUNCTION ((SB-INT:CONSTANT-ARG (OR RATIONAL (NOT (SATISFIES SB-EXT:FLOAT-INFINITY-P))))) *)" "optimize")
+  T:(TRUNCATE "(FUNCTION (DOUBLE-FLOAT &OPTIONAL (OR FLOAT INTEGER)) *)" "optimize")
+  T:(TRUNCATE "(FUNCTION (DOUBLE-FLOAT REAL) *)" "optimize")
+  T:(TRUNCATE "(FUNCTION (REAL DOUBLE-FLOAT) *)" "optimize")
+  V:SB-KERNEL:%UNARY-TRUNCATE/DOUBLE-FLOAT
+  V:SB-VM::</DOUBLE-FLOAT-ZERO
+  V:SB-VM::<=/DOUBLE-FLOAT
+  V:SB-VM::<=/DOUBLE-FLOAT-ZERO
+  V:SB-VM::=/DOUBLE-FLOAT-ZERO
+  V:SB-VM::>=/DOUBLE-FLOAT
+  V:SB-VM::>=/DOUBLE-FLOAT-ZERO
+  V:SB-VM::ABS/DOUBLE-FLOAT
+  V:SB-VM::DOUBLE-FLOAT-COMPARE
+  V:SB-VM::DOUBLE-FLOAT-COMPARE-ZERO
+  V:SB-VM::FLOAT-COMPARE
+  V:SB-VM::FLOAT-COMPARE-ZERO
+  V:SB-VM::QUIET</DOUBLE-FLOAT
+  V:SB-VM::QUIET</DOUBLE-FLOAT-ZERO
+  V:SB-VM::QUIET=/DOUBLE-FLOAT
+  V:SB-VM::QUIET=/DOUBLE-FLOAT-ZERO
+
+[character] char-code code-char char< char-upcase ... on declared characters
+  T:(CHAR-CODE "FUNCTION" "optimize")
+  T:(CHAR-EQUAL "(FUNCTION (BASE-CHAR BASE-CHAR) *)" "open code")
+  T:(CHAR-EQUAL "(FUNCTION (BASE-CHAR CHARACTER) *)" "open code")
+  T:(CHAR-EQUAL "(FUNCTION (CHARACTER BASE-CHAR) *)" "open code")
+  T:(DIGIT-CHAR-P "(FUNCTION ((SB-KERNEL:CHARACTER-SET ((0 . 1632))) &OPTIONAL (INTEGER 2 10)) *)" "optimize")
+  T:(DIGIT-CHAR-P "(FUNCTION ((SB-KERNEL:CHARACTER-SET ((0 . 1632))) (SB-INT:CONSTANT-ARG (INTEGER 11))) *)" "optimize")
+  T:(SB-KERNEL:BASE-CHAR-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-SYS:%STANDARD-CHAR-P "(FUNCTION (T) *)" "optimize")
+  V:CHAR-CODE
+  V:SB-KERNEL:BASE-CHAR-P
+  V:SB-VM::BASE-CHAR-P-CHARACTER
+  V:SB-VM::BASE-CHAR-P-CHARACTER-REG
+  V:SB-VM::CHARACTER-COMPARE
+  V:SB-VM::CHARACTER-COMPARE/C
+  V:SB-VM::IF-EQ-CHARACTER
+  V:SB-VM::TAGGED-CHAR-CODE
+
+[string] length, char and string comparisons on declared strings
+  T:(CONCATENATE "(FUNCTION ((SB-INT:CONSTANT-ARG T) &REST SEQUENCE) *)" "optimize")
+  T:(CONCATENATE "FUNCTION" "optimize")
+  T:(SB-C::STRING-DESIGNATOR-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-C::STRING-DESIGNATOR-P "FUNCTION" "optimize")
+  T:(SB-EXT:OCTETS-TO-STRING "(FUNCTION (T &REST T) *)" "precompute external-format lookup")
+  T:(SB-EXT:STRING-TO-OCTETS "(FUNCTION (T &REST T) *)" "precompute external-format lookup")
+  T:(SB-KERNEL:%CONCATENATE-TO-BASE-STRING "FUNCTION" "optimize")
+  T:(SB-KERNEL:%CONCATENATE-TO-LIST "FUNCTION" "optimize")
+  T:(SB-KERNEL:%CONCATENATE-TO-STRING "(FUNCTION ((VECTOR CHARACTER)) *)" "optimize")
+  T:(SB-KERNEL:%CONCATENATE-TO-STRING "(FUNCTION (BASE-STRING) *)" "optimize")
+  T:(SB-KERNEL:%CONCATENATE-TO-STRING "FUNCTION" "optimize")
+  T:(SB-KERNEL:%CONCATENATE-TO-VECTOR "FUNCTION" "optimize")
+  T:(SB-KERNEL:BASE-STRING-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:CHARACTER-STRING-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-BASE-STRING= "(FUNCTION (T T (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T)) *)" 
+  T:(SB-KERNEL:SIMPLE-CHARACTER-STRING-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-CHARACTER-STRING= "(FUNCTION (T T (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T))
+  T:(SB-KERNEL:STRING/=* "(FUNCTION (SIMPLE-STRING SIMPLE-STRING T T T T) *)" "optimize")
+  T:(SB-KERNEL:STRING/=* "(FUNCTION (STRING STRING (SB-INT:CONSTANT-ARG (INTEGER 0 0)) (SB-INT:CONSTANT-ARG NULL) (SB-INT:CONSTANT-ARG (INTEGER 0 0)) (S
+  T:(SB-KERNEL:STRING/=* "FUNCTION" "optimize")
+  T:(SB-KERNEL:STRING<* "(FUNCTION (SIMPLE-STRING SIMPLE-STRING T T T T) *)" "optimize")
+  T:(SB-KERNEL:STRING<=* "(FUNCTION (SIMPLE-STRING SIMPLE-STRING T T T T) *)" "optimize")
+  T:(SB-KERNEL:STRING=* "(FUNCTION (SIMPLE-BASE-STRING SIMPLE-BASE-STRING T T T T) *)" "optimize")
+  T:(SB-KERNEL:STRING=* "(FUNCTION (T T (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T) (SB-INT:CONSTANT-ARG T)) *)" "optimize")
+  T:(SB-KERNEL:STRING>* "(FUNCTION (SIMPLE-STRING SIMPLE-STRING T T T T) *)" "optimize")
+  T:(SB-KERNEL:STRING>=* "(FUNCTION (SIMPLE-STRING SIMPLE-STRING T T T T) *)" "optimize")
+  T:(STRING "(FUNCTION ((OR STRING SYMBOL)) *)" "optimize")
+  T:(STRING "(FUNCTION (STRING) *)" "optimize")
+  T:(STRING "(FUNCTION (SYMBOL) *)" "optimize")
+  T:(STRING-EQUAL "(FUNCTION (T T &KEY (:START1 (SB-INT:CONSTANT-ARG T)) (:START2 (SB-INT:CONSTANT-ARG T)) (:END1 (SB-INT:CONSTANT-ARG T)) (:END2 (SB-IN
+  T:(STRING-EQUAL "FUNCTION" "optimize")
+  T:(STRING< "FUNCTION" "optimize")
+  T:(STRING<= "FUNCTION" "optimize")
+  T:(STRING> "FUNCTION" "optimize")
+  T:(STRING>= "FUNCTION" "optimize")
+  V:SB-KERNEL:BASE-STRING-P
+  V:SB-KERNEL:CHARACTER-STRING-P
+
+[specialised-array] stobj array fields: one element type per SBCL specialised vector
+  T:(SB-INT:BIT-VECTOR-= "(FUNCTION (SIMPLE-BIT-VECTOR SIMPLE-BIT-VECTOR) *)" "optimize")
+  T:(SB-KERNEL:%CHECK-VECTOR-SEQUENCE-BOUNDS "(FUNCTION (VECTOR T T) *)" "optimize")
+  T:(SB-KERNEL:%CONCATENATE-TO-SIMPLE-VECTOR "FUNCTION" "optimize")
+  T:(SB-KERNEL:%SET-ROW-MAJOR-AREF "FUNCTION" "optimize")
+  T:(SB-KERNEL:%WITH-ARRAY-DATA "(FUNCTION ((OR VECTOR SIMPLE-ARRAY) (UNSIGNED-BYTE 45) (OR NULL (UNSIGNED-BYTE 45))) *)" "inline non-SIMPLE-vector-hand
+  T:(SB-KERNEL:%WITH-ARRAY-DATA/FP "(FUNCTION ((OR VECTOR SIMPLE-ARRAY) (UNSIGNED-BYTE 45) (OR NULL (UNSIGNED-BYTE 45))) *)" "inline non-SIMPLE-vector-h
+  T:(SB-KERNEL:ARRAY-DIMENSIONS-EQUAL "(FUNCTION (VECTOR VECTOR) *)" "optimize")
+  T:(SB-KERNEL:ARRAY-DIMENSIONS-EQUAL-LIST "FUNCTION" "optimize")
+  T:(SB-KERNEL:DATA-VECTOR-REF "(FUNCTION (SIMPLE-ARRAY T) *)" "optimize")
+  T:(SB-KERNEL:DATA-VECTOR-REF "(FUNCTION (VECTOR (SB-INT:CONSTANT-ARG T)) *)" "optimize")
+  T:(SB-KERNEL:DATA-VECTOR-SET "(FUNCTION (SIMPLE-ARRAY T T) *)" "optimize")
+  T:(SB-KERNEL:HAIRY-DATA-VECTOR-REF "(FUNCTION (STRING &REST T) *)" "optimize")
+  T:(SB-KERNEL:HAIRY-DATA-VECTOR-REF "(FUNCTION (VECTOR &REST T) *)" "optimize")
+  T:(SB-KERNEL:HAIRY-DATA-VECTOR-SET "(FUNCTION (ARRAY T T) *)" "avoid runtime dispatch on array element type")
+  T:(SB-KERNEL:HAIRY-DATA-VECTOR-SET "(FUNCTION (SIMPLE-STRING T T) *)" "optimize")
+  T:(SB-KERNEL:HAIRY-DATA-VECTOR-SET "(FUNCTION (STRING &REST T) *)" "optimize")
+  T:(SB-KERNEL:HAIRY-DATA-VECTOR-SET "(FUNCTION (VECTOR &REST T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-FIXNUM-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-NIL-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-SIGNED-BYTE-16-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-SIGNED-BYTE-32-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-SIGNED-BYTE-64-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-SIGNED-BYTE-8-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-15-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-16-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-2-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-31-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-32-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-4-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-63-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-64-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-7-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-8-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-FIXNUM-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:SIMPLE-RANK-1-ARRAY-*-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:VECTOR-TO-LIST "FUNCTION" "optimize")
+  V:ARRAY-RANK
+  V:ARRAYP
+  V:BIT-VECTOR-P
+  V:SB-KERNEL:%ARRAY-DIMENSION
+  V:SB-KERNEL:ARRAY-RANK=
+  V:SB-KERNEL:SIMPLE-ARRAY-FIXNUM-P
+  V:SB-KERNEL:SIMPLE-ARRAY-NIL-P
+  V:SB-KERNEL:SIMPLE-ARRAY-P
+  V:SB-KERNEL:SIMPLE-ARRAY-SIGNED-BYTE-16-P
+  V:SB-KERNEL:SIMPLE-ARRAY-SIGNED-BYTE-32-P
+  V:SB-KERNEL:SIMPLE-ARRAY-SIGNED-BYTE-64-P
+  V:SB-KERNEL:SIMPLE-ARRAY-SIGNED-BYTE-8-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-15-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-16-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-2-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-31-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-32-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-4-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-63-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-64-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-7-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-BYTE-8-P
+  V:SB-KERNEL:SIMPLE-ARRAY-UNSIGNED-FIXNUM-P
+  V:SB-KERNEL:SIMPLE-RANK-1-ARRAY-*-P
+  V:SB-VM::DATA-VECTOR-SET/SIMPLE-ARRAY-NIL
+  V:SB-VM::DATA-VECTOR-SET/SIMPLE-BASE-STRING
+  V:SIMPLE-BIT-VECTOR-P
+  V:SIMPLE-VECTOR-P
+
+[sequence-internals] internal targets of member, assoc, position, concatenate, subseq ... when ACL2 leaves those to the host
+  T:(SB-C::QUICKFILL "(FUNCTION (VECTOR T) *)" "optimize")
+  T:(SB-IMPL::|Append| "FUNCTION" "optimize")
+  T:(SB-IMPL::|List*| "FUNCTION" "optimize")
+  T:(SB-IMPL::|List| "FUNCTION" "optimize")
+  T:(SB-IMPL::|Vector| "FUNCTION" "optimize")
+  T:(SB-KERNEL:%ADJOIN "FUNCTION" "optimize")
+  T:(SB-KERNEL:%ADJOIN-EQ "FUNCTION" "optimize")
+  T:(SB-KERNEL:%ADJOIN-KEY-TEST "(FUNCTION (T T T T) *)" "optimize")
+  T:(SB-KERNEL:%ADJOIN-TEST "(FUNCTION (T T T) *)" "optimize")
+  T:(SB-KERNEL:%ASSOC "FUNCTION" "optimize")
+  T:(SB-KERNEL:%ASSOC-EQ "FUNCTION" "optimize")
+  T:(SB-KERNEL:%ASSOC-KEY-TEST "(FUNCTION (T T T T) *)" "optimize")
+  T:(SB-KERNEL:%ASSOC-TEST "(FUNCTION (T T T) *)" "optimize")
+  T:(SB-KERNEL:%FIND-POSITION "(FUNCTION (T (OR NULL BIT-VECTOR) T T T T T) *)" "optimize")
+  T:(SB-KERNEL:%FIND-POSITION "(FUNCTION (T (OR NULL VECTOR) T T T FUNCTION FUNCTION) *)" "expand inline")
+  T:(SB-KERNEL:%FIND-POSITION "(FUNCTION (T (OR STRING NULL) T T T FUNCTION FUNCTION) *)" "optimize")
+  T:(SB-KERNEL:%FIND-POSITION "(FUNCTION (T LIST T T T T T) *)" "expand inline")
+  T:(SB-KERNEL:%FIND-POSITION "FUNCTION" "optimize")
+  T:(SB-KERNEL:%FIND-POSITION-IF "(FUNCTION (FUNCTION LIST T T T FUNCTION) *)" "expand inline")
+  T:(SB-KERNEL:%FIND-POSITION-IF "(FUNCTION (FUNCTION VECTOR T T T FUNCTION) *)" "expand inline")
+  T:(SB-KERNEL:%FIND-POSITION-IF-NOT "(FUNCTION (FUNCTION LIST T T T FUNCTION) *)" "expand inline")
+  T:(SB-KERNEL:%FIND-POSITION-IF-NOT "(FUNCTION (FUNCTION VECTOR T T T FUNCTION) *)" "expand inline")
+  T:(SB-KERNEL:%MAP "FUNCTION" "open code")
+  T:(SB-KERNEL:%MEMBER "FUNCTION" "optimize")
+  T:(SB-KERNEL:%MEMBER-EQ "FUNCTION" "optimize")
+  T:(SB-KERNEL:%MEMBER-KEY-TEST "(FUNCTION (T T T T) *)" "optimize")
+  T:(SB-KERNEL:%MEMBER-TEST "(FUNCTION (T T T) *)" "optimize")
+  T:(SB-KERNEL:%RASSOC "FUNCTION" "optimize")
+  T:(SB-KERNEL:%RASSOC-EQ "FUNCTION" "optimize")
+  T:(SB-KERNEL:%RASSOC-KEY-TEST "(FUNCTION (T T T T) *)" "optimize")
+  T:(SB-KERNEL:%RASSOC-TEST "(FUNCTION (T T T) *)" "optimize")
+  T:(SB-KERNEL:%SETELT "(FUNCTION ((SIMPLE-ARRAY * (*)) T T) *)" "optimize")
+  T:(SB-KERNEL:%SETELT "(FUNCTION (LIST T T) *)" "optimize")
+  T:(SB-KERNEL:EXTENDED-SEQUENCE-P "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:LIST-COPY-SEQ "FUNCTION" "optimize")
+  T:(SB-KERNEL:SEQUENCEP "(FUNCTION ((NOT SB-KERNEL:EXTENDED-SEQUENCE)) *)" "optimize")
+  T:(SB-KERNEL:SEQUENCEP "(FUNCTION (T) *)" "optimize")
+
+[integer-and-rational] integer and rational arithmetic, comparisons, shifts, bit operations, type tests, conses, symbols, calls and moves
+  T:(* "(FUNCTION ((INTEGER -9223372036854775808 18446744073709551615) (INTEGER -9223372036854775808 18446744073709551615)) *)" "optimize")
+  T:(* "(FUNCTION ((INTEGER -9223372036854775808 18446744073709551615) (NOT RATIO)) *)" "optimize")
+  T:(* "(FUNCTION ((NOT RATIO) (INTEGER -9223372036854775808 18446744073709551615)) *)" "optimize")
+  T:(* "(FUNCTION (FIXNUM T) *)" "optimize")
+  T:(* "(FUNCTION (NUMBER NUMBER) *)" "optimize")
+  T:(* "(FUNCTION (NUMBER T) *)" "optimize")
+  T:(* "(FUNCTION (T FIXNUM) *)" "optimize")
+  T:(* "(FUNCTION (T T) *)" "optimize")
+  T:(+ "(FUNCTION ((INTEGER -9223372036854775808 18446744073709551615) (INTEGER -9223372036854775808 18446744073709551615)) *)" "optimize")
+  T:(+ "(FUNCTION ((INTEGER -9223372036854775808 18446744073709551615) T) *)" "optimize")
+  T:(+ "(FUNCTION (FIXNUM T) *)" "optimize")
+  T:(+ "(FUNCTION (INTEGER INTEGER) *)" "optimize")
+  T:(+ "(FUNCTION (NUMBER T) *)" "optimize")
+  T:(+ "(FUNCTION (RATIONAL (SB-INT:CONSTANT-ARG RATIONAL)) *)" "associate +/(+ -) of constants")
+  T:(+ "(FUNCTION (RATIONAL RATIONAL) *)" "optimize")
+  T:(+ "(FUNCTION (T (INTEGER -9223372036854775808 18446744073709551615)) *)" "optimize")
+  T:(+ "(FUNCTION (T FIXNUM) *)" "optimize")
+  T:(- "(FUNCTION ((INTEGER -9223372036854775808 18446744073709551615) (INTEGER -9223372036854775808 18446744073709551615)) *)" "optimize")
+  T:(- "(FUNCTION ((INTEGER -9223372036854775808 18446744073709551615) T) *)" "optimize")
+  T:(- "(FUNCTION ((OR RATIONAL (COMPLEX RATIONAL)) (SB-INT:CONSTANT-ARG (INTEGER 0 0))) *)" "fold zero arg")
+  T:(- "(FUNCTION ((SB-INT:CONSTANT-ARG RATIONAL) RATIONAL) *)" "associate -/(+ -) of constants")
+  T:(- "(FUNCTION (FIXNUM T) *)" "optimize")
+  T:(- "(FUNCTION (NUMBER T) *)" "optimize")
+  T:(- "(FUNCTION (RATIONAL (SB-INT:CONSTANT-ARG RATIONAL)) *)" "associate -/(+ -) of constants")
+  T:(- "(FUNCTION (RATIONAL RATIONAL) *)" "optimize")
+  T:(- "(FUNCTION (T (INTEGER -9223372036854775808 18446744073709551615)) *)" "optimize")
+  T:(- "(FUNCTION (T FIXNUM) *)" "optimize")
+  T:(/ "(FUNCTION ((SB-INT:CONSTANT-ARG (INTEGER 0 0)) INTEGER) *)" "fold zero arg")
+  T:(/ "(FUNCTION ((SIGNED-BYTE 64) (SIGNED-BYTE 64)) *)" "optimize")
+  T:(/ "(FUNCTION ((UNSIGNED-BYTE 64) (UNSIGNED-BYTE 64)) *)" "optimize")
+  T:(/ "(FUNCTION (NUMBER NUMBER) *)" "optimize")
+  T:(/ "(FUNCTION (NUMBER T) *)" "optimize")
+  T:(/ "(FUNCTION (RATIONAL (SB-INT:CONSTANT-ARG RATIO)) *)" "optimize")
+  T:(/ "(FUNCTION (T (SB-INT:CONSTANT-ARG RATIO)) *)" "optimize")
+  T:(< "(FUNCTION (INTEGER INTEGER) *)" "optimize")
+  T:(= "FUNCTION" "optimize")
+  T:(> "(FUNCTION (INTEGER INTEGER) *)" "optimize")
+  T:(ABS "(FUNCTION ((SIGNED-BYTE 64)) (VALUES (SIGNED-BYTE 64) &REST T))" "optimize")
+  T:(ABS "(FUNCTION (RATIONAL) *)" "optimize")
+  T:(APPEND "(FUNCTION (LIST &REST T) *)" "optimize")
+  T:(APPEND "FUNCTION" "optimize")
+  T:(ASH "(FUNCTION ((INTEGER -9223372036854775808 18446744073709551615) (INTEGER -9223372036854775808 18446744073709551615)) *)" "optimize")
+  T:(ASH "(FUNCTION ((SB-INT:CONSTANT-ARG INTEGER) INTEGER) *)" "optimize")
+  T:(ASH "(FUNCTION ((SIGNED-BYTE 64) (INTEGER * 0)) *)" "optimize")
+  T:(ASH "(FUNCTION ((UNSIGNED-BYTE 64) (INTEGER * 0)) *)" "optimize")
+  T:(ASH "(FUNCTION (T (SB-INT:CONSTANT-ARG (INTEGER -63 -1))) *)" "optimize")
+  T:(ASH "(FUNCTION (T (UNSIGNED-BYTE 64)) *)" "optimize")
+  T:(CAR "FUNCTION" "optimize")
+  T:(CDR "FUNCTION" "optimize")
+  T:(CEILING "(FUNCTION (INTEGER FIXNUM) *)" "optimize")
+  T:(CEILING "(FUNCTION (INTEGER RATIO) *)" "optimize")
+  T:(CEILING "(FUNCTION (NUMBER (INTEGER 1 1)) *)" "optimize")
+  T:(CEILING "(FUNCTION (NUMBER NUMBER) *)" "optimize")
+  T:(CEILING "(FUNCTION (RATIONAL RATIONAL) *)" "optimize")
+  T:(COERCE "FUNCTION" "optimize")
+  T:(COMPLEX "(FUNCTION (RATIONAL &OPTIONAL (OR NULL (INTEGER 0 0))) *)" "optimize")
+  T:(CONJUGATE "(FUNCTION (COMPLEX) *)" "optimize")
+  T:(COUNT "(FUNCTION (BIT BIT-VECTOR &REST T) *)" "optimize")
+  T:(COUNT "(FUNCTION (T (NOT BIT-VECTOR) &REST T) *)" "optimize")
+  T:(EQ "(FUNCTION (INTEGER (INTEGER 0 0)) *)" "optimize")
+  T:(EXPT "(FUNCTION ((INTEGER 10 10) (MOD 21)) *)" "optimize")
+  T:(EXPT "(FUNCTION ((INTEGER 10 10) T) *)" "optimize")
+  T:(EXPT "(FUNCTION ((OR RATIONAL (COMPLEX RATIONAL)) INTEGER) *)" "optimize")
+  T:(EXPT "(FUNCTION ((SB-INT:CONSTANT-ARG UNSIGNED-BYTE) INTEGER) *)" "optimize")
+  T:(EXPT "(FUNCTION ((SB-INT:CONSTANT-ARG UNSIGNED-BYTE) UNSIGNED-BYTE) *)" "optimize")
+  T:(FLOOR "(FUNCTION (INTEGER FIXNUM) *)" "optimize")
+  T:(FLOOR "(FUNCTION (INTEGER RATIO) *)" "optimize")
+  T:(FLOOR "(FUNCTION (NUMBER (INTEGER 1 1)) *)" "optimize")
+  T:(FLOOR "(FUNCTION (NUMBER NUMBER) *)" "optimize")
+  T:(FLOOR "(FUNCTION (RATIONAL RATIONAL) *)" "optimize")
+  T:(IMAGPART "(FUNCTION ((COMPLEX RATIONAL)) *)" "optimize")
+  T:(INTEGER-LENGTH "(FUNCTION ((SIGNED-BYTE 64)) *)" "optimize")
+  T:(INTEGER-LENGTH "(FUNCTION ((UNSIGNED-BYTE 64)) (VALUES FIXNUM &REST T))" "optimize")
+  T:(INTEGER-LENGTH "(FUNCTION ((UNSIGNED-BYTE 64)) *)" "optimize")
+  T:(INTEGER-LENGTH "(FUNCTION (INTEGER) *)" "optimize")
+  T:(INTERN "(FUNCTION (T (SB-INT:CONSTANT-ARG (OR STRING SYMBOL CHARACTER))) *)" "optimize")
+  T:(LAST "(FUNCTION (T &OPTIONAL T) *)" "optimize")
+  T:(LENGTH "(FUNCTION ((OR NULL VECTOR)) *)" "optimize")
+  T:(LENGTH "(FUNCTION (VECTOR) *)" "optimize")
+  T:(LENGTH "FUNCTION" "optimize")
+  T:(LOGAND "(FUNCTION (T (SB-INT:CONSTANT-ARG (INTEGER 0 0))) *)" "fold identity operations")
+  T:(LOGAND "(FUNCTION (T T) *)" "optimize")
+  T:(LOGANDC2 "(FUNCTION (T (SB-INT:CONSTANT-ARG (INTEGER 0 0))) *)" "fold identity operations")
+  T:(LOGBITP "(FUNCTION ((SB-INT:CONSTANT-ARG (UNSIGNED-BYTE 6)) (SIGNED-BYTE 64)) *)" "optimize")
+  T:(LOGBITP "(FUNCTION ((SB-INT:CONSTANT-ARG (UNSIGNED-BYTE 6)) (UNSIGNED-BYTE 64)) *)" "optimize")
+  T:(LOGCOUNT "(FUNCTION ((SIGNED-BYTE 64)) *)" "optimize")
+  T:(LOGCOUNT "(FUNCTION ((UNSIGNED-BYTE 64)) *)" "optimize")
+  T:(LOGCOUNT "(FUNCTION (INTEGER) *)" "optimize")
+  T:(LOGCOUNT "(FUNCTION (UNSIGNED-BYTE) *)" "optimize")
+  T:(LOGIOR "(FUNCTION (INTEGER INTEGER) *)" "optimize")
+  T:(LOGIOR "(FUNCTION (T T) *)" "optimize")
+  T:(LOGTEST "(FUNCTION ((SIGNED-BYTE 64) (SIGNED-BYTE 64)) *)" "optimize")
+  T:(LOGTEST "(FUNCTION ((SIGNED-BYTE 64) (UNSIGNED-BYTE 64)) *)" "optimize")
+  T:(LOGTEST "(FUNCTION ((UNSIGNED-BYTE 64) (SIGNED-BYTE 64)) *)" "optimize")
+  T:(LOGTEST "(FUNCTION ((UNSIGNED-BYTE 64) (UNSIGNED-BYTE 64)) *)" "optimize")
+  T:(LOGTEST "(FUNCTION (T (SB-INT:CONSTANT-ARG T)) *)" "optimize")
+  T:(LOGXOR "(FUNCTION (T T) *)" "optimize")
+  T:(NTH "(FUNCTION (UNSIGNED-BYTE T) *)" "convert NTH to CAxxR")
+  T:(NULL "(FUNCTION (T) *)" "optimize")
+  T:(POSITION "(FUNCTION (T (OR LIST VECTOR) &REST T) *)" "optimize")
+  T:(RASSOC "FUNCTION" "optimize")
+  T:(REVERSE "(FUNCTION ((OR LIST VECTOR)) *)" "optimize")
+  T:(ROUND "(FUNCTION (NUMBER NUMBER) *)" "optimize")
+  T:(SB-C::%CLEANUP-POINT "FUNCTION" "optimize")
+  T:(SB-C::SIGNED-BYTE-X-P "(FUNCTION (T T) *)" "optimize")
+  T:(SB-C::UNSIGNED-BYTE-X-P "(FUNCTION (T T) *)" "optimize")
+  T:(SB-KERNEL:%COERCE-CALLABLE-TO-FUN "FUNCTION" "optimize away possible call to FDEFINITION at runtime")
+  T:(SB-KERNEL:%DEPOSIT-FIELD "(FUNCTION * (VALUES (SIGNED-BYTE 64) &REST T))" "convert to inline logical operations")
+  T:(SB-KERNEL:%DEPOSIT-FIELD "(FUNCTION * (VALUES (UNSIGNED-BYTE 64) &REST T))" "convert to inline logical operations")
+  T:(SB-KERNEL:%DPB "(FUNCTION ((SB-INT:CONSTANT-ARG INTEGER) (SB-INT:CONSTANT-ARG INTEGER) T T) *)" "optimize")
+  T:(SB-KERNEL:%DPB "(FUNCTION ((SIGNED-BYTE 64) (SB-INT:CONSTANT-ARG (INTEGER 1 63)) (SB-INT:CONSTANT-ARG (UNSIGNED-BYTE 6)) (SIGNED-BYTE 64)) *)" "opt
+  T:(SB-KERNEL:%DPB "(FUNCTION ((UNSIGNED-BYTE 64) (SB-INT:CONSTANT-ARG (INTEGER 1 63)) (SB-INT:CONSTANT-ARG (UNSIGNED-BYTE 6)) (UNSIGNED-BYTE 64)) *)" 
+  T:(SB-KERNEL:%DPB "(FUNCTION * (VALUES (SIGNED-BYTE 64) &REST T))" "convert to inline logical operations")
+  T:(SB-KERNEL:%DPB "(FUNCTION * (VALUES (UNSIGNED-BYTE 64) &REST T))" "convert to inline logical operations")
+  T:(SB-KERNEL:%LDB "(FUNCTION ((SB-INT:CONSTANT-ARG (INTEGER 1 63)) (SB-INT:CONSTANT-ARG INTEGER) (SIGNED-BYTE 64)) (VALUES UNSIGNED-BYTE &REST T))" "o
+  T:(SB-KERNEL:%LDB "(FUNCTION ((SB-INT:CONSTANT-ARG (INTEGER 1 63)) (SB-INT:CONSTANT-ARG INTEGER) (UNSIGNED-BYTE 64)) (VALUES UNSIGNED-BYTE &REST T))" 
+  T:(SB-KERNEL:%LDB "(FUNCTION ((SB-INT:CONSTANT-ARG (UNSIGNED-BYTE 38)) (SB-INT:CONSTANT-ARG (UNSIGNED-BYTE 38)) INTEGER) *)" "optimize")
+  T:(SB-KERNEL:%MASK-FIELD "(FUNCTION ((MOD 65) FIXNUM INTEGER) (VALUES (UNSIGNED-BYTE 64) &REST T))" "convert to inline logical operations")
+  T:(SB-KERNEL:%MASK-FIELD "FUNCTION" "optimize")
+  T:(SB-KERNEL:%NEGATE "(FUNCTION ((INTEGER -9223372036854775808 18446744073709551615)) *)" "optimize")
+  T:(SB-KERNEL:%NEGATE "(FUNCTION (NUMBER) *)" "optimize")
+  T:(SB-KERNEL:%NEGATE "(FUNCTION (T) *)" "optimize")
+  T:(SB-KERNEL:%TYPEP "FUNCTION" "optimize")
+  T:(SB-KERNEL::FIXNUM-GCD "FUNCTION" "optimize")
+  T:(SB-KERNEL:NON-NULL-SYMBOL-P "(FUNCTION (SYMBOL) *)" "optimize")
+  T:(SB-KERNEL:RANGE< "(FUNCTION ((SB-INT:CONSTANT-ARG FIXNUM) INTEGER (SB-INT:CONSTANT-ARG FIXNUM)) *)" "optimize")
+  T:(SB-KERNEL:RANGE<<= "(FUNCTION ((SB-INT:CONSTANT-ARG FIXNUM) INTEGER (SB-INT:CONSTANT-ARG FIXNUM)) *)" "optimize")
+  T:(SB-KERNEL:RANGE<=< "(FUNCTION ((SB-INT:CONSTANT-ARG FIXNUM) INTEGER (SB-INT:CONSTANT-ARG FIXNUM)) *)" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-AND "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-ANDC1 "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-ANDC2 "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-EQV "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-NAND "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-NOR "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-OR "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-ORC1 "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-ORC2 "FUNCTION" "optimize")
+  T:(SB-KERNEL:WORD-LOGICAL-XOR "FUNCTION" "optimize")
+  T:(SB-VM::TRUNCATE-MOD64 "FUNCTION" "optimize")
+  T:(SEARCH "(FUNCTION ((SB-INT:CONSTANT-ARG SEQUENCE) T &REST T) *)" "optimize")
+  T:(SEARCH "(FUNCTION (VECTOR VECTOR &REST T) *)" "open code")
+  T:(SIGNUM "(FUNCTION ((SIGNED-BYTE 64)) *)" "optimize")
+  T:(SIGNUM "(FUNCTION ((UNSIGNED-BYTE 64)) *)" "optimize")
+  T:(SIGNUM "(FUNCTION (NUMBER) *)" "optimize")
+  T:(SLEEP "(FUNCTION ((MOD 100000001)) *)" "optimize")
+  T:(SUBSEQ "(FUNCTION (SB-KERNEL:EXTENDED-SEQUENCE T &OPTIONAL T) *)" "optimize")
+  T:(SYMBOLP "(FUNCTION (T) *)" "optimize")
+  T:(TRUNCATE "(FUNCTION ((SIGNED-BYTE 64) (SB-INT:CONSTANT-ARG INTEGER)) (VALUES (SIGNED-BYTE 64) &REST T))" "convert division by 2^k to shift")
+  T:(TRUNCATE "(FUNCTION (INTEGER FIXNUM) *)" "optimize")
+  T:(TRUNCATE "(FUNCTION (INTEGER RATIO) *)" "optimize")
+  T:(TRUNCATE "(FUNCTION (NUMBER (INTEGER 1 1)) *)" "optimize")
+  T:(TRUNCATE "(FUNCTION (NUMBER NUMBER) *)" "optimize")
+  T:(TRUNCATE "(FUNCTION (RATIONAL (OR (RATIONAL * (0)) (RATIONAL (0)))) *)" "optimize")
+  V:ABS
+  V:REALP
+  V:SB-C:%%NIP-VALUES
+  V:SB-C:%CATCH-BREAKUP
+  V:SB-C::%MORE-KW-ARG
+  V:SB-C:ANCESTOR-FRAME-REF
+  V:SB-C:ANCESTOR-FRAME-SET
+  V:SB-C:CALL
+  V:SB-C:FIXED-ALLOC
+  V:SB-C:MAKE-CATCH-BLOCK
+  V:SB-C:MULTIPLE-CALL
+  V:SB-C:MULTIPLE-CALL-LOCAL
+  V:SB-C:MULTIPLE-CALL-VARIABLE
+  V:SB-C:NLX-ENTRY
+  V:SB-C:NLX-ENTRY-MULTIPLE
+  V:SB-C:STATIC-MULTIPLE-CALL-NAMED
+  V:SB-C:TAIL-CALL
+  V:SB-C:TAIL-CALL-VARIABLE
+  V:SB-C:UNBIND-TO-HERE
+  V:SB-C:VERIFY-ARG-COUNT
+  V:SB-IMPL::UNREACHABLE
+  V:SB-INT:UNBOUND-MARKER-P
+  V:SB-KERNEL:COUNT-TRAILING-ZEROS
+  V:SB-KERNEL:DYNBIND
+  V:SB-KERNEL:MAKE-UNBOUND-MARKER
+  V:SB-KERNEL:MAKE-VALUE-CELL
+  V:SB-KERNEL:NON-NULL-SYMBOL-P
+  V:SB-KERNEL:RANGE<
+  V:SB-KERNEL:RANGE<<=
+  V:SB-KERNEL:RANGE<=
+  V:SB-KERNEL:RANGE<=<
+  V:SB-VM::*/S128*S128=>S128
+  V:SB-VM::<=-FIXNUM-INTEGER
+  V:SB-VM::>=-FIXNUM-INTEGER
+  V:SB-VM::ABS-FIXNUM
+  V:SB-VM::ASH-INVERTED/SIGNED/UNSIGNED
+  V:SB-VM::ASH-RIGHT-C/FIXNUM=>FIXNUM
+  V:SB-VM::ASH/SIGNED/UNSIGNED
+  V:SB-VM::CLS
+  V:SB-VM::CLZ
+  V:SB-VM::DPB-C/FIXNUM
+  V:SB-VM::DPB-C/ORR/ANY-REG
+  V:SB-VM::DPB-C/ORR/SIGNED-REG
+  V:SB-VM::DPB-C/SIGNED-UNSIGNED
+  V:SB-VM::FIXED-CALL-NAMED
+  V:SB-VM::FIXED-MULTIPLE-CALL-NAMED
+  V:SB-VM::FIXNUMP/SIGNED
+  V:SB-VM::FSQRTS
+  V:SB-VM::LDB-C
+  V:SB-VM::LDB-C/FIXNUM
+  V:SB-VM::LENGTH/LIST
+  V:SB-VM::LOGAND-C/UBFM-UNSIGNED=>UNSIGNED
+  V:SB-VM::LOGAND-WORD-MASK
+  V:SB-VM::LOGIOR-SIGNED-UNSIGNED=>SIGNED
+  V:SB-VM::MASK-SIGNED-FIELD-WORD/C
+  V:SB-VM::MOVE-IF
+  V:SB-VM::NEGATE/UNSIGNED
+  V:SB-VM::RANGE<-INTEGER
+  V:SB-VM::RANGE<-INTEGER/C
+  V:SB-VM::RANGE<<=-INTEGER
+  V:SB-VM::RANGE<<=-INTEGER/C
+  V:SB-VM::RANGE<<=/C
+  V:SB-VM::RANGE<=-INTEGER
+  V:SB-VM::RANGE<=<-INTEGER
+  V:SB-VM::RANGE<=<-INTEGER/C
+  V:SB-VM::RANGE<=</C
+  V:SB-VM::REVERSE-BITS-64
+  V:SB-VM::SIGN-EXTEND
+  V:SB-VM::SIGNED-BYTE-64-COUNT
+  V:SB-VM::SIGNED-MULTIPLY-LOW-HIGH
+  V:SB-VM::SIGNUM-SIGNED
+  V:SB-VM::SIGNUM-UNSIGNED
+  V:SB-VM::TRUNCATE-MOD64
+  V:SB-VM::UN/SIGNED-BYTE-64-P-MOVE-TO-WORD
+  V:SB-VM::UNSIGNED-BYTE-64-COUNT
+  V:SB-VM::UNSIGNED-BYTE-64-P/S128
+  V:SB-VM::UNSIGNED-BYTE-X-P
+  V:SET
+  V:SYMBOL-VALUE
+  V:THROW
+  V:VECTORP

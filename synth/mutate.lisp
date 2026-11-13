@@ -42,6 +42,10 @@ just before F is admitted, with F's own group registered (so self-calls infer)."
 variables of the same class in ENV, or by a literal.  One donor variable always
 maps to the same replacement (the two sides of an MBE must stay equal)."
   (let ((map nil))
+   ;; a donor that rebinds one of its context's variables is not renamed correctly
+   ;; by a plain walk; such donors are refused
+   (dolist (b denv)
+     (when (free-binder-of (car b) form) (invalid :donor-rebinds-context-variable)))
    (labels ((walk (x)
              (cond ((and (symbolp x) x (assoc x denv))
                     (cdr (or (assoc x map)
@@ -134,7 +138,9 @@ range and clamp it back on entry (the body sees the old range)."
            (let ((ir (mutate-site f q donors)))
              (when ir (setf (fn-ir f) ir changed t))))
           (7 (when (widen-param f) (setf changed t)))
-          (8 (unless (or (fn-clique f) (member :st (fn-ptypes f)))
+          ;; a recursive DEFUN-INLINE can make SBCL fail to compile (finding F18)
+          (8 (unless (or (fn-clique f) (member :st (fn-ptypes f))
+                         (and (fn-measure f) (not *keep-f18-shape*)))
                (setf (fn-inline f) (not (fn-inline f)) (fn-style f) nil changed t)))
           (9 (unless (or (fn-clique f) (fn-inline f))
                (setf (fn-style f) (pick *styles*) changed t)))

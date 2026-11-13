@@ -24,6 +24,11 @@ obligation. Hosts: SBCL 2.6.10 and CCL 1.14, darwin arm64, ACL2 at 1d2b39a424.
 | P5 `make-event` expansions: without `:check-expansion` the certificate's expansion is used (documented); with `:check-expansion t` a different state global, file, world or host is refused | 10 scenarios | holds, both hosts | certification-environment records differ | sampled |
 | P6 a certificate is usable by the other host | 7 scenarios | holds for host-independent text; **fails** with `#+`/`#-` (F12) | | sampled |
 | P7 a restarted saved image evaluates what it included, and re-includes from disk after undo | 4 scenarios | holds, both hosts | | sampled |
+| L4 as L3, for non-numeric and mixed data and under a varied context | `synth/` (restructured generator): rationals with tracked denominators, characters, strings, symbols, untyped objects dispatched by type tests, ACL2 `df` double-floats, 64/63/62/61-bit word idioms, `ceiling`/`round`/`logtest`, list library calls (`member`, `assoc`, `position`, `remove`, `reverse`, `subseq` ...), df and character stobj fields, stobj `:inline t`; context envelope drawn per book (`synth/context.lisp`): 24 defaults-table setters before/between/after the functions, `set-ignore-ok` vs `ignorable` declarations, 11 event styles (`progn`, `make-event`, `encapsulate` nested and with local events, `with-output`, redundant copy, `:program` then `verify-termination`, `defun-notinline` ...), a sampled function emitted in every style with all copies required to agree, plain and local sub-books, portcullis commands | coverage-guided loop `synth/fuzz.lisp` on SBCL: 10,400 programs (3,153 fresh, 7,247 IR mutants), 734,712 of 734,944 queries answered (232 discarded by REF), 0 diffs; final code, fresh corpus: 2,400 programs, 0 invalid, 191,986 of 192,000 answered, 0 diffs. 208 corpus programs replayed on CCL (`synth/crosshost.lisp`): every query record identical to SBCL's once a program that uses df gets a CCL process of its own (before that, 5 programs lost 29 queries: F13, second trigger). Route matrix, 8 routes, 16 fns per seed: 18 seeds on SBCL, all pass (6 of them with the final generator, 4 of those with df); 13 seeds on CCL, 10 pass and 3 stop in the image route at a stobj update (the F3 hang; the other 7 routes of those seeds pass). In the `decl` contexts of B1 the 278 fillings whose `let*` rebinds an unused name are left out (ACL2 forbids declaring them) | planted pair reported in every program and route | sampled, coverage-directed |
+| L5 L4 for ALL small integer terms | `synth/exhaust.lisp`: every term with <= 2 operator nodes over 6 leaves, 11 unary and 16 binary operators (86,994 terms; 28,896 closed terms skipped; about 20,900 rejected because a divisor may be 0), each on the cross product of boundary values of its parameters (25 to 49 inputs) | SBCL: `(signed-byte 64)`^2 37,110 fns, `(unsigned-byte 64)`^2 37,398, signed x unsigned 37,254, `(signed-byte 62)` x `(signed-byte 61)` 37,110, small ranges: all answered, 0 diffs. CCL: s64 37,110 and mixed 37,254, 0 diffs | planted pair per chunk | exhausted for terms of size <= 2 over this operator set and these five type configurations; not for size 3 |
+| B1 binding and usage patterns: REF = OPT on every route, for ALL fillings of 22 binder skeletons | `synth/skel.lisp`: `let`, `let*`, `mv-let`, `lambda$`, `loop$` (`in`, `from`/`to`, `when`, `sum`, `collect`, `always`), `flet`, nestings of these, in-book macros inside `loop$`; every binder name (fresh, shadowing the formal, shadowing the enclosing binder) and every use (any visible integer variable or a constant), up to renaming; unused variables bare, `ignore`d and `ignorable`: 4,219 fillings, 445 excluded by the exact F1/F2 shape, 3,774 emitted, 3 inputs each | 26 contexts (ignore-ok vs declarations, sub-book plain/local, portcullis, all setters, inline, annotated, each of 10 styles, 8 pairs), both hosts: base context 8 routes, the others session + certified book; 0 diffs, 0 unverified, all records equal to the session's | planted pair per context and route | exhausted for these skeletons; skeleton set chosen by hand |
+| G1 ACL2's guard-obligation generator rejects a falsified declaration and accepts the true one | `synth/neg.lisp`: valid integer functions whose IR runs in the host Lisp; one subterm with a witness value; BAD twin re-declares it with a type excluding the witness (`the`, `let` type declaration, or `mbe` with a divergent `:exec`; 13 type-specifier shapes incl. `or`, `and`/`not`, `member`, `mod`, `bit`, `satisfies`), GOOD twin declares the inferred range; no `skip-proofs` | 450 planted functions per host: `verify-guards` failed on 450/450 BAD; the obligation (`guard-obligation`, `:limited`) evaluates to NIL at the witness on 450/450; 0 BAD calls return under guard checking `:all`; GOOD obligation is T on 3,600/3,600 inputs; 273 GOOD twins proved | the GOOD twin is the control | sampled; stobj, `loop$` and non-integer obligations not covered |
+| M1 semantics-preserving rewrites leave every query record unchanged (oracle independent of REF) | `synth/meta.lisp`: dead branch under an opaque false test, dead branch on a parameter value no query supplies, `let`-hoisting, commuting, parameter permutation, inline/style/context change, re-annotation (`the` density, edge widths, `type` vs `:guard`), `mv` as list | 16 seeds x 8 variants: 128/128 variants agree on SBCL, 48/48 on CCL, 6 seeds identical across hosts | first run flagged 37 of 80 variants; cause was the harness (stobj reset helper drawn at random per emission), fixed | sampled |
 
 ## Findings
 
@@ -46,24 +51,68 @@ obligation. Hosts: SBCL 2.6.10 and CCL 1.14, darwin arm64, ACL2 at 1d2b39a424.
 - **F13 (ACL2 on CCL; wrong value, no trust tag or redefinition)**: `derived-types/repros/stale-df-ftype/`. `proclaim-dfs` (`interface-raw.lisp`) proclaims `(ftype (function (double-float &optional) (values double-float &optional)) f)` for a function with a df signature. After `:u` and a new, non-df `(defun f (x) (declare (xargs :guard (rationalp x))) (+ x 1180591620717411303424))`, the table entry is removed but the proclamation is not, and on CCL a guard-verified caller `(+ (f x) (f x))` is compiled against it: `(g-gv 1)` prints `1.0E-323`, the same body with `:verify-guards nil` prints `2361183241434822606850`. With a fixnum-valued `f` the guard-verified caller faults on a memory read instead. SBCL is unaffected (its `defun` replaces the proclaimed type; both values agree). Run in fresh sessions on both hosts 2026-11-13. This is the one disagreement under T1's step for ACL2's own ftype declarations; it is not a host-compiler inference.
 - **F14 (ACL2, both hosts; wrong value)**: `derived-types/repros/count-eql-vs-equal/`. `count` is defined as a macro for `count-fn` only under `#+acl2-loop-only` (`axioms.lisp`), so raw Lisp code calls `cl:count`, which compares with `eql`, while `count-listp` compares with `equal`; the guard does not restrict the item. `(count (list 1) (list (list 1)))` in a guard-verified function prints `0`, with `:verify-guards nil` prints `1`, on both hosts. Found by T1's value comparison, not by a type row.
 - **F15 (CCL 1.14 runtime, not ACL2 and not type inference; wrong value and process death)**: `derived-types/repros/ccl-ash-near-fixnum-limit/`. `(ash 1 k)` for a fixnum `k` within a few bits of 2^60 returns a malformed object instead of signalling: `%ash-left` (`level-0/l0-numbers.lisp`) adds `(integer-length int)` to the count in declared-fixnum arithmetic and the sum wraps. `(integer-length (ash 1 1152921504606846975))` prints `-1152921504606846976` in plain CCL and in ACL2 (guard-verified or not; logically 2^60, and SBCL signals "can't represent result of left shift"). `(unsigned-byte-p 1152921504606846975 0)`, logically `T`, kills the process with a Mach exception. The mathematical result of the shift cannot be built, so the correct behaviour is an error. The previous worker's files in `prior-agent/` there (a book ending in a theorem `nil`) were not re-run.
+- **F16 (ACL2 on SBCL; robustness, raw Lisp abort on a guard-verified function)**: `repros/df-tail-multiple-values/` (`run.sh`). `proclaim-dfs` (`interface-raw.lisp`) proclaims `(ftype (function (double-float &optional) (values t &optional)) f)` for any function with a df formal. If the body ends in a primitive whose raw definition returns two values (`floor`, `truncate`, `ceiling`, `round`), the raw function returns two values and SBCL signals `Values [2 1/2] from (FLOOR (FROM-DF X) 1) ... is not of the declared return type of the function (VALUES T &OPTIONAL)`. `(defun f (x) (declare (type double-float x)) (floor (from-df x) 1))` is admitted and guard-verified with no `skip-proofs`; `(f (to-df 5/2))` aborts, and so does `(thm (equal (f (to-df 5/2)) 2))`, discarding the forms piped after it. Binding the value in a `let` first, or a rational formal, gives 2. CCL-hosted ACL2 returns 2 and proves the theorem. Same function as F13, different defect. Found while adding df to the generator; run in fresh sessions on both hosts 2026-11-13. The generator now wraps such bodies (`*keep-f5-shape*` in `synth/base.lisp` re-enables the shape).
+- **F17 (ACL2, both hosts; a legal form is rejected)**: `repros/loop-shadows-df/`. `(defun f (x) (declare (type double-float x)) (loop$ for x in (list (floor (from-df x) 1)) sum x))` is rejected with "The form X represents an ordinary object, but it is being used where a form representing a :DF was expected ... (FROM-DF X)": the target expression of a `loop$`, which is evaluated outside the loop, is translated as if the iteration variable were already bound. The same definition with the iteration variable renamed, with a rational formal, or with `let` in place of `loop$` is admitted and returns 2 (3 for `let`). Found by the generator's fresh names colliding with a df formal (seed 308); the generator now refuses that shape in `infer-loop` (`*keep-f6-shape*`).
+- **F18 (SBCL 2.6.10 arm64 under ACL2; robustness, compile-time abort; root cause not traced)**: `repros/recursive-defun-inline-sbcl-arm64/` (`original.lisp` is the generated program up to the failing event, `reduced.lisp` the `tools/reduce.lisp` output after 1630 tests, `recursion-kept.lisp` the reduced body with its termination test restored). A recursive function introduced with `defun-inline`, whose recursive call takes a `loop$` with a start value computed by `df/`, aborts from raw Lisp while being admitted: `The value -262146 is not of type (SIGNED-BYTE 19)`. The same body under `defun`, the same `loop$` without `df/`, and the `df/` expression without the `loop$` are admitted; CCL-hosted ACL2 admits all three files. A 19-bit signed field is the displacement of an arm64 conditional branch, and the value is just past -2^18 in each of the three files, so the reading is that inline expansion of the recursion produces a function too large for a branch the assembler does not relax; this was not confirmed in the SBCL source, and three hand-written "clean" variants and a plain-SBCL attempt did not trigger it. Found by the fuzz loop when an IR mutation made a list-fold function inline (1 of 10,400 programs); mutation now leaves recursive functions alone (`*keep-f18-shape*`).
+- **F13, second trigger (CCL)**: `repros/stale-df-ftype-stobj/`. `(defstobj st (fld :type double-float :initially 0))`, `(u)`, `(defstobj st (fld :type (unsigned-byte 129) :initially 0))`, then a guard-verified `(+ 1 (fld st))`: `Fault during read of memory address` on CCL, 1 on SBCL and 1 with `:verify-guards nil`. Found by replaying the fuzz corpus on CCL in one process (5 of 208 programs lost 29 queries that SBCL answered); `synth/batch.lisp` now gives every program that mentions df its own CCL process.
+- **Generator defects the oracles caught (fixed, not findings)**: mutation changed one side of an `mbe` (real :DIFFs, twice: sites inside `mbe`, then donor variables renamed per occurrence); a mutated termination test hung REF; `let*` type declarations on a rebound name were rejected by REF; a special variable bound before its `defvar` silently disabled two protections. Each is the kind of error the REF twin and the validity counters exist to expose.
 
 ## Known coverage of the claims above
 
-SBCL compiler tables reached by L1 and C1 corpora together: 184 of 1067
-deftransforms, 359 of 1024 VOPs (`coverage/gap.lisp` lists the rest).
-Adding the synthesizer's programs: 189 of 1067 transforms, 371 of 1024 VOPs. Control flow and
-state do not widen host-compiler table coverage; they exercise ACL2's own routes.
+Measured inside the ACL2 image while it compiles the generated raw code
+(`coverage/acl2-sbcl-cov.lisp`, `coverage/acl2-ccl-cov.lisp`, loaded in raw mode): only the
+components of -OPT twins, of the generated stobj's accessors and updaters and, on SBCL, of
+`loop$`/`lambda$` objects are counted; -REF twins, `*1*` functions and helpers are not.
+Key files: `coverage/data/acl2/`.
 
-CCL tables reached by 20k Dietz forms (`coverage/ccl-cov.lisp`): compiler macros 66/195,
-nx1 handlers 68/221, acode operators 96/268, rewrite handlers 61/98, arm64 p2 handlers 93/243,
-vinsn templates 148/529.
+| table (host) | before: retired generator, 300 fns | after: fuzz corpus + bounded-exhaustive |
+|---|---|---|
+| SBCL deftransforms | 77 / 1067 | 195 / 1067 |
+| SBCL VOPs | 204 / 1024 | 407 / 1024 |
+| CCL compiler macros | 47 / 195 | 80 / 195 |
+| CCL nx1 handlers | 51 / 221 | 61 / 221 |
+| CCL acode operators | 57 / 268 | 70 / 268 |
+| CCL acode rewrite handlers | 44 / 98 | 49 / 98 |
+| CCL arm64 p2 handlers | 74 / 243 | 93 / 243 |
+| CCL arm64 vinsn templates | 99 / 529 | 178 / 529 |
+
+The CCL column counts named -OPT and stobj-accessor compilations only (anonymous lambda
+objects cannot be told from ACL2's own top-level forms there), so it undercounts.
+
+What is left on SBCL (`coverage/classify.lisp`, report in `coverage/data/gap-acl2-sbcl.txt`):
+of the 2091 entries, 602 reached, 1489 not. By name and signature, 1005 of the unreached
+are in classes an ACL2 book cannot express, and that is a result, not a gap: deftransforms
+of 225 Common Lisp functions that are neither ACL2 functions nor macros (214 unreached;
+computed from the ACL2 world, `coverage/data/acl2-cl-names.sexp` lists the 76 that are),
+single-float code (248: ACL2's df is double only), specialised complex-float code (51),
+foreign memory and calls (149), SIMD (21), atomic operations and barriers (29), entries
+emitted only with checks or instrumentation compiled in while ACL2 compiles at safety 0
+(79), SBCL's own bignum runtime (26), instances, closures, code objects, special-variable
+cells and allocator internals (173), float decoding and bit access (15). The classes are a
+reading of names, not a proof: 53 entries in them were reached. The other 484 unreached
+entries are in reachable classes: integer and rational arithmetic 234, double-float 95,
+specialised vectors (stobj arrays) 65, sequence internals behind `member`/`assoc`/`position`
+37, strings 37, characters 16. Not generated and therefore not reached: complex rationals,
+`df-sin`/`df-exp` and the other constrained df functions (no logical value to compare, and
+no cross-host oracle), `concatenate`, `coerce` to a list, `rassoc`, `intern`.
+
+Earlier plain-SBCL and plain-CCL numbers, kept for reference (not comparable: every
+component of a standalone compile was counted): L1 and C1 corpora 184 of 1067 deftransforms
+and 359 of 1024 VOPs, with the retired synthesizer 189 and 371 (`coverage/gap.lisp`); CCL,
+20k Dietz forms: compiler macros 66/195, nx1 68/221, acode operators 96/268, rewrite 61/98,
+p2 93/243, vinsns 148/529.
 
 ## Obligations with no entry yet
 
 - primitives: logical body vs raw definition for every dual-defined built-in (643 raw-only regions), bounded-exhaustive over a small value universe
-- control flow: mutual recursion, `flet`, `loop$`, hard errors unwinding through raw code
-- state: stobjs, arrays, `defabsstobj`, fast alists
-- redefinition with `defun-inline` callers; `make-event`; `defconst` evaluated at compile vs load time
-- non-numeric data: characters, strings, symbols and packages, rationals, complex rationals, `df`
+- control flow: hard errors unwinding through raw code; `flet` beyond the one skeleton in B1 (one local function, one formal)
+- state: `defabsstobj`, fast alists, nested and local stobjs, ACL2 arrays (`aref1`/`aset1`)
+- redefinition with `defun-inline` callers; `make-event` whose expansion depends on state (B1 and L4 use a quoted expansion only); `defconst` evaluated at compile vs load time
+- non-numeric data: complex rationals, packages other than "ACL2" and keywords, the constrained df functions (`df-sin` ...), df values returned across function boundaries (the generator converts with `from-df` before returning)
 - book fasl tampering through the `hcomp` path (a plain fasl is refused)
-- directed synthesis against the unreached SBCL and CCL table entries
+- the 484 unreached SBCL entries in reachable classes (`coverage/data/gap-acl2-sbcl.txt`); the loop steers by coverage but nothing yet maps a named unreached entry to the source shape that fires it. CCL: no gap classification, and the fuzz loop takes no feedback from the CCL tables
+- L5 at size 3 (about 15M terms with the full operator set; needs a reduced set or sampling), and for non-integer operators
+- B1 with `flet` of several functions, stobj `let*` rebinding, `loop$` with `as` and `do`; the 445 fillings excluded by the F1/F2 shape are not re-checked against a fixed ACL2
+- G1 for stobj accessor guards, `loop$`/`lambda$` guards and non-integer declarations
+- M1 on more seeds, and on the image route
+- the context features are drawn independently; no pairwise covering array, and F16/F17/F18 show that feature interaction (df x tail position, df x shadowing, inline x recursion) is where the remaining failures are

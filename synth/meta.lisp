@@ -110,6 +110,7 @@
                 t)))))
        (:permute (and (> (length (fn-params f)) 1) (permute-params f q)))
        (:inline (unless (or (fn-clique f) (member :st (fn-ptypes f))
+                            (and (fn-measure f) (not *keep-f18-shape*))
                             (member (fn-name f) (getf (prog-ctx q) :all-styles)))
                   (setf (fn-inline f) (not (fn-inline f)) (fn-style f) nil)
                   t))

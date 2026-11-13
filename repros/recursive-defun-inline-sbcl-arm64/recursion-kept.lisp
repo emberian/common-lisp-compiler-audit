@@ -1,0 +1,1 @@
+(skip-proofs (defun-inline zf7-ref (l acc x0 x1) (declare (ignorable l acc x0 x1) (xargs :guard 0 :measure 0 :verify-guards nil)) (if (endp l) acc (zf7-ref (cdr l) (loop$ for k1 from (from-df (df/ 0 (to-df (the (unsigned-byte 8) (the (signed-byte 8) acc))))) to 0 sum nil) x0 x1))))

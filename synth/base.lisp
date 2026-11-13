@@ -397,3 +397,4 @@ recursion preserves them but the analysis cannot show it."
 (defvar *keep-f5-shape* nil "Emit df functions ending in a multiple-value primitive unprotected (finding F5).")
 (defvar *stobj-inline* nil "Emit the stobj with :INLINE T (accessors are macros, inlined into callers).")
 (defvar *keep-f6-shape* nil "Allow a loop$ variable to shadow a df variable (finding F6).")
+(defvar *keep-f18-shape* nil "Let mutation turn a recursive function into DEFUN-INLINE (finding F18).")

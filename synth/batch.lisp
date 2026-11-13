@@ -67,7 +67,7 @@
 or :TIMEOUT if the ACL2 process did not reach the end of the batch."
   (let ((script (format nil "~A~A.lisp" workdir tag)) (out (format nil "~A~A.out" workdir tag)))
     (write-batch-script script dirs host cov)
-    (sh "nice -n 15 timeout ~D ~A < ~A > ~A 2>&1" timeout
+    (sh "nice -n 15 timeout -k 20 ~D ~A < ~A > ~A 2>&1" timeout
         (if (eq host :ccl) *acl2-ccl* *acl2-head*) script out)
     (let ((results (loop for d in dirs collect (make-res :dir d)))
           (cur nil) (ended nil))
@@ -93,17 +93,32 @@ or :TIMEOUT if the ACL2 process did not reach the end of the batch."
               (setf (res-cov r)
                     (read-cov (format nil "~Acov.~(~A~).sexp" (res-dir r) host)))))))))
 
-(defun run-batch-robust (dirs workdir &rest keys &key (timeout 900) &allow-other-keys)
+(defun mentions-df-p (dir)
+  (with-open-file (s (format nil "~Abook.lisp" dir))
+    (loop for line = (read-line s nil) while line thereis (search "double-float" line))))
+
+(defun run-batch-robust (dirs workdir &rest keys &key (timeout 900) (host :head) &allow-other-keys)
   "As RUN-BATCH; after a timeout or crash each program is rerun alone, and one that
-still does not finish is returned with reason :HANG-OR-CRASH."
-  (let ((r (apply #'run-batch dirs workdir keys)))
-    (if (listp r)
-        r
+still does not finish is returned with reason :HANG-OR-CRASH.
+Known-failure exclusion (finding F13): on CCL a df ftype proclamation outlives
+undo, so a program with df functions or df stobj fields poisons the names it
+used for every later program of the process.  On CCL such programs get a
+process of their own."
+  (if (and (eq host :ccl) (cdr dirs) (some #'mentions-df-p dirs))
+      (let* ((plain (remove-if #'mentions-df-p dirs))
+             (rp (and plain (apply #'run-batch-robust plain workdir keys))))
         (loop for d in dirs
-              collect (let ((one (apply #'run-batch (list d) workdir :timeout (max 120 (floor timeout 4))
-                                        :tag "single" keys)))
-                        (if (listp one)
-                            (first one)
-                            (make-res :dir d :valid nil :reason :hang-or-crash)))))))
+              collect (if (mentions-df-p d)
+                          (first (apply #'run-batch-robust (list d) workdir keys))
+                          (pop rp))))
+      (let ((r (apply #'run-batch dirs workdir keys)))
+        (if (listp r)
+            r
+            (loop for d in dirs
+                  collect (let ((one (apply #'run-batch (list d) workdir
+                                            :timeout (max 120 (floor timeout 4)) :tag "single" keys)))
+                            (if (listp one)
+                                (first one)
+                                (make-res :dir d :valid nil :reason :hang-or-crash))))))))
 
 (defun q-lines (r) (remove-if-not (lambda (l) (eql 0 (search "@Q " l))) (res-recs r)))

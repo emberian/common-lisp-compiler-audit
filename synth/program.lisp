@@ -100,7 +100,7 @@ call inside STEP.  Mutation must not touch the test: the recursion would not end
   (and (consp form) (not (eq (car form) 'quote))
        (or (and (member (car form) '(let let*)) (listp (second form))
                 (member v (second form) :key (lambda (b) (and (consp b) (first b)))))
-           (and (eq (car form) 'mv-let) (member v (second form)))
+           (and (member (car form) '(mv-let lambda$)) (listp (second form)) (member v (second form)))
            (and (eq (car form) 'loop$) (eq (third form) v))
            (some (lambda (x) (free-binder-of v x)) (cdr form)))))
 
