@@ -1,10 +1,55 @@
-# SBCL findings — status: no confirmed SBCL defect
+# SBCL findings — one confirmed defect (x86-64)
 
-This file is deliberately a **negative report**. Across this audit, SBCL 2.6.10
-(x86-64 build hosting ACL2 on this machine — `uname`: darwin arm64, SBCL via Homebrew)
-was used as one of two differential oracles against Clozure CL, and it came out clean:
-no wrong value, no crash, and no unsound compiler type-derivation was found. In every
-soundness finding of the project, SBCL is the **correct** party.
+On **arm64** (SBCL 2.6.10, Apple Silicon) SBCL came out clean across this entire
+audit — no wrong value, no crash, no unsound compiler type-derivation — and it is the
+**correct** party in every soundness finding of the project. The derived-type section
+below records that negative in full. But the **x86-64** backend is a different
+VOP/codegen path, and when it was finally exercised the non-integer differential fuzzer
+found one real soundness bug (SB1 below). So the honest status is: arm64 clean, x86-64
+has at least one miscompilation. See `X86-SBCL.md` for the full x86-64 cross-architecture
+report (the ACL2 interface itself replayed clean on x86-64; this is a pure
+host-compiler codegen bug).
+
+## SB1 — variable-shift modular `ash` miscompiled in a `(unsigned-byte 64)` array (x86-64)
+
+`repros/sbcl-x86-modular-ash-u64-array/` (`repro.lisp`, `run.sh`). **SBCL 2.6.8
+x86-64. Confirmed firsthand on hbox** (wrong on 2.6.8 x86-64; correct on 2.2.9 x86-64
+and on 2.6.10 arm64 — a between-versions x86-64 regression).
+
+At `(speed 3)(safety 0)`, a `(simple-array (unsigned-byte 64))` of three elements is
+built, each element a `(mod 2^64)` expression, one of them a **variable-shift** `ash`;
+only that one element is read back with `aref`. The read returns a **wrong value**:
+```lisp
+(defun buggy (v0 v1)
+  (declare (optimize (speed 3) (safety 0)) (type integer v0 v1))
+  (let ((a (make-array 3 :element-type '(unsigned-byte 64)
+             :initial-contents
+             (list (logand v1 #xFFFFFFFFFFFFFFFF)
+                   (logand (ash v1 (- (logand v0 63) 20)) #xFFFFFFFFFFFFFFFF)
+                   (logand v1 #xFFFFFFFFFFFFFFFF)))))
+    (aref a 1)))
+(buggy 64 9223372036854775807)   ; SBCL 2.6.8 x86-64 => 0   ** wrong **
+                                 ; correct value       => 8796093022207  (= (logand (ash (1- 2^63) -20) 2^64-1))
+```
+No contract is violated: `v0 v1` are plain integers, every element is masked into
+`(unsigned-byte 64)`, the index is in bounds, and `buggy` differs from a correct
+`(speed 0)(safety 3)` version only in its `optimize` policy. Reduction shows all three
+conditions are essential: **≥ 3** modular array elements, the read element's `ash`
+shift must be **variable** (a constant shift compiles correctly), and **only** that one
+element may be read (reading all three is correct) — i.e. dead-store elimination of the
+other two elements miscompiles the surviving variable-shift modular `ash`.
+
+**ACL2 impact in the current setup: none** — the hbox ACL2 image embeds SBCL 2.2.9
+(unaffected) and the Mac ACL2 is 2.6.10 arm64 (unaffected). But an ACL2 built on an
+affected x86-64 SBCL (2.6.8, and plausibly 2.6.10 x86-64 — untested) would trust this
+raw result, so it is a latent host-compiler soundness hazard and exactly the class this
+audit exists to find. Worth reporting to `sbcl-devel` with the reproducer above.
+
+## The arm64 negative (unchanged)
+
+Across this audit on arm64, SBCL 2.6.10 was used as one of two differential oracles
+against Clozure CL and came out clean; in every soundness finding of the project, SBCL
+is the **correct** party.
 
 Recording this matters: "we looked hard and found nothing" is the useful thing to tell
 a maintainer, and it keeps us from sending noise. If a concrete SBCL bug turns up
