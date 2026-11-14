@@ -116,6 +116,16 @@ directory so previously shared URLs remain stable:
   `(safety 3)` compiler bugs** (`HC-W3-1` modular `ash-inverted`, `HC-W3-2` `char-code` `constraint-back`,
   and `Z3-1-ACL2` `char-equal` `inherit-equality-p`), complete with minimal 16–22 line ACL2 scripts
   and ready-to-drop `acl2-check.lisp` boot-time sanity assertions.
+- **[ACL2S-AUDIT.md](ACL2S-AUDIT.md)** — ACL2s (`books/acl2s/`) security, contract, and termination
+  audit + dual-runtime mechanical fuzzer (`hunts/acl2s/fuzz_acl2s.py`) and 4-pipeline fuzzing blueprint:
+  `ACL2S-1` `defdata-attach` & `register-type` silently opening `(defttag :defdata-attach)` +
+  `defattach ... :skip-checks t` without guard checks, faulting raw memory inside `:verify-guards t`
+  `:logic` callers; `ACL2S-2` `definec-core` `remove-duplicates` silently dropping/inverting duplicate
+  positional formals (`(sub-dup 10 1) => -9`) and conjoining contradictory types so unsound `:exec`
+  bodies (`(car x)`) pass guard verification (`:common-lisp-compliant`); `ACL2S-3` `ccg` `redefun defuns-fn`
+  crashing valid `:loop$-recursion t` definitions with `HARD ACL2 ERROR in CHOKE-ON-LOOP$-RECURSION`;
+  and `ACL2S-4` `defunc` `test?-phase` `skip-proofs` + `with-timeout-aux-raw` uncaught `storage-condition`
+  aborting raw Lisp on non-terminating `definec` (+ 5 minor static defects).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
