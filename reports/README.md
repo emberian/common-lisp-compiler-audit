@@ -91,6 +91,15 @@ directory so previously shared URLs remain stable:
   compiled `include-book`; `KD-2` `translate-functional-substitution` omitting `(logicp fn2 wrld)`
   and crashing `expand-abbreviations`; `KD-3` `certify-book :pcert :complete` mtime-only promotion
   ignoring sub-book certificate annotation changes).
+- **[ACL2-FV-ENGINES.md](ACL2-FV-ENGINES.md)** — Community-book clause processors & `defttag`
+  FV solver bridges (`FV-1` `centaur/misc/fast-alist-pop-raw.lsp` omitting `'invariant-risk` on
+  `fast-alist-pop*`, proving `NIL`; `FV-2` `clause-processors/SULFA` `eriks-ht-*` raw/logic
+  hash-table mismatch proving `NIL`; `FV-3` `projects/smtlink` `ACL2_to_Z3.py` conflating booleans
+  with `0`/`1` across 8 ground ops; `FV-4` `SMTLink` case/package folding + stale `a.symbol-index`
+  collapsing distinct quoted symbols to `"gensym_0"`; `FV-5` `SMTLink` uninterpreted-symbol Python
+  injection spoofing `"proved"`; `FV-6` `centaur/satlink` `"s UNSATISFIABLE"` prefix match &
+  exit-code `1`/`139` acceptance; plus 4-target mechanical fuzzing blueprint; `:ttags nil` verified
+  cores of `GL`, `FGL`, and `clause-processors/*` audited clean).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
