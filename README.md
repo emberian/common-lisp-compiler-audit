@@ -18,10 +18,10 @@ Counts below reflect **distinct root-cause bug classes** committed with standalo
 
 | Target | Soundness / Wrong-Code | Security / Sandbox Bypass | Crash / Robustness / Divergence | Total Distinct Classes |
 |---|---:|---:|---:|---:|
-| **ACL2 (`8.7+`)** | **27** *(29 ACL2 root causes + 1 pure SBCL-induced `NIL` proof `Z3-1-ACL2` counted under SBCL)* | **1** *(`certify-book :ttags nil` & wormhole disk write)* | **20** *(+ 10 source-audited latent/minor kernel defects)* | **48** *(50 root causes)* |
+| **ACL2 (`8.7+`)** | **27** *(29 ACL2 root causes + 1 pure SBCL-induced `NIL` proof `Z3-1-ACL2` counted under SBCL)* | **1** *(`certify-book :ttags nil` & wormhole disk write)* | **23** *(+ 10 source-audited latent/minor kernel defects)* | **51** *(53 root causes)* |
 | **SBCL (`2.6.8–2.6.10`)** | **6** *(5 live in `2.6.10` at `(safety 3)`, incl. `Z3-1` proving `NIL` in ACL2; 1 fixed in `2.6.10`)* | 0 | **2** *(both live in `2.6.10`, pure ANSI CL; 1 segfault at `(safety 3)`, 1 arm64 asm crash)* | **8** *(7 live in `2.6.10`)* |
 | **Clozure CL (`1.14`)** | **6** *(3 at `(safety 3)`, incl. ARM64 `FCMP` `NaN` & `(space 0)` overwriting `(safety 3)` -> `0`)* | 0 | **3** *(saved-image W^X livelock, `2^60` `ash` corruption, arm64 P2 bugs)* | **9** |
-| **Total** | **39** | **1** | **25** | **65** |
+| **Total** | **39** | **1** | **28** | **68** |
 
 ### Soundness Threat Model (ACL2)
 
@@ -63,6 +63,7 @@ Breakdown of the **27 ACL2 soundness classes (29 root causes)** by trust boundar
 | [`reports/ACL2-PKG-SERIALIZE-CERT.md`](reports/ACL2-PKG-SERIALIZE-CERT.md) | ACL2 `8.7+` | 1 (`PSC-S1`, + raw OOB read) | 1 (`PSC-S2`) | 3 (`PSC-R1..R3`, `PSC-F1`) | `.sao`/`#Y` V1 `size=0` `(svref arr -1)` OOB + `include-book` missing `chk-bad-lisp-object`, `serialize-write` `*wormholep*`/`writes-okp` bypass, fast-alist & `#u`/`#f`/`#!` reader bugs |
 | [`reports/ACL2-WORLD-ROLLBACK.md`](reports/ACL2-WORLD-ROLLBACK.md) | ACL2 `8.7+` | 4 (`WRB-S1..S4`; 3 `:ttags nil` books) | 0 | 3 (`WRB-R1..R3`) | Shallow `*user-stobj-alist*` snapshot aliasing `swap-stobjs`, child stobj `stobj-table` retraction missing `memoize-flush`, failed-`include-book` `*the-live-<stobj>*` & `(defg <st-lst> nil)` leaks |
 | [`reports/ACL2-PROVER-KERNEL.md`](reports/ACL2-PROVER-KERNEL.md) | ACL2 `8.7+` | 7 (`PK-S1..S6` pure-kernel `NIL` proofs + `PK-E1`) | 0 | *(+5 minor kernel defects `PK-M1..M5`)* | `type-set` free-var & `bind-free` forced `ttree` drops, `meta-extract-contextual-fact` `mfc` forced-fact leak, `:apply-linear` `governors` leak, `(:guard-theorem fn)` warrant drift & `badge-table` reset |
+| [`reports/ACL2-KERNEL-DEEP.md`](reports/ACL2-KERNEL-DEEP.md) | ACL2 `8.7+` | 0 | 0 | 3 (`KD-1..3`) | `hcomp` `elided-defconst` wrapper desync crashing `include-book`, `:functional-instance` `:program`-mode crash, `:pcert :complete` stale sub-book annotation promotion, + 4-part mechanical fuzzing blueprint |
 | [`SBCL.md`](SBCL.md) & [`reports/SBCL-F18-ARM64-BRANCH-OVERFLOW.md`](reports/SBCL-F18-ARM64-BRANCH-OVERFLOW.md) | SBCL `2.6.8–2.6.10` | 1 (`SB1`, fixed in `2.6.10` via `0fd47cc68`) | 0 | 1 (`SB2`/`F18`, live `2.6.10`) | `x86-64` `ash-right-two-words-variable` `rcx` lifetime (`2.6.8–2.6.9`); `arm64` unrelaxed `(SIGNED-BYTE 19)` PC-relative branch/literal overflow (`2.6.10`) |
 | [`reports/SBCL-2.6.10-FINDINGS.md`](reports/SBCL-2.6.10-FINDINGS.md) | SBCL `2.6.10` | 3 (`SB-2610-2..4`, all at `(safety 3)`) | 0 | 1 (`SB-2610-1`, pure ANSI CL segfault at `(safety 3)`) | `x86-64` `%more-arg-values-skip`, `arm64`/`x86-64` SIMD VOP `:from (:argument)` & backwards `move`, `arm64` `bignum-mult-and-add-4-arg` register clobber |
 | [`CCL.md`](CCL.md) & [`CCL-OPTIMIZERS.md`](CCL-OPTIMIZERS.md) | CCL `1.14` | 2 (`CCL-3`/`CCL-OPT-2`, `CCL-OPT-1`) | 0 | 2 (`CCL-1`, `CCL-2`) | `save-application` arm64 W^X `mprotect` livelock, `(ash 1 (1- 2^60))` corrupt bignum, 15-op `require-type` multiple-values leak, 4-op unary `truncate`-family value drop |

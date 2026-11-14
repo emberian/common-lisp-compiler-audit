@@ -83,6 +83,14 @@ directory so previously shared URLs remain stable:
   `mfc` and dropping `ttree`; `PK-S4` proof-builder `:apply-linear` leaking unreachable `IF`-branch
   `governors` into top-level `:hyps`; `PK-S5` `encapsulate` Pass-2 `local` warrant world-drift in
   `(:guard-theorem fn)`; `PK-S6` unrestricted post-bootstrap `badge-table` reset abandoning warrants).
+- **[ACL2-KERNEL-DEEP.md](ACL2-KERNEL-DEEP.md)** — Wave-3 audit & mechanical fuzzing blueprint for
+  provisional certification (`pcert`), `hcomp` `defconst` elision, patterned congruence/`geneqv`,
+  `:outside-inside`/`rewrite-quoted-constant`, `defchoose`/`defun-sk` + `:functional-instance`, and
+  hint/parallel boundaries (`KD-1` `hcomp-elided-defconst-alist2` vs `subst-by-position-eliding-defconst2`
+  wrapper desync on `with-output`/`with-prover-step-limit`/`with-guard-checking-event` crashing
+  compiled `include-book`; `KD-2` `translate-functional-substitution` omitting `(logicp fn2 wrld)`
+  and crashing `expand-abbreviations`; `KD-3` `certify-book :pcert :complete` mtime-only promotion
+  ignoring sub-book certificate annotation changes).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
