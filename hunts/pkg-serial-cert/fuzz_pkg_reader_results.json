@@ -1,0 +1,368 @@
+{
+  "part_a_read_object_with_case_mismatches": [
+    {
+      "host": "SBCL",
+      "mode": ":downcase",
+      "token": "FOO",
+      "expected_symbol_name": "foo",
+      "actual_symbol_name": "FOO"
+    },
+    {
+      "host": "SBCL",
+      "mode": ":downcase",
+      "token": "BazQuX",
+      "expected_symbol_name": "bazqux",
+      "actual_symbol_name": "BazQuX"
+    },
+    {
+      "host": "SBCL",
+      "mode": ":downcase",
+      "token": "HELLO-WORLD",
+      "expected_symbol_name": "hello-world",
+      "actual_symbol_name": "HELLO-WORLD"
+    },
+    {
+      "host": "SBCL",
+      "mode": ":invert",
+      "token": "FOO",
+      "expected_symbol_name": "foo",
+      "actual_symbol_name": "FOO"
+    },
+    {
+      "host": "SBCL",
+      "mode": ":invert",
+      "token": "bar",
+      "expected_symbol_name": "BAR",
+      "actual_symbol_name": "bar"
+    },
+    {
+      "host": "SBCL",
+      "mode": ":invert",
+      "token": "HELLO-WORLD",
+      "expected_symbol_name": "hello-world",
+      "actual_symbol_name": "HELLO-WORLD"
+    },
+    {
+      "host": "SBCL",
+      "mode": ":invert",
+      "token": "hello-world",
+      "expected_symbol_name": "HELLO-WORLD",
+      "actual_symbol_name": "hello-world"
+    },
+    {
+      "host": "CCL",
+      "mode": ":downcase",
+      "token": "FOO",
+      "expected_symbol_name": "foo",
+      "actual_symbol_name": "FOO"
+    },
+    {
+      "host": "CCL",
+      "mode": ":downcase",
+      "token": "BazQuX",
+      "expected_symbol_name": "bazqux",
+      "actual_symbol_name": "BazQuX"
+    },
+    {
+      "host": "CCL",
+      "mode": ":downcase",
+      "token": "HELLO-WORLD",
+      "expected_symbol_name": "hello-world",
+      "actual_symbol_name": "HELLO-WORLD"
+    },
+    {
+      "host": "CCL",
+      "mode": ":invert",
+      "token": "FOO",
+      "expected_symbol_name": "foo",
+      "actual_symbol_name": "FOO"
+    },
+    {
+      "host": "CCL",
+      "mode": ":invert",
+      "token": "bar",
+      "expected_symbol_name": "BAR",
+      "actual_symbol_name": "bar"
+    },
+    {
+      "host": "CCL",
+      "mode": ":invert",
+      "token": "HELLO-WORLD",
+      "expected_symbol_name": "hello-world",
+      "actual_symbol_name": "HELLO-WORLD"
+    },
+    {
+      "host": "CCL",
+      "mode": ":invert",
+      "token": "hello-world",
+      "expected_symbol_name": "HELLO-WORLD",
+      "actual_symbol_name": "hello-world"
+    }
+  ],
+  "part_b_sharp_macro_anomalies": [
+    {
+      "host": "SBCL",
+      "case": "sharp_u_preserve_lower_bin",
+      "mode": ":preserve",
+      "note": "should-read-10",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": true,
+      "ok_output": null
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_preserve_lower_oct",
+      "mode": ":preserve",
+      "note": "should-read-63",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": true,
+      "ok_output": null
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_preserve_lower_hex",
+      "mode": ":preserve",
+      "note": "should-read-255",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": true,
+      "ok_output": null
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_bare_b_underscore",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_bare_o_underscore",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_bare_x_underscore",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_div_zero",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_bin_div_zero",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_bar_trailing_junk",
+      "mode": ":upcase",
+      "note": "malformed-trailing",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=42"
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_u_hex_bar_trailing_junk",
+      "mode": ":upcase",
+      "note": "malformed-trailing",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=16"
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_f_empty_list",
+      "mode": ":upcase",
+      "note": "degenerate-empty",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=(0)"
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_f_minus_only",
+      "mode": ":upcase",
+      "note": "degenerate-empty",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=(0)"
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_f_dot_only",
+      "mode": ":upcase",
+      "note": "degenerate-empty",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=(0)"
+    },
+    {
+      "host": "SBCL",
+      "case": "sharp_f_hex_empty",
+      "mode": ":upcase",
+      "note": "degenerate-empty",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=(0)"
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_preserve_lower_bin",
+      "mode": ":preserve",
+      "note": "should-read-10",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": true,
+      "ok_output": null
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_preserve_lower_oct",
+      "mode": ":preserve",
+      "note": "should-read-63",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": true,
+      "ok_output": null
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_preserve_lower_hex",
+      "mode": ":preserve",
+      "note": "should-read-255",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": true,
+      "ok_output": null
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_bare_b_underscore",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_bare_o_underscore",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_bare_x_underscore",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_div_zero",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_bin_div_zero",
+      "mode": ":upcase",
+      "note": "malformed",
+      "raw_lisp_abort": true,
+      "hard_acl2_error": false,
+      "ok_output": null
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_bar_trailing_junk",
+      "mode": ":upcase",
+      "note": "malformed-trailing",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=42"
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_u_hex_bar_trailing_junk",
+      "mode": ":upcase",
+      "note": "malformed-trailing",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=16"
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_f_empty_list",
+      "mode": ":upcase",
+      "note": "degenerate-empty",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=(0)"
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_f_minus_only",
+      "mode": ":upcase",
+      "note": "degenerate-empty",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=(0)"
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_f_dot_only",
+      "mode": ":upcase",
+      "note": "degenerate-empty",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=(0)"
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_f_hex_empty",
+      "mode": ":upcase",
+      "note": "degenerate-empty",
+      "raw_lisp_abort": false,
+      "hard_acl2_error": false,
+      "ok_output": "SHARP-OK val=(0)"
+    }
+  ],
+  "part_c_pkg_portcullis_anomalies": [
+    {
+      "host": "SBCL",
+      "case": "sharp_bang_accepts_hidden_defpkg",
+      "detail": "#!HIDDEN-PKG-FUZZ 42 succeeded after (include-book \"mid\") even though HIDDEN-PKG-FUZZ is a hidden-defpkg!"
+    },
+    {
+      "host": "CCL",
+      "case": "sharp_bang_accepts_hidden_defpkg",
+      "detail": "#!HIDDEN-PKG-FUZZ 42 succeeded after (include-book \"mid\") even though HIDDEN-PKG-FUZZ is a hidden-defpkg!"
+    }
+  ]
+}

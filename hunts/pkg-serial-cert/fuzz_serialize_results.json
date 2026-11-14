@@ -1,0 +1,59 @@
+{
+  "part_a_valid_roundtrip_findings": [
+    "VALID-ERROR reader=SBCL writer=sbcl obj=fal-only-atoms mode=NEVER err=Invalid serialized object, magic number incorrect: 0 AC 12 B",
+    "READER-ERROR reader=SBCL writer=sbcl obj=fal-only-atoms #y err=Invalid serialized object, magic number incorrect: 0 AC 12 B",
+    "VALID-ERROR reader=CCL writer=ccl obj=fal-only-atoms mode=NEVER err=Invalid serialized object, magic number incorrect: 0 AC 12 B",
+    "READER-ERROR reader=CCL writer=ccl obj=fal-only-atoms #y err=Invalid serialized object, magic number incorrect: 0 AC 12 B",
+    "VALID-ERROR reader=SBCL writer=ccl obj=fal-only-atoms mode=NEVER err=Invalid serialized object, magic number incorrect: 0 AC 12 B",
+    "READER-ERROR reader=SBCL writer=ccl obj=fal-only-atoms #y err=Invalid serialized object, magic number incorrect: 0 AC 12 B"
+  ],
+  "part_b_adversarial_findings": [
+    "ADV-FINDING host=SBCL case=v3_fal_atom_t mode=:smart universe-ok=T bad=NIL heq-ok=T ft-bad=((:SLOT1-ATOM-KEY",
+    "ADV-FINDING host=SBCL case=v3_fal_atom_t mode=:always universe-ok=T bad=NIL heq-ok=T ft-bad=((:SLOT2-ATOM-KEY",
+    "ADV-FINDING host=SBCL case=v3_fal_atom_nil_via_pkg mode=:smart universe-ok=T bad=NIL heq-ok=T ft-bad=(:SLOT1-NIL-KEY-HAS-VAL)",
+    "ADV-FINDING host=SBCL case=v3_fal_atom_nil_via_pkg mode=:always universe-ok=T bad=NIL heq-ok=T ft-bad=(:SLOT1-NIL-KEY-HAS-VAL)",
+    "ADV-FINDING host=SBCL case=v3_fal_atom_int42 mode=:smart universe-ok=T bad=NIL heq-ok=T ft-bad=((:SLOT2-ATOM-KEY",
+    "ADV-FINDING host=SBCL case=v3_fal_atom_int42 mode=:always universe-ok=T bad=NIL heq-ok=T ft-bad=((:SLOT1-ATOM-KEY",
+    "ADV-FINDING host=CCL case=v1_size0_oob mode=:smart universe-ok=NIL bad=NIL heq-ok=NIL ft-bad=NIL",
+    "ADV-FINDING host=CCL case=v1_size0_oob mode=:always universe-ok=NIL bad=NIL heq-ok=NIL ft-bad=NIL",
+    "ADV-FINDING host=CCL case=v1_size0_oob mode=:never universe-ok=NIL bad=NIL heq-ok=NIL ft-bad=NIL",
+    "ADV-FINDING host=CCL case=v3_fal_atom_t mode=:smart universe-ok=T bad=NIL heq-ok=T ft-bad=((:SLOT1-ATOM-KEY T))",
+    "ADV-FINDING host=CCL case=v3_fal_atom_t mode=:always universe-ok=T bad=NIL heq-ok=T ft-bad=((:SLOT2-ATOM-KEY T))",
+    "ADV-FINDING host=CCL case=v3_fal_atom_nil_via_pkg mode=:smart universe-ok=T bad=NIL heq-ok=T ft-bad=(:SLOT1-NIL-KEY-HAS-VAL)",
+    "ADV-FINDING host=CCL case=v3_fal_atom_nil_via_pkg mode=:always universe-ok=T bad=NIL heq-ok=T ft-bad=(:SLOT1-NIL-KEY-HAS-VAL)",
+    "ADV-FINDING host=CCL case=v3_fal_atom_int42 mode=:smart universe-ok=T bad=NIL heq-ok=T ft-bad=((:SLOT2-ATOM-KEY 42))",
+    "ADV-FINDING host=CCL case=v3_fal_atom_int42 mode=:always universe-ok=T bad=NIL heq-ok=T ft-bad=((:SLOT1-ATOM-KEY 42))"
+  ],
+  "isolated_checks": {
+    "honsed_fal_break_sbcl": {
+      "rc": 0,
+      "triggered_break_raw": true
+    },
+    "honsed_fal_break_ccl": {
+      "rc": 0,
+      "triggered_break_raw": true
+    },
+    "v3_fal_bignum_count_sbcl": {
+      "rc": 0,
+      "raw_lisp_error": false
+    },
+    "v3_fal_bignum_count_ccl": {
+      "rc": 0,
+      "raw_lisp_error": true
+    },
+    "ccl_stack_overflow_array_2_57": {
+      "rc": 0,
+      "tail": [
+        "The message above might explain the error.  If not, and",
+        "if you didn't cause an explicit interrupt (Control-C),",
+        "then it may help to see :DOC raw-lisp-error.",
+        "",
+        "To enable breaks into the debugger (also see :DOC acl2-customization):",
+        "(SET-DEBUGGER-ENABLE T)",
+        "ACL2 !>Bye.",
+        ""
+      ]
+    }
+  },
+  "num_adversarial_cases": 87
+}

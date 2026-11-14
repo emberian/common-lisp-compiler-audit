@@ -46,6 +46,15 @@ directory so previously shared URLs remain stable:
   bypassing `*warrant-reqs*` and `*aokp*`; `SCR-S3` `defattach` failing to propagate or enforce
   `invariant-risk` on constrained stobj/array updaters; `SCR-R1` `(serialize-read file :hons-mode :never)`
   stream desynchronization; `SCR-L1..L5`).
+- **[ACL2-PKG-SERIALIZE-CERT.md](ACL2-PKG-SERIALIZE-CERT.md)** — Package, reader, `.sao`/`#Y`
+  serializer, and certification boundary audit (`PSC-S1` 13-byte `.sao` V1 `size/idx = 0`
+  `(svref arr -1)` OOB read at `(safety 0)` yielding `#<BOGUS object @ #xBE>` outside the ACL2
+  universe on single-host CCL and proving `(defthm nil-proved nil)` across SBCL->CCL `#Y` book
+  certification with `:ttags nil` and zero `#+`/`#-`; `PSC-S2` `serialize-write` bypassing both
+  `*wormholep*` purity during `defthm` and `writes-okp` `:ttags nil` book-certification sandbox;
+  `PSC-R1a..d` normed-spine fast-alist `hl-alist-stolen-warning` raw break & FAL decoder bugs;
+  `PSC-F1` `read-object-with-case` ignoring `:downcase`/`:invert`; `PSC-R2`/`PSC-R3` `#u`, `#f`,
+  and `#!` `hidden-defpkg` reader bugs).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
