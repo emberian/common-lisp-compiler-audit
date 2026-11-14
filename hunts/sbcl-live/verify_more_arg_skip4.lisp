@@ -1,0 +1,91 @@
+(declaim (muffle-conditions sb-ext:compiler-note style-warning))
+
+(declaim (notinline sink))
+(defun sink (x) x)
+
+(format t "=== 1. Full prologue+body disassembly of (speed 3) (safety 3) %more-arg-values-skip bug ===~%")
+(let ((fn (compile nil
+            '(lambda (p0 p1 p2 p3 p4 p5 p6 p7 p8 p9 &rest r)
+               (declare (optimize (speed 3) (safety 3))
+                        (type fixnum p0 p1 p2 p3 p4 p5 p6 p7 p8 p9))
+               (let ((l0 (the fixnum (+ 1 p0)))
+                     (l1 (the fixnum (+ 2 p1)))
+                     (l2 (the fixnum (+ 3 p2)))
+                     (l3 (the fixnum (+ 4 p3)))
+                     (l4 (the fixnum (+ 5 p4)))
+                     (l5 (the fixnum (+ 6 p5))))
+                 (declare (type fixnum l0 l1 l2 l3 l4 l5))
+                 (multiple-value-prog1
+                     (values-list (cdr r))
+                   (sink (list l0 l1 l2 l3 l4 l5))))))))
+  (sb-disassem:disassemble-code-component fn))
+
+(format t "~%=== 2. Check default policy ((speed 1) (safety 1)) with 0..6 prefix args & register vars! ===~%")
+(block search-def
+  (dotimes (nprefix 7)
+    (dotimes (nlive 12)
+      (let* ((pvars (loop for i below nprefix collect (intern (format nil "P~D" i))))
+             (lvars (loop for i below nlive collect (intern (format nil "L~D" i))))
+             (fn (compile nil
+                   `(lambda (,@pvars &rest r)
+                      (let* (,@(loop for v in lvars for i from 0
+                                     collect `(,v ,(if (> nprefix 0)
+                                                       `(eq ,(nth (mod i nprefix) pvars) ',v)
+                                                       `',v))))
+                        (multiple-value-prog1
+                            (values-list (cdr r))
+                          (sink (list ,@lvars)))))))
+             (dis (with-output-to-string (s) (sb-disassem:disassemble-code-component fn :stream s))))
+        (let ((lines (let ((res nil) (st 0))
+                       (loop for p = (position #\Newline dis :start st)
+                             do (push (subseq dis st (or p (length dis))) res)
+                             while p do (setf st (1+ p)))
+                       (nreverse res))))
+          (loop for (l1 l2) on lines
+                when (and l1 l2 (search "XOR " l1) (search "-8]" l2))
+                do (let* ((xp (search "XOR " l1))
+                          (cm (and xp (position #\, l1 :start xp)))
+                          (r32 (and xp cm (string-trim " " (subseq l1 (+ xp 4) cm))))
+                          (r64 (cond ((and (>= (length r32) 2) (char= (char r32 0) #\E))
+                                      (concatenate 'string "R" (subseq r32 1)))
+                                     ((and (>= (length r32) 2) (char= (char r32 (1- (length r32))) #\D))
+                                      (subseq r32 0 (1- (length r32))))
+                                     (t r32))))
+                     (when (search (concatenate 'string "[" r64 "-8]") l2)
+                       (format t "DEFAULT POLICY HIT! nprefix=~D nlive=~D reg=~A~%  ~A~%  ~A~%"
+                               nprefix nlive r64 l1 l2)
+                       (return-from search-def t)))))))))
+
+(format t "~%=== 3. Loop-back targeting test on bignum-negate-last-two-loop & bignum-add-loop ===~%")
+(let ((fn1 (compile nil
+             '(lambda (a l)
+                (declare (optimize (speed 3) (safety 0))
+                         (type bignum a)
+                         (type (unsigned-byte 64) l))
+                (dotimes (i 1 l)
+                  (multiple-value-bind (last1 last2)
+                      (sb-sys:%primitive sb-vm::bignum-negate-last-two-loop a l)
+                    (declare (ignore last1))
+                    (setq l last2))))))
+      (fn2 (compile nil
+             '(lambda (a b la lb r)
+                (declare (optimize (speed 3) (safety 0))
+                         (type bignum a b r)
+                         (type (unsigned-byte 64) la lb))
+                ;; Keep la live, let lb die!
+                (sb-sys:%primitive sb-vm::bignum-add-loop a b la lb r)
+                la)))
+      (fn3 (compile nil
+             '(lambda (a b la lb r)
+                (declare (optimize (speed 3) (safety 0))
+                         (type bignum a b r)
+                         (type (unsigned-byte 64) la lb))
+                ;; Keep lb live, let la die!
+                (sb-sys:%primitive sb-vm::bignum-add-loop a b la lb r)
+                lb))))
+  (format t "--- fn1 (bignum-negate-last-two-loop with dotimes setq l last2): ---~%")
+  (disassemble fn1)
+  (format t "--- fn2 (bignum-add-loop keep la): ---~%")
+  (disassemble fn2)
+  (format t "--- fn3 (bignum-add-loop keep lb): ---~%")
+  (disassemble fn3))

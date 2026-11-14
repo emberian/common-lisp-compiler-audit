@@ -11,8 +11,19 @@ directory so previously shared URLs remain stable:
   surviving `(u)` and faulting on CCL, plus cross-reference to `ME1` trust-tag-gated
   `make-event :expansion?`).
 - **[SBCL-F18-ARM64-BRANCH-OVERFLOW.md](SBCL-F18-ARM64-BRANCH-OVERFLOW.md)** — Live SBCL
-  2.6.10 darwin-arm64 assembler crash (`The value -262148 is not of type (SIGNED-BYTE 19)`)
-  triggered by recursive `defun-inline` expansion.
+  2.6.10 darwin-arm64 assembler crash (`The value -262149 is not of type (SIGNED-BYTE 19)`)
+  reduced to a 19-line pure ANSI CL reproducer (`repros/recursive-defun-inline-sbcl-arm64/plain-sbcl.lisp`)
+  and traced to unrelaxed PC-relative `LDR Rt, label` / conditional branch offsets in
+  `src/compiler/arm64/insts.lisp`.
+- **[SBCL-2.6.10-FINDINGS.md](SBCL-2.6.10-FINDINGS.md)** — Four brand-new **LIVE** compiler
+  soundness & register-lifetime bugs in SBCL 2.6.10 (`arm64` + `x86-64`), all reproducing at
+  `(safety 3)` and two at default `(speed 1)(safety 1)`: `SB-2610-1` pure ANSI CL x86-64
+  segfault in `%more-arg-values-skip` (`multiple-value-prog1` + `(values-list (cdr r))`);
+  `SB-2610-2` arm64 `%make-simd-pack-single` + x86-64 AVX-512 `%make-simd-pack-512-single`
+  off-by-one `:from (:argument ...)` clobber; `SB-2610-3` arm64 `bignum-mult-and-add-4-arg`
+  double register clobber corrupting both 64-bit output limbs; `SB-2610-4` backwards
+  `(move x y)` across all 8 `%simd-pack{,-256,-512}-int-to-{single,double}` VOPs overwriting
+  caller's live input variable.
 - **[CCL-CODEGEN-FINDINGS.md](CCL-CODEGEN-FINDINGS.md)** — Four new Clozure CL 1.14
   compiler & backend bug families (`CCL-CG-1` ARM64/ARM32 2D `aset2` / 3D `aref3` register
   clobber at `(safety 3)`; `CCL-CG-2` `nx1-expand-inline-call` copying `space` into `safety`

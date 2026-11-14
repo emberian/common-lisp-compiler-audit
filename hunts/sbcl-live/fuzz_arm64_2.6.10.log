@@ -1,0 +1,8 @@
+Starting SBCL 2.6.10 (ARM64) anti-masking differential fuzzer for 3000 functions...
+  progress: 500/3000 functions (3000 calls, 0 mismatches, 0 compile-errors)
+  progress: 1000/3000 functions (6000 calls, 0 mismatches, 0 compile-errors)
+  progress: 1500/3000 functions (9000 calls, 0 mismatches, 0 compile-errors)
+  progress: 2000/3000 functions (12000 calls, 0 mismatches, 0 compile-errors)
+  progress: 2500/3000 functions (15000 calls, 0 mismatches, 0 compile-errors)
+  progress: 3000/3000 functions (18000 calls, 0 mismatches, 0 compile-errors)
+DONE on ARM64: 3000 functions, 18000 differential calls in 58.10s (51.6 fns/s): mismatches=0 compile-errors=0
