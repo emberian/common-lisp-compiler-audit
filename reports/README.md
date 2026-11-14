@@ -134,6 +134,26 @@ directory so previously shared URLs remain stable:
   missing `(msg ...)` wrapper crashing `FMT0`; `W4-KF-3` `defun-sk-fn` macroexpander crashes + odd-length
   `(:stobjs st1 st2)` / `:dfs` splice under `:constrain t`; and `W4-KF-4` internal `:OMITTED` sentinel
   leaking into user `:backtrack` hints and top-of-waterfall `hints`.
+- **[W4-COMPILER-FUZZ-FINDINGS.md](W4-COMPILER-FUZZ-FINDINGS.md)** — Wave-4 4-stage host-compiler
+  fuzzing & Z3 IR sweep (`hunts/w4-compiler-fuzz/`: 16 Z3 SMT checks, 41,600 context-position lambdas,
+  8,960 reg-pressure/immediate functions, 15,246 stdlib/transform evals across SBCL & CCL arm64 + x86-64)
+  uncovering 14 novel zero-UB compiler bugs (`W4-HC-1..7, 9..15`): 8 in SBCL 2.6.10 (including 4 unpatched
+  SBCL `HEAD` 0-day ICEs in `%dpb derive-type`, rational `ash` comparison, `(notinline gcd)`, and ARM64
+  8-bit `define-partial-reffer/setter` offset `4095` aborting `:ttags nil` ACL2, plus `(safety 3)` `eq`
+  non-`eq-comparable` bignum misfold, `check-type` constraint collapse, `:allow-other-keys` ICE, and
+  `coerce` wrong condition class) and 6 in Clozure CL 1.14 (ARM64 2D/3D `aset2`/`aset3` uninitialized-register
+  memory corruption, `%displace-array` `$arh_disp_bit` raw VM header corruption at `(safety 3)`, x86-64
+  `bit-orc2` SSE2 `movq` upper-64-bit drop, `equalp` hash-table `1/2` vs `0.5d0`, `concatenate`/`coerce`
+  empty-type `NIL` unsoundness, and 0D `adjust-array` / `(signum -0.0)`).
+- **[W4-KIMI-CORE-COMPILERS.md](W4-KIMI-CORE-COMPILERS.md)** — Wave-4 Kimi K3.1-pro + manual kernel
+  and compiler audit (`hunts/w4-kimi-core/`) uncovering 7 novel bugs (`W4-KC-1..7`): **two `:ttag nil`
+  ACL2 `(defthm nil-proved nil)` proofs on Clozure CL 1.14** (`W4-KC-1` 1-event, 13-step `to-dfp-of-rize`
+  + CCL `(= (float (rationalize f) f) f) => NIL`, and `W4-KC-2` CCL ARM64 `arm642-vref1` missing `* 4`
+  byte scale on bit-vector constant index `> 131040`), CCL x86-64 `x862-vref1` double `misc-data-offset`
+  (`-10`) at `(safety 3)` (`W4-KC-3`), SBCL 2.6.10 ARM64 `(values-list (reverse x))` calling undefined
+  `SB-C::REVERSE-VALUES-LIST` (`W4-KC-4`), ACL2 `badge-table-guard1` dropping unprovable `NATP-MEASURE`
+  obligations on `G2` warrants (`W4-KC-5`), ACL2(p) `parallel-raw.lisp` `(pand)` `NIL` vs `T` &
+  `spec-mv-let` leak (`W4-KC-6`), and SBCL 2D `%with-array-data` dropping `start` (`W4-KC-7`).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,

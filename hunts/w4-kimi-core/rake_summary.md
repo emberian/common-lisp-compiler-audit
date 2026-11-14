@@ -8,9 +8,9 @@
 | Slice | Target Files & Line Ranges | Kimi Outcome | Leads Produced | Verification Outcome |
 |---|---|---|---|---|
 | `01-acl2-tau-bounders-rules` | `tau.lisp:1600-3050, 9900-11300` | `rc=0` (341.3s) | Clean (no defects reported in sliced ranges) | N/A |
-| `02-acl2-bdd-nonlinear` | `bdd.lisp:1840-3235`, `non-linear.lisp:55-986` | `rc=0` (293.3s, 53 lines) | `non-linear.lisp:143-144,104-106,432-433` (`invert-var`/`varify!`/`inverse-vars-p`) | **TRUE POSITIVE (`W4-KC-5b`)** — `eql` on `''-1` + `varify!` strips scalar factor `2` + `inverse-vars-p` unconditionally returns `T` for `EXPT` |
+| `02-acl2-bdd-nonlinear` | `bdd.lisp:1840-3235`, `non-linear.lisp:55-986` | `rc=0` (293.3s, 53 lines) | `non-linear.lisp:143-144,104-106,432-433` (`invert-var`/`varify!`/`inverse-vars-p`) | **DUPLICATE of `PK-M3`** (`ACL2-PROVER-KERNEL.md:302-303`) — confirmed & dropped during de-duplication |
 | `03-acl2-linear-ab` | `linear-a.lisp`, `linear-b.lisp` | `rc=124` (360s) | Timed out | Manual check clean on target slices |
-| `04-acl2-apply-float` | `apply.lisp`, `float-a.lisp` | `rc=124` (360s) | Timed out | Manual audit discovered **`W4-KC-1`** (`float-b.lisp:409-430` + CCL `RATIONALIZE`/`FLOAT`) & **`W4-KC-5a`** (`apply.lisp:2046-2059, 1430-1457` `badge-table-guard1` bypass) |
+| `04-acl2-apply-float` | `apply.lisp`, `float-a.lisp` | `rc=124` (360s) | Timed out | Manual audit discovered **`W4-KC-1`** (`float-b.lisp:409-430` + CCL `RATIONALIZE`/`FLOAT`) & **`W4-KC-5`** (`apply.lisp:1430-1457, 2046-2059` `badge-table-guard1` bypass) |
 | `05-acl2-par-iface` | `parallel-raw.lisp:1-1435`, `interface-raw.lisp:1120-2350` | `rc=0` (330.6s, 123 lines) | 4 leads in `parallel-raw.lisp` (`pand`, `spec-mv-let`, `remove-thread-array-from-work-queue-rec`, `eval-and-save-result`) | **4 TRUE POSITIVES (`W4-KC-6`)** — verified live against `saved_acl2` (`:acl2-par` vs `:logic`) |
 | `06-ccl-front-opt` | `nx1.lisp`, `optimizers.lisp` | `rc=124` (360s) | Timed out | Covered by sibling `w4-fuzz-compilers` |
 | `07-ccl-arm64-x86-p2` | `arm642.lisp`, `x862.lisp` | `rc=124` (360s) | Timed out | Manual audit discovered **`W4-KC-2`** (`arm642.lisp:1883,2641`) & **`W4-KC-3`** (`x862.lisp:2093..2172`) |
