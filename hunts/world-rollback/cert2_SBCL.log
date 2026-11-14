@@ -1,0 +1,1079 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Note: Writing .port file, /Users/ember/dev/compiler-audit/hunts/world-
+rollback/book_st_lst_nil.port.
+
+CERTIFICATION ATTEMPT FOR 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/book_st_lst_nil.lisp"
+ACL2 Version 8.7
+
+* Step 1: Read 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/book_st_lst_nil.lisp"
+and compute its book-hash.
+
+* Step 2:  There were nine forms in the file.  We now attempt to establish
+that each form, whether local or non-local, is indeed an admissible
+embedded event form in the context of the previously admitted ones.
+
+
+ACL2 !>>(DEFEVALUATOR EV-CP EV-CP-LST ((IF X Y Z) (NOT X)))
+
+
+ACL2 !>>(WITH-OUTPUT
+         :OFF ERROR :STACK
+         :PUSH
+         (MAKE-EVENT
+          (ER-PROGN
+           (WITH-OUTPUT
+               :STACK
+               :POP (DEFEVALUATOR-CHECK
+                         '(DEFEVALUATOR EV-CP EV-CP-LST ((IF X Y Z) (NOT X)))
+                         'EV-CP
+                         'EV-CP-LST
+                         '((IF X Y Z) (NOT X))
+                         '(DEFEVALUATOR . EV-CP)
+                         STATE))
+           (VALUE '(VALUE-TRIPLE NIL)))))
+
+Summary
+Form:  ( MAKE-EVENT (ER-PROGN ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+NIL
+
+
+ACL2 !>>(ENCAPSULATE (((EV-CP * *) => *)
+                      ((EV-CP-LST * *) => *))
+         (SET-INHIBIT-WARNINGS "theory")
+         (LOCAL (IN-THEORY *DEFEVALUATOR-FORM-BASE-THEORY*))
+         (LOCAL (DEFUN-NX APPLY-FOR-DEFEVALUATOR (FN ARGS)
+                          (DECLARE (XARGS :VERIFY-GUARDS NIL
+                                          :NORMALIZE NIL))
+                          (COND ((EQUAL FN 'IF)
+                                 (IF (CAR ARGS)
+                                     (CAR (CDR ARGS))
+                                   (CAR (CDR (CDR ARGS)))))
+                                ((EQUAL FN 'NOT) (NOT (CAR ARGS)))
+                                (T NIL))))
+         (LOCAL
+          (MUTUAL-RECURSION
+           (DEFUN-NX
+            EV-CP (X A)
+            (DECLARE
+             (XARGS
+               :VERIFY-GUARDS NIL
+               :MEASURE (ACL2-COUNT X)
+               :WELL-FOUNDED-RELATION O<
+               :NORMALIZE NIL
+               :HINTS
+               (("goal" :IN-THEORY (ENABLE (:TYPE-PRESCRIPTION ACL2-COUNT))))
+               :MODE :LOGIC))
+            (COND ((SYMBOLP X)
+                   (AND X (CDR (ASSOC-EQ X A))))
+                  ((ATOM X) NIL)
+                  ((EQ (CAR X) 'QUOTE) (CAR (CDR X)))
+                  (T (LET ((ARGS (EV-CP-LST (CDR X) A)))
+                       (COND ((CONSP (CAR X))
+                              (EV-CP (CAR (CDR (CDR (CAR X))))
+                                     (PAIRLIS$ (CAR (CDR (CAR X))) ARGS)))
+                             ((NOT (SYMBOLP (CAR X))) NIL)
+                             (T (APPLY-FOR-DEFEVALUATOR (CAR X)
+                                                        ARGS)))))))
+           (DEFUN-NX EV-CP-LST (X-LST A)
+                     (DECLARE (XARGS :MEASURE (ACL2-COUNT X-LST)
+                                     :WELL-FOUNDED-RELATION O<))
+                     (COND ((ENDP X-LST) NIL)
+                           (T (CONS (EV-CP (CAR X-LST) A)
+                                    (EV-CP-LST (CDR X-LST) A)))))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP
+                                    EV-CP-LST APPLY-FOR-DEFEVALUATOR)))
+         (LOCAL
+            (DEFTHM EVAL-LIST-KWOTE-LST
+              (EQUAL (EV-CP-LST (KWOTE-LST ARGS) A)
+                     (TRUE-LIST-FIX ARGS))
+              :HINTS (("goal" :EXPAND ((:FREE (X Y) (EV-CP-LST (CONS X Y) A))
+                                       (EV-CP-LST NIL A)
+                                       (:FREE (X) (EV-CP (LIST 'QUOTE X) A)))
+                              :INDUCT (TRUE-LIST-FIX ARGS)))))
+         (LOCAL
+            (DEFTHM TRUE-LIST-FIX-EV-LST
+              (EQUAL (TRUE-LIST-FIX (EV-CP-LST X A))
+                     (EV-CP-LST X A))
+              :HINTS (("goal" :INDUCT (LEN X)
+                              :IN-THEORY (E/D ((:INDUCTION LEN)))
+                              :EXPAND ((EV-CP-LST X A) (EV-CP-LST NIL A))))))
+         (LOCAL (DEFTHM EV-COMMUTES-CAR
+                  (EQUAL (CAR (EV-CP-LST X A))
+                         (EV-CP (CAR X) A))
+                  :HINTS (("goal" :EXPAND ((EV-CP-LST X A) (EV-CP NIL A))
+                                  :IN-THEORY (ENABLE DEFAULT-CAR)))))
+         (LOCAL (DEFTHM EV-LST-COMMUTES-CDR
+                  (EQUAL (CDR (EV-CP-LST X A))
+                         (EV-CP-LST (CDR X) A))
+                  :HINTS (("Goal" :EXPAND ((EV-CP-LST X A) (EV-CP-LST NIL A))
+                                  :IN-THEORY (ENABLE DEFAULT-CDR)))))
+         (DEFTHMD EV-CP-CONSTRAINT-0
+           (IMPLIES (AND (CONSP X)
+                         (SYNTAXP (NOT (EQUAL A ''NIL)))
+                         (NOT (EQUAL (CAR X) 'QUOTE)))
+                    (EQUAL (EV-CP X A)
+                           (EV-CP (CONS (CAR X)
+                                        (KWOTE-LST (EV-CP-LST (CDR X) A)))
+                                  NIL)))
+           :HINTS
+           (("Goal" :EXPAND ((:FREE (X) (HIDE X))
+                             (EV-CP X A)
+                             (:FREE (ARGS)
+                                    (EV-CP (CONS (CAR X) ARGS) NIL)))
+                    :IN-THEORY '(EVAL-LIST-KWOTE-LST TRUE-LIST-FIX-EV-LST
+                                                     CAR-CONS CDR-CONS))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-0)))
+         (DEFTHM EV-CP-CONSTRAINT-1
+           (IMPLIES (SYMBOLP X)
+                    (EQUAL (EV-CP X A)
+                           (AND X (CDR (ASSOC-EQUAL X A)))))
+           :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-1)))
+         (DEFTHM EV-CP-CONSTRAINT-2
+           (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'QUOTE))
+                    (EQUAL (EV-CP X A) (CADR X)))
+           :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-2)))
+         (DEFTHM EV-CP-CONSTRAINT-3
+           (IMPLIES (AND (CONSP X) (CONSP (CAR X)))
+                    (EQUAL (EV-CP X A)
+                           (EV-CP (CADDR (CAR X))
+                                  (PAIRLIS$ (CADR (CAR X))
+                                            (EV-CP-LST (CDR X) A)))))
+           :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-3)))
+         (DEFTHM EV-CP-CONSTRAINT-4
+           (IMPLIES (NOT (CONSP X-LST))
+                    (EQUAL (EV-CP-LST X-LST A) NIL))
+           :HINTS (("Goal" :EXPAND ((EV-CP-LST X-LST A)))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-4)))
+         (DEFTHM EV-CP-CONSTRAINT-5
+           (IMPLIES (CONSP X-LST)
+                    (EQUAL (EV-CP-LST X-LST A)
+                           (CONS (EV-CP (CAR X-LST) A)
+                                 (EV-CP-LST (CDR X-LST) A))))
+           :HINTS (("Goal" :EXPAND ((EV-CP-LST X-LST A)))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-5)))
+         (DEFTHMD EV-CP-CONSTRAINT-6
+           (IMPLIES (AND (NOT (CONSP X)) (NOT (SYMBOLP X)))
+                    (EQUAL (EV-CP X A) NIL))
+           :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-6)))
+         (DEFTHMD EV-CP-CONSTRAINT-7
+           (IMPLIES (AND (CONSP X)
+                         (NOT (CONSP (CAR X)))
+                         (NOT (SYMBOLP (CAR X))))
+                    (EQUAL (EV-CP X A) NIL))
+           :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-7)))
+         (DEFTHM EV-CP-CONSTRAINT-8
+           (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'IF))
+                    (EQUAL (EV-CP X A)
+                           (IF (EV-CP (CADR X) A)
+                               (EV-CP (CADDR X) A)
+                             (EV-CP (CADDDR X) A))))
+           :HINTS
+           (("Goal" :EXPAND ((EV-CP X A)
+                             (:FREE (X) (HIDE X))
+                             (:FREE (FN ARGS)
+                                    (APPLY-FOR-DEFEVALUATOR FN ARGS))))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-8)))
+         (DEFTHM EV-CP-CONSTRAINT-9
+           (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'NOT))
+                    (EQUAL (EV-CP X A)
+                           (NOT (EV-CP (CADR X) A))))
+           :HINTS
+           (("Goal" :EXPAND ((EV-CP X A)
+                             (:FREE (X) (HIDE X))
+                             (:FREE (FN ARGS)
+                                    (APPLY-FOR-DEFEVALUATOR FN ARGS))))))
+         (LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-9))))
+
+To verify that the 29 encapsulated events correctly extend the current
+theory we will evaluate them.  The theory thus constructed is only
+ephemeral.
+
+Encapsulated Events:
+
+
+ACL2 !>>(SET-INHIBIT-WARNINGS "theory")
+("theory")
+
+
+ACL2 !>>(LOCAL (IN-THEORY *DEFEVALUATOR-FORM-BASE-THEORY*))
+
+ACL2 Warning [Disable] in ( IN-THEORY *DEFEVALUATOR-FORM-BASE-THEORY*):
+Forcing has transitioned from enabled to disabled.
+See :DOC force.
+
+
+Summary
+Form:  ( IN-THEORY *DEFEVALUATOR-FORM-BASE-THEORY*)
+Rules: NIL
+Warnings:  Disable
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 47)
+
+
+ACL2 !>>(LOCAL (DEFUN-NX APPLY-FOR-DEFEVALUATOR (FN ARGS)
+                         (DECLARE (XARGS :VERIFY-GUARDS NIL
+                                         :NORMALIZE NIL))
+                         (COND ((EQUAL FN 'IF)
+                                (IF (CAR ARGS)
+                                    (CAR (CDR ARGS))
+                                  (CAR (CDR (CDR ARGS)))))
+                               ((EQUAL FN 'NOT) (NOT (CAR ARGS)))
+                               (T NIL))))
+
+Since APPLY-FOR-DEFEVALUATOR is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of APPLY-FOR-DEFEVALUATOR.
+
+Summary
+Form:  ( DEFUN APPLY-FOR-DEFEVALUATOR ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:DEFUN-NX APPLY-FOR-DEFEVALUATOR)
+
+
+ACL2 !>>(LOCAL
+         (MUTUAL-RECURSION
+          (DEFUN-NX
+           EV-CP (X A)
+           (DECLARE
+            (XARGS
+               :VERIFY-GUARDS NIL
+               :MEASURE (ACL2-COUNT X)
+               :WELL-FOUNDED-RELATION O<
+               :NORMALIZE NIL
+               :HINTS
+               (("goal" :IN-THEORY (ENABLE (:TYPE-PRESCRIPTION ACL2-COUNT))))
+               :MODE :LOGIC))
+           (COND ((SYMBOLP X)
+                  (AND X (CDR (ASSOC-EQ X A))))
+                 ((ATOM X) NIL)
+                 ((EQ (CAR X) 'QUOTE) (CAR (CDR X)))
+                 (T (LET ((ARGS (EV-CP-LST (CDR X) A)))
+                      (COND ((CONSP (CAR X))
+                             (EV-CP (CAR (CDR (CDR (CAR X))))
+                                    (PAIRLIS$ (CAR (CDR (CAR X))) ARGS)))
+                            ((NOT (SYMBOLP (CAR X))) NIL)
+                            (T (APPLY-FOR-DEFEVALUATOR (CAR X)
+                                                       ARGS)))))))
+          (DEFUN-NX EV-CP-LST (X-LST A)
+                    (DECLARE (XARGS :MEASURE (ACL2-COUNT X-LST)
+                                    :WELL-FOUNDED-RELATION O<))
+                    (COND ((ENDP X-LST) NIL)
+                          (T (CONS (EV-CP (CAR X-LST) A)
+                                   (EV-CP-LST (CDR X-LST) A)))))))
+
+For the admission of EV-CP and EV-CP-LST we will use the relation O<
+(which is known to be well-founded on the domain recognized by O-P)
+and the measure (ACL2-COUNT X) for EV-CP and (ACL2-COUNT X-LST) for
+EV-CP-LST.  The non-trivial part of the measure conjecture is
+
+Goal
+(IMPLIES (AND (NOT (SYMBOLP X))
+              (NOT (ATOM X))
+              (NOT (EQ (CAR X) 'QUOTE))
+              (CONSP (CAR X)))
+         (O< (ACL2-COUNT (CADDR (CAR X)))
+             (ACL2-COUNT X))).
+Goal'
+Goal''
+Subgoal 3
+Subgoal 3'
+Subgoal 2
+Subgoal 2'
+Subgoal 1
+Subgoal 1'
+
+Q.E.D.
+
+That completes the proof of the measure theorem for EV-CP and EV-CP-LST.
+Thus, we admit these functions under the principle of definition. 
+We could deduce no constraints on the type of EV-CP, but we do observe
+that the type of EV-CP-LST is described by the theorem 
+(TRUE-LISTP (EV-CP-LST X-LST A)).  We used primitive type reasoning.
+
+Summary
+Form:  ( MUTUAL-RECURSION ( DEFUN EV-CP ...) ...)
+Rules: ((:DEFINITION ACL2-COUNT)
+        (:DEFINITION ATOM)
+        (:DEFINITION EQ)
+        (:DEFINITION NOT)
+        (:DEFINITION O-FINP)
+        (:DEFINITION O<)
+        (:ELIM CAR-CDR-ELIM)
+        (:FAKE-RUNE-FOR-LINEAR NIL)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE CAR-CONS)
+        (:REWRITE CDR-CONS)
+        (:TYPE-PRESCRIPTION ACL2-COUNT))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  1606
+((:DEFUN-NX EV-CP)
+ (:DEFUN-NX EV-CP-LST))
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP
+                                   EV-CP-LST APPLY-FOR-DEFEVALUATOR)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 50)
+
+
+ACL2 !>>(LOCAL
+            (DEFTHM EVAL-LIST-KWOTE-LST
+              (EQUAL (EV-CP-LST (KWOTE-LST ARGS) A)
+                     (TRUE-LIST-FIX ARGS))
+              :HINTS (("goal" :EXPAND ((:FREE (X Y) (EV-CP-LST (CONS X Y) A))
+                                       (EV-CP-LST NIL A)
+                                       (:FREE (X) (EV-CP (LIST 'QUOTE X) A)))
+                              :INDUCT (TRUE-LIST-FIX ARGS)))))
+
+*1 (the initial Goal, a key checkpoint) is pushed for proof by induction.
+
+We have been told to use induction.  One induction scheme is suggested
+by the induction hint.  
+
+We will induct according to a scheme suggested by (TRUE-LIST-FIX ARGS).
+
+This suggestion was produced using the :induction rule TRUE-LIST-FIX.
+If we let (:P A ARGS) denote *1 above then the induction scheme we'll
+use is
+(AND (IMPLIES (NOT (CONSP ARGS)) (:P A ARGS))
+     (IMPLIES (AND (CONSP ARGS) (:P A (CDR ARGS)))
+              (:P A ARGS))).
+This induction is justified by the same argument used to admit TRUE-LIST-FIX.
+When applied to the goal at hand the above induction scheme produces
+two nontautological subgoals.
+Subgoal *1/2
+Subgoal *1/1
+
+*1 is COMPLETED!
+Thus key checkpoint Goal is COMPLETED!
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EVAL-LIST-KWOTE-LST ...)
+Rules: ((:DEFINITION EQ)
+        (:DEFINITION EV-CP)
+        (:DEFINITION EV-CP-LST)
+        (:DEFINITION KWOTE)
+        (:DEFINITION KWOTE-LST)
+        (:DEFINITION RETURN-LAST)
+        (:DEFINITION TRUE-LIST-FIX)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:INDUCTION TRUE-LIST-FIX)
+        (:REWRITE CAR-CONS)
+        (:REWRITE CDR-CONS))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  197
+EVAL-LIST-KWOTE-LST
+
+
+ACL2 !>>(LOCAL
+            (DEFTHM TRUE-LIST-FIX-EV-LST
+              (EQUAL (TRUE-LIST-FIX (EV-CP-LST X A))
+                     (EV-CP-LST X A))
+              :HINTS (("goal" :INDUCT (LEN X)
+                              :IN-THEORY (E/D ((:INDUCTION LEN)))
+                              :EXPAND ((EV-CP-LST X A) (EV-CP-LST NIL A))))))
+
+*1 (the initial Goal, a key checkpoint) is pushed for proof by induction.
+
+We have been told to use induction.  One induction scheme is suggested
+by the induction hint.  
+
+We will induct according to a scheme suggested by (LEN X).
+
+This suggestion was produced using the :induction rule LEN.  If we
+let (:P A X) denote *1 above then the induction scheme we'll use is
+(AND (IMPLIES (NOT (CONSP X)) (:P A X))
+     (IMPLIES (AND (CONSP X) (:P A (CDR X)))
+              (:P A X))).
+This induction is justified by the same argument used to admit LEN.
+When applied to the goal at hand the above induction scheme produces
+two nontautological subgoals.
+Subgoal *1/2
+Subgoal *1/1
+
+*1 is COMPLETED!
+Thus key checkpoint Goal is COMPLETED!
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM TRUE-LIST-FIX-EV-LST ...)
+Rules: ((:DEFINITION EV-CP-LST)
+        (:DEFINITION TRUE-LIST-FIX)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:INDUCTION LEN)
+        (:REWRITE CAR-CONS)
+        (:REWRITE CDR-CONS)
+        (:TYPE-PRESCRIPTION EV-CP-LST))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  143
+TRUE-LIST-FIX-EV-LST
+
+
+ACL2 !>>(LOCAL (DEFTHM EV-COMMUTES-CAR
+                 (EQUAL (CAR (EV-CP-LST X A))
+                        (EV-CP (CAR X) A))
+                 :HINTS (("goal" :EXPAND ((EV-CP-LST X A) (EV-CP NIL A))
+                                 :IN-THEORY (ENABLE DEFAULT-CAR)))))
+
+Splitter note (see :DOC splitter) for Goal (2 subgoals).
+  if-intro: ((:DEFINITION EV-CP-LST))
+
+Subgoal 2
+Subgoal 1
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-COMMUTES-CAR ...)
+Rules: ((:DEFINITION EV-CP)
+        (:DEFINITION EV-CP-LST)
+        (:DEFINITION RETURN-LAST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE CAR-CONS)
+        (:REWRITE DEFAULT-CAR))
+Splitter rules (see :DOC splitter):
+  if-intro: ((:DEFINITION EV-CP-LST))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  91
+EV-COMMUTES-CAR
+
+
+ACL2 !>>(LOCAL (DEFTHM EV-LST-COMMUTES-CDR
+                 (EQUAL (CDR (EV-CP-LST X A))
+                        (EV-CP-LST (CDR X) A))
+                 :HINTS (("Goal" :EXPAND ((EV-CP-LST X A) (EV-CP-LST NIL A))
+                                 :IN-THEORY (ENABLE DEFAULT-CDR)))))
+
+Splitter note (see :DOC splitter) for Goal (2 subgoals).
+  if-intro: ((:DEFINITION EV-CP-LST))
+
+Subgoal 2
+Subgoal 1
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-LST-COMMUTES-CDR ...)
+Rules: ((:DEFINITION EV-CP-LST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE CDR-CONS)
+        (:REWRITE DEFAULT-CDR))
+Splitter rules (see :DOC splitter):
+  if-intro: ((:DEFINITION EV-CP-LST))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  79
+EV-LST-COMMUTES-CDR
+
+
+ACL2 !>>(DEFTHMD EV-CP-CONSTRAINT-0
+          (IMPLIES (AND (CONSP X)
+                        (SYNTAXP (NOT (EQUAL A ''NIL)))
+                        (NOT (EQUAL (CAR X) 'QUOTE)))
+                   (EQUAL (EV-CP X A)
+                          (EV-CP (CONS (CAR X)
+                                       (KWOTE-LST (EV-CP-LST (CDR X) A)))
+                                 NIL)))
+          :HINTS
+          (("Goal" :EXPAND ((:FREE (X) (HIDE X))
+                            (EV-CP X A)
+                            (:FREE (ARGS)
+                                   (EV-CP (CONS (CAR X) ARGS) NIL)))
+                   :IN-THEORY '(EVAL-LIST-KWOTE-LST TRUE-LIST-FIX-EV-LST
+                                                    CAR-CONS CDR-CONS))))
+Goal'
+
+Splitter note (see :DOC splitter) for Goal' (2 subgoals).
+  if-intro: ((:DEFINITION EV-CP))
+
+Subgoal 2
+Subgoal 1
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-0 ...)
+Rules: ((:DEFINITION EV-CP)
+        (:DEFINITION RETURN-LAST)
+        (:DEFINITION SYNP)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE CAR-CONS)
+        (:REWRITE CDR-CONS)
+        (:REWRITE EVAL-LIST-KWOTE-LST)
+        (:REWRITE TRUE-LIST-FIX-EV-LST))
+Splitter rules (see :DOC splitter):
+  if-intro: ((:DEFINITION EV-CP))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  331
+(:DEFTHMD EV-CP-CONSTRAINT-0)
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-0)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHM EV-CP-CONSTRAINT-1
+          (IMPLIES (SYMBOLP X)
+                   (EQUAL (EV-CP X A)
+                          (AND X (CDR (ASSOC-EQUAL X A)))))
+          :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+
+ACL2 Warning [Double-rewrite] in ( DEFTHM EV-CP-CONSTRAINT-1 ...):
+In a :REWRITE rule generated from EV-CP-CONSTRAINT-1, equivalence relation
+IFF is maintained at one problematic occurrence of variable X in the
+right-hand side, but not at any binding occurrence of X.  Consider
+replacing that occurrence of X in the right-hand side with 
+(DOUBLE-REWRITE X).  See :doc double-rewrite for more information on
+this issue.
+
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-1 ...)
+Rules: ((:DEFINITION EV-CP)
+        (:DEFINITION RETURN-LAST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Warnings:  Double-rewrite
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  82
+EV-CP-CONSTRAINT-1
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-1)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHM EV-CP-CONSTRAINT-2
+          (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'QUOTE))
+                   (EQUAL (EV-CP X A) (CADR X)))
+          :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-2 ...)
+Rules: ((:DEFINITION EQ)
+        (:DEFINITION EV-CP)
+        (:DEFINITION RETURN-LAST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  91
+EV-CP-CONSTRAINT-2
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-2)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHM EV-CP-CONSTRAINT-3
+          (IMPLIES (AND (CONSP X) (CONSP (CAR X)))
+                   (EQUAL (EV-CP X A)
+                          (EV-CP (CADDR (CAR X))
+                                 (PAIRLIS$ (CADR (CAR X))
+                                           (EV-CP-LST (CDR X) A)))))
+          :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-3 ...)
+Rules: ((:DEFINITION EQ)
+        (:DEFINITION EV-CP)
+        (:DEFINITION RETURN-LAST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  142
+EV-CP-CONSTRAINT-3
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-3)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHM EV-CP-CONSTRAINT-4
+          (IMPLIES (NOT (CONSP X-LST))
+                   (EQUAL (EV-CP-LST X-LST A) NIL))
+          :HINTS (("Goal" :EXPAND ((EV-CP-LST X-LST A)))))
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-4 ...)
+Rules: ((:DEFINITION EV-CP-LST)
+        (:DEFINITION NOT)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  38
+EV-CP-CONSTRAINT-4
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-4)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHM EV-CP-CONSTRAINT-5
+          (IMPLIES (CONSP X-LST)
+                   (EQUAL (EV-CP-LST X-LST A)
+                          (CONS (EV-CP (CAR X-LST) A)
+                                (EV-CP-LST (CDR X-LST) A))))
+          :HINTS (("Goal" :EXPAND ((EV-CP-LST X-LST A)))))
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-5 ...)
+Rules: ((:DEFINITION EV-CP-LST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  70
+EV-CP-CONSTRAINT-5
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-5)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHMD EV-CP-CONSTRAINT-6
+          (IMPLIES (AND (NOT (CONSP X)) (NOT (SYMBOLP X)))
+                   (EQUAL (EV-CP X A) NIL))
+          :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-6 ...)
+Rules: ((:DEFINITION EV-CP)
+        (:DEFINITION NOT)
+        (:DEFINITION RETURN-LAST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  67
+(:DEFTHMD EV-CP-CONSTRAINT-6)
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-6)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHMD EV-CP-CONSTRAINT-7
+          (IMPLIES (AND (CONSP X)
+                        (NOT (CONSP (CAR X)))
+                        (NOT (SYMBOLP (CAR X))))
+                   (EQUAL (EV-CP X A) NIL))
+          :HINTS (("Goal" :EXPAND ((EV-CP X A)))))
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-7 ...)
+Rules: ((:DEFINITION EQ)
+        (:DEFINITION EV-CP)
+        (:DEFINITION NOT)
+        (:DEFINITION RETURN-LAST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  114
+(:DEFTHMD EV-CP-CONSTRAINT-7)
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-7)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHM EV-CP-CONSTRAINT-8
+          (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'IF))
+                   (EQUAL (EV-CP X A)
+                          (IF (EV-CP (CADR X) A)
+                              (EV-CP (CADDR X) A)
+                            (EV-CP (CADDDR X) A))))
+          :HINTS
+          (("Goal" :EXPAND ((EV-CP X A)
+                            (:FREE (X) (HIDE X))
+                            (:FREE (FN ARGS)
+                                   (APPLY-FOR-DEFEVALUATOR FN ARGS))))))
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-8 ...)
+Rules: ((:DEFINITION APPLY-FOR-DEFEVALUATOR)
+        (:DEFINITION EQ)
+        (:DEFINITION EV-CP)
+        (:DEFINITION RETURN-LAST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE EV-COMMUTES-CAR)
+        (:REWRITE EV-LST-COMMUTES-CDR))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  203
+EV-CP-CONSTRAINT-8
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-8)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+
+ACL2 !>>(DEFTHM EV-CP-CONSTRAINT-9
+          (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'NOT))
+                   (EQUAL (EV-CP X A)
+                          (NOT (EV-CP (CADR X) A))))
+          :HINTS
+          (("Goal" :EXPAND ((EV-CP X A)
+                            (:FREE (X) (HIDE X))
+                            (:FREE (FN ARGS)
+                                   (APPLY-FOR-DEFEVALUATOR FN ARGS))))))
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM EV-CP-CONSTRAINT-9 ...)
+Rules: ((:DEFINITION APPLY-FOR-DEFEVALUATOR)
+        (:DEFINITION EQ)
+        (:DEFINITION EV-CP)
+        (:DEFINITION NOT)
+        (:DEFINITION RETURN-LAST)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE EV-COMMUTES-CAR))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  149
+EV-CP-CONSTRAINT-9
+
+
+ACL2 !>>(LOCAL (IN-THEORY (DISABLE EV-CP-CONSTRAINT-9)))
+
+Summary
+Form:  ( IN-THEORY (DISABLE ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+(:NUMBER-OF-ENABLED-RUNES 54)
+
+End of Encapsulated Events.
+
+Having verified that the encapsulated events validate the signatures
+of the ENCAPSULATE event, we discard the ephemeral theory and extend
+the original theory as directed by the signatures and the non-LOCAL
+events.
+
+The following constraint is associated with both of the functions EV-CP
+and EV-CP-LST:
+
+(AND (IMPLIES (AND (CONSP X)
+                   (SYNTAXP (NOT (EQUAL A ''NIL)))
+                   (NOT (EQUAL (CAR X) 'QUOTE)))
+              (EQUAL (EV-CP X A)
+                     (EV-CP (CONS (CAR X)
+                                  (KWOTE-LST (EV-CP-LST (CDR X) A)))
+                            NIL)))
+     (IMPLIES (SYMBOLP X)
+              (EQUAL (EV-CP X A)
+                     (AND X (CDR (ASSOC-EQUAL X A)))))
+     (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'QUOTE))
+              (EQUAL (EV-CP X A) (CADR X)))
+     (IMPLIES (AND (CONSP X) (CONSP (CAR X)))
+              (EQUAL (EV-CP X A)
+                     (EV-CP (CADDR (CAR X))
+                            (PAIRLIS$ (CADR (CAR X))
+                                      (EV-CP-LST (CDR X) A)))))
+     (IMPLIES (NOT (CONSP X-LST))
+              (EQUAL (EV-CP-LST X-LST A) NIL))
+     (IMPLIES (CONSP X-LST)
+              (EQUAL (EV-CP-LST X-LST A)
+                     (CONS (EV-CP (CAR X-LST) A)
+                           (EV-CP-LST (CDR X-LST) A))))
+     (IMPLIES (AND (NOT (CONSP X)) (NOT (SYMBOLP X)))
+              (EQUAL (EV-CP X A) NIL))
+     (IMPLIES (AND (CONSP X)
+                   (NOT (CONSP (CAR X)))
+                   (NOT (SYMBOLP (CAR X))))
+              (EQUAL (EV-CP X A) NIL))
+     (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'IF))
+              (EQUAL (EV-CP X A)
+                     (IF (EV-CP (CADR X) A)
+                         (EV-CP (CADDR X) A)
+                       (EV-CP (CADDDR X) A))))
+     (IMPLIES (AND (CONSP X) (EQUAL (CAR X) 'NOT))
+              (EQUAL (EV-CP X A)
+                     (NOT (EV-CP (CADR X) A)))))
+
+Summary
+Form:  ( ENCAPSULATE (((EV-CP * ...) ...) ...) ...)
+Rules: NIL
+Warnings:  Double-rewrite and Disable
+Time:  0.02 seconds (prove: 0.00, print: 0.00, other: 0.01)
+Prover steps counted:  3403
+(EV-CP EV-CP-LST)
+
+Summary
+Form:  ( PROGN (WITH-OUTPUT :OFF ...) ...)
+Rules: NIL
+Warnings:  Double-rewrite and Disable
+Time:  0.02 seconds (prove: 0.00, print: 0.00, other: 0.02)
+Prover steps counted:  3403
+(EV-CP EV-CP-LST)
+
+
+ACL2 !>>(DEFSTOBJ ST
+          (FLD :TYPE INTEGER :INITIALLY 0))
+
+Summary
+Form:  ( DEFSTOBJ ST ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ST
+
+
+ACL2 !>>(DEFUN READ-ST (ST)
+          (DECLARE (XARGS :STOBJS ST :GUARD T))
+          (FLD ST))
+
+Since READ-ST is non-recursive, its admission is trivial.  We could
+deduce no constraints on the type of READ-ST.
+
+(READ-ST ST) => *.
+
+Computing the guard conjecture for READ-ST....
+
+The guard conjecture for READ-ST is trivial to prove.  READ-ST is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN READ-ST ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+READ-ST
+
+
+ACL2 !>>(MEMOIZE 'READ-ST)
+
+ACL2 Observation in ( TABLE MEMOIZE-TABLE ...):  The function READ-ST
+has input stobj ST.  The memoization table for READ-ST will be cleared
+whenever this stobj is updated.  Any update of a stobj may therefore
+be significantly slower, perhaps by a factor of 5 or 10, when it is
+an input of a memoized function.
+READ-ST
+
+
+ACL2 !>>(ENCAPSULATE NIL
+          (LOCAL (INCLUDE-BOOK "st_lst_helper_book")))
+
+To verify that the encapsulated event correctly extends the current
+theory we will evaluate it.  The theory thus constructed is only ephemeral.
+
+Encapsulated Event:
+
+
+ACL2 !>>(LOCAL (INCLUDE-BOOK "st_lst_helper_book"))
+
+Summary
+Form:  ( INCLUDE-BOOK "st_lst_helper_book" ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/st_lst_helper_book.lisp"
+
+End of Encapsulated Event.
+
+ACL2 Observation in ( ENCAPSULATE NIL (LOCAL ...) ...):  The submitted
+encapsulate event has created no new ACL2 events, and thus is leaving
+the ACL2 logical world unchanged.  See :DOC encapsulate.
+
+Summary
+Form:  ( ENCAPSULATE NIL (LOCAL ...) ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+:EMPTY-ENCAPSULATE
+
+
+ACL2 !>>(DEFUN LEAK-CP (CLAUSE HINT ST)
+          (DECLARE (XARGS :STOBJS ST :GUARD T)
+                   (IGNORE HINT))
+          (LET* ((ST (UPDATE-FLD 0 ST))
+                 (V0 (READ-ST ST))
+                 (ST (UPDATE-FLD 1 ST))
+                 (V1 (READ-ST ST))
+                 (ACTUAL (FLD ST)))
+            (DECLARE (IGNORE V0))
+            (IF (EQUAL V1 ACTUAL)
+                (MV NIL (LIST CLAUSE) ST)
+              (MV NIL NIL ST))))
+
+Since LEAK-CP is non-recursive, its admission is trivial.  We observe
+that the type of LEAK-CP is described by the theorem 
+(AND (CONSP (LEAK-CP CLAUSE HINT ST)) (TRUE-LISTP (LEAK-CP CLAUSE HINT ST))).
+We used primitive type reasoning.
+
+(LEAK-CP * * ST) => (MV * * ST).
+
+Computing the guard conjecture for LEAK-CP....
+
+The guard conjecture for LEAK-CP is trivial to prove.  LEAK-CP is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN LEAK-CP ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+LEAK-CP
+
+
+ACL2 !>>(DEFTHM LEAK-CP-CORRECT
+         (IMPLIES
+          (AND
+           (PSEUDO-TERM-LISTP CLAUSE)
+           (ALISTP A)
+           (EV-CP (CONJOIN-CLAUSES (CLAUSES-RESULT (LEAK-CP CLAUSE HINT ST)))
+                  A))
+          (EV-CP (DISJOIN CLAUSE) A))
+         :RULE-CLASSES :CLAUSE-PROCESSOR)
+Goal'
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM LEAK-CP-CORRECT ...)
+Rules: ((:DEFINITION CLAUSES-RESULT)
+        (:DEFINITION CONJOIN)
+        (:DEFINITION CONJOIN-CLAUSES)
+        (:DEFINITION DISJOIN-LST)
+        (:DEFINITION FLD)
+        (:DEFINITION LEAK-CP)
+        (:DEFINITION READ-ST)
+        (:DEFINITION UPDATE-FLD)
+        (:DEFINITION UPDATE-NTH)
+        (:EXECUTABLE-COUNTERPART CONSP)
+        (:EXECUTABLE-COUNTERPART DISJOIN-LST)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART ZP)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE CAR-CONS)
+        (:REWRITE CDR-CONS)
+        (:REWRITE NTH-0-CONS))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  277
+LEAK-CP-CORRECT
+
+
+ACL2 !>>(DEFTHM NIL-PROVED
+          NIL
+          :HINTS (("Goal" :CLAUSE-PROCESSOR (LEAK-CP CLAUSE NIL ST)))
+          :RULE-CLASSES NIL)
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM NIL-PROVED ...)
+Rules: NIL
+Hint-events: ((:CLAUSE-PROCESSOR LEAK-CP))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+NIL-PROVED
+
+* Step 3:  That completes the admissibility check.  Each form read
+was an embedded event form and was admissible.  No LOCAL or SET-GUARD-
+CHECKING forms make it necessary to check for local incompatibilities,
+so we skip that check.
+
+* Step 4:  Write the certificate for 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/book_st_lst_nil.lisp"
+in 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/book_st_lst_nil.cert".
+
+* Step 5:  Compile the functions defined in 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/book_st_lst_nil.lisp".
+
+Note: Writing book expansion file, /Users/ember/dev/compiler-audit/hunts/world-
+rollback/book_st_lst_nil@expansion.lsp.
+
+
+Note: Deleting expansion file for the book, /Users/ember/dev/compiler-
+audit/hunts/world-rollback/book_st_lst_nil.lisp.
+
+Summary
+Form:  (CERTIFY-BOOK "book_st_lst_nil" ...)
+Rules: NIL
+Warnings:  Double-rewrite and Disable
+Time:  0.05 seconds (prove: 0.00, print: 0.00, other: 0.05)
+Prover steps counted:  3680
+ "/Users/ember/dev/compiler-audit/hunts/world-rollback/book_st_lst_nil.lisp"
+ACL2 !>

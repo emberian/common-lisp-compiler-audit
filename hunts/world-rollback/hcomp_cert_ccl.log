@@ -1,0 +1,282 @@
+Welcome to Clozure Common Lisp Version 1.14 darwinarm64!
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  19:52:12.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/ccl-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Note: Writing .port file, /Users/ember/dev/compiler-audit/hunts/world-
+rollback/probe_hcomp_stobj_nil.port.
+
+CERTIFICATION ATTEMPT FOR 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/probe_hcomp_stobj_nil.lisp"
+
+ACL2 Version 8.7
+
+* Step 1: Read 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/probe_hcomp_stobj_nil.lisp"
+and compute its book-hash.
+
+* Step 2:  There were 14 forms in the file.  We now attempt to establish
+that each form, whether local or non-local, is indeed an admissible
+embedded event form in the context of the previously admitted ones.
+
+
+ACL2 !>>(DEFSTOBJ KID FLD1)
+
+Summary
+Form:  ( DEFSTOBJ KID ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+KID
+
+
+ACL2 !>>(DEFSTOBJ MOM (KID-FIELD :TYPE KID))
+
+Summary
+Form:  ( DEFSTOBJ MOM ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+MOM
+
+
+ACL2 !>>(MAKE-EVENT (ER-PROGN (REMOVE-GLOBAL-STOBJ 'MOM STATE)
+                              (VALUE '(VALUE-TRIPLE :REMOVED))))
+
+Summary
+Form:  ( MAKE-EVENT (ER-PROGN ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+:REMOVED
+
+
+ACL2 !>>(MAKE-EVENT
+             (MV-LET (ERP VAL STATE)
+                     (INCLUDE-BOOK "bad_mom_book")
+               (DECLARE (IGNORE VAL))
+               (PROG2$ (CW "~%@R FAILED-INCLUDE-BOOK erp=~x0~%"
+                           ERP)
+                       (VALUE '(VALUE-TRIPLE :FAILED-INCLUDE-CLEANLY)))))
+
+
+ACL2 Error in ( DEFSTOBJ MOM ...):  The name MOM is in use as a single-
+threaded object.  The redefinition feature is currently off.  See :DOC
+ld-redefinition-action.
+
+
+Note: MOM was previously defined at the top level of the book being
+certified.
+
+
+Note: the current attempt to define MOM is being made in the last of
+the following books.
+
+   [Included books, outermost to innermost:
+    "/Users/ember/dev/compiler-audit/hunts/world-rollback/bad_mom_book.lisp"
+   ]
+
+ACL2 Error [Failure] in ( DEFSTOBJ MOM ...):  See :DOC failure.
+
+******** FAILED ********
+
+ACL2 Warning in ( INCLUDE-BOOK "bad_mom_book" ...):  The error reported
+above indicates that this book is incompatible with the current logical
+world.  The attempted INCLUDE-BOOK has failed.
+
+
+Summary
+Form:  ( INCLUDE-BOOK "bad_mom_book" ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+
+ACL2 Error [Failure] in ( INCLUDE-BOOK "bad_mom_book" ...):  See :DOC
+failure.
+
+******** FAILED ********
+
+@R FAILED-INCLUDE-BOOK erp=T
+
+Summary
+Form:  ( MAKE-EVENT (MV-LET ...))
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+:FAILED-INCLUDE-CLEANLY
+
+
+ACL2 !>>(MAKE-EVENT (ER-PROGN (ADD-GLOBAL-STOBJ 'MOM STATE)
+                              (VALUE '(VALUE-TRIPLE :RESTORED))))
+
+Summary
+Form:  ( MAKE-EVENT (ER-PROGN ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+:RESTORED
+
+
+ACL2 !>>(DEFUN MOM.UPDATE-FLD1 (VAL MOM)
+          (DECLARE (XARGS :STOBJS MOM))
+          (STOBJ-LET ((KID (KID-FIELD MOM)))
+                     (KID)
+                     (UPDATE-FLD1 VAL KID)
+                     MOM))
+
+Since MOM.UPDATE-FLD1 is non-recursive, its admission is trivial. 
+We observe that the type of MOM.UPDATE-FLD1 is described by the theorem
+(CONSP (MOM.UPDATE-FLD1 VAL MOM)).  We used the :type-prescription
+rule UPDATE-KID-FIELD.
+
+(MOM.UPDATE-FLD1 * MOM) => MOM.
+
+Computing the guard conjecture for MOM.UPDATE-FLD1....
+
+The guard conjecture for MOM.UPDATE-FLD1 is trivial to prove.  
+MOM.UPDATE-FLD1 is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN MOM.UPDATE-FLD1 ...)
+Rules: ((:TYPE-PRESCRIPTION UPDATE-KID-FIELD))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+MOM.UPDATE-FLD1
+
+
+ACL2 !>>(DEFUN MOM.FLD1 (MOM)
+          (DECLARE (XARGS :STOBJS MOM))
+          (STOBJ-LET ((KID (KID-FIELD MOM)))
+                     (VAL)
+                     (FLD1 KID)
+                     VAL))
+
+Since MOM.FLD1 is non-recursive, its admission is trivial.  We could
+deduce no constraints on the type of MOM.FLD1.
+
+(MOM.FLD1 MOM) => *.
+
+Computing the guard conjecture for MOM.FLD1....
+
+The guard conjecture for MOM.FLD1 is trivial to prove.  MOM.FLD1 is
+compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN MOM.FLD1 ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+MOM.FLD1
+
+
+ACL2 !>>(DEFUN TEST NIL
+          (DECLARE (XARGS :GUARD T))
+          (WITH-LOCAL-STOBJ MOM
+                            (MV-LET (VAL MOM)
+                                    (LET* ((MOM (MOM.UPDATE-FLD1 3 MOM))
+                                           (VAL1 (MOM.FLD1 MOM))
+                                           (MOM (MOM.UPDATE-FLD1 4 MOM))
+                                           (VAL2 (MOM.FLD1 MOM)))
+                                      (MV (EQUAL VAL1 VAL2) MOM))
+                              VAL)))
+
+Since TEST is non-recursive, its admission is trivial.  We could deduce
+no constraints on the type of TEST.
+
+Computing the guard conjecture for TEST....
+
+The guard conjecture for TEST is trivial to prove.  TEST is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN TEST ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+TEST
+
+
+ACL2 !>>(DEFTHM TRUE-PROP
+          (NOT (TEST))
+          :RULE-CLASSES NIL)
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM TRUE-PROP ...)
+Rules: ((:EXECUTABLE-COUNTERPART NOT)
+        (:EXECUTABLE-COUNTERPART TEST))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  2
+TRUE-PROP
+
+
+ACL2 !>>(MEMOIZE 'MOM.FLD1)
+
+ACL2 Observation in ( TABLE MEMOIZE-TABLE ...):  The function MOM.FLD1
+has input stobj MOM.  The memoization table for MOM.FLD1 will be cleared
+whenever this stobj is updated.  Any update of a stobj may therefore
+be significantly slower, perhaps by a factor of 5 or 10, when it is
+an input of a memoized function.
+MOM.FLD1
+
+
+ACL2 !>>(DEFTHM FALSE-PROP
+          (TEST)
+          :RULE-CLASSES NIL)
+Goal'
+
+([ A key checkpoint:
+
+Goal'
+NIL
+
+A goal of NIL, Goal', has been generated!  Obviously, the proof attempt
+has failed.
+
+])
+
+Summary
+Form:  ( DEFTHM FALSE-PROP ...)
+Rules: ((:EXECUTABLE-COUNTERPART TEST))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  3
+
+---
+The key checkpoint goal, below, may help you to debug this failure.
+See :DOC failure and see :DOC set-checkpoint-summary-limit.
+---
+
+*** Key checkpoint at the top level
+    before generating a goal of NIL (see :DOC nil-goal): ***
+
+Goal'
+NIL
+
+ACL2 Error [Failure] in ( DEFTHM FALSE-PROP ...):  See :DOC failure.
+
+******** FAILED ********
+
+ACL2 Warning in CERTIFY-BOOK:  The attempted CERTIFY-BOOK has failed
+while trying to establish the admissibility of one of the (local or
+non-local) forms in the book to be certified.
+
+
+Summary
+Form:  (CERTIFY-BOOK 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/probe_hcomp_stobj_nil"
+...)
+Rules: NIL
+Time:  0.07 seconds (prove: 0.00, print: 0.00, other: 0.06)
+Prover steps counted:  5
+
+ACL2 Error [Failure] in (CERTIFY-BOOK 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/probe_hcomp_stobj_nil"
+...):  See :DOC failure.
+
+******** FAILED ********
+ACL2 !>Bye.

@@ -1,0 +1,40 @@
+[
+  {
+    "host": "sbcl",
+    "seed": 9001,
+    "batches": 35,
+    "candidates_per_batch": 20,
+    "total_candidates": 700,
+    "hits_by_family": {
+      "warrant-guard-thm/badge-reset": 39,
+      "pb-instructions": 44,
+      "bind-free-force": 30,
+      "mfc-contextual/ap": 21,
+      "tp-free-force": 22,
+      "mfc-contextual/typeset": 21,
+      "mfc-contextual/rw+": 20,
+      "warrant-guard-thm/encap-nonlambda": 25
+    },
+    "hard_errors": 0,
+    "elapsed_sec": 10.12
+  },
+  {
+    "host": "ccl",
+    "seed": 9002,
+    "batches": 35,
+    "candidates_per_batch": 20,
+    "total_candidates": 700,
+    "hits_by_family": {
+      "mfc-contextual/rw+": 14,
+      "warrant-guard-thm/encap-nonlambda": 32,
+      "mfc-contextual/ap": 16,
+      "pb-instructions": 51,
+      "tp-free-force": 32,
+      "mfc-contextual/typeset": 19,
+      "bind-free-force": 38,
+      "warrant-guard-thm/badge-reset": 23
+    },
+    "hard_errors": 0,
+    "elapsed_sec": 24.37
+  }
+]

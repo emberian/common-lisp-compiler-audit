@@ -1,0 +1,141 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !> "ACL2"
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ KID ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+ KID
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ KID2 ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ KID2
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ PARENT ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+ PARENT
+ACL2 !>
+Since SWAP-K1 is non-recursive, its admission is trivial.  We observe
+that the type of SWAP-K1 is described by the theorem 
+(AND (CONSP (SWAP-K1 PARENT KID)) (TRUE-LISTP (SWAP-K1 PARENT KID))).
+We used primitive type reasoning.
+
+(SWAP-K1 PARENT KID) => (MV PARENT KID).
+
+Computing the guard conjecture for SWAP-K1....
+
+The guard conjecture for SWAP-K1 is trivial to prove.  SWAP-K1 is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN SWAP-K1 ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ SWAP-K1
+ACL2 !>
+Since SWAP-K2 is non-recursive, its admission is trivial.  We observe
+that the type of SWAP-K2 is described by the theorem 
+(AND (CONSP (SWAP-K2 PARENT KID)) (TRUE-LISTP (SWAP-K2 PARENT KID))).
+We used primitive type reasoning.
+
+(SWAP-K2 PARENT KID) => (MV PARENT KID).
+
+Computing the guard conjecture for SWAP-K2....
+
+The guard conjecture for SWAP-K2 is trivial to prove.  SWAP-K2 is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN SWAP-K2 ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ SWAP-K2
+ACL2 !>
+Since SET-K1 is non-recursive, its admission is trivial.  We observe
+that the type of SET-K1 is described by the theorem 
+(CONSP (SET-K1 V PARENT)).  We used the :type-prescription rule UPDATE-K1.
+
+(SET-K1 * PARENT) => PARENT.
+
+Computing the guard conjecture for SET-K1....
+
+The guard conjecture for SET-K1 is trivial to prove.  SET-K1 is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN SET-K1 ...)
+Rules: ((:TYPE-PRESCRIPTION UPDATE-K1))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ SET-K1
+ACL2 !>
+Since SET-K2 is non-recursive, its admission is trivial.  We observe
+that the type of SET-K2 is described by the theorem 
+(CONSP (SET-K2 V PARENT)).  We used the :type-prescription rule UPDATE-K2.
+
+(SET-K2 * PARENT) => PARENT.
+
+Computing the guard conjecture for SET-K2....
+
+The guard conjecture for SET-K2 is trivial to prove.  SET-K2 is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN SET-K2 ...)
+Rules: ((:TYPE-PRESCRIPTION UPDATE-K2))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ SET-K2
+ACL2 !>
+Since GET-K1 is non-recursive, its admission is trivial.  We could
+deduce no constraints on the type of GET-K1.
+
+(GET-K1 PARENT) => *.
+
+Computing the guard conjecture for GET-K1....
+
+The guard conjecture for GET-K1 is trivial to prove.  GET-K1 is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN GET-K1 ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ GET-K1
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ TMP ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ TMP
+ACL2 !>(<parent> <kid>)
+ACL2 !> V         8:x(DEFUN GET-K1 (PARENT) ...)
+ACL2 !>(<parent> <kid>)
+ACL2 !><parent>
+ACL2 !><parent>
+ACL2 !>2
+ACL2 !>Bye.

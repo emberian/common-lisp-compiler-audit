@@ -1,0 +1,16 @@
+{
+  "seed_start": 1000,
+  "count": 210,
+  "allow_found_triggers": false,
+  "elapsed_sec": 30.42,
+  "op_counts": {
+    "include-fail": 22,
+    "ld-fail": 32,
+    "progn-fail": 38,
+    "encap-fail": 33,
+    "certify-reset": 26,
+    "encap-local": 27,
+    "ubt": 32
+  },
+  "divergent_seeds": []
+}

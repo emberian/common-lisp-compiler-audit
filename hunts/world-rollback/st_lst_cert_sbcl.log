@@ -1,0 +1,99 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Note: Writing .port file, /Users/ember/dev/compiler-audit/hunts/world-
+rollback/st_lst_helper_book.port.
+
+CERTIFICATION ATTEMPT FOR 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/st_lst_helper_book.lisp"
+
+ACL2 Version 8.7
+
+* Step 1: Read 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/st_lst_helper_book.lisp"
+and compute its book-hash.
+
+* Step 2:  There were three forms in the file.  We now attempt to establish
+that each form, whether local or non-local, is indeed an admissible
+embedded event form in the context of the previously admitted ones.
+
+
+ACL2 !>>(DEFSTOBJ ST
+          (FLD :TYPE INTEGER :INITIALLY 0))
+
+Summary
+Form:  ( DEFSTOBJ ST ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+ST
+
+
+ACL2 !>>(DEFUN CONFLICT-FN NIL 1)
+
+Since CONFLICT-FN is non-recursive, its admission is trivial.  We observe
+that the type of CONFLICT-FN is described by the theorem 
+(EQUAL (CONFLICT-FN) 1).  
+
+Summary
+Form:  ( DEFUN CONFLICT-FN ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+CONFLICT-FN
+
+* Step 3:  That completes the admissibility check.  Each form read
+was an embedded event form and was admissible.  No LOCAL or SET-GUARD-
+CHECKING forms make it necessary to check for local incompatibilities,
+so we skip that check.
+
+ACL2 Warning [Guards] in (CERTIFY-BOOK "st_lst_helper_book" ...): 
+The book 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/st_lst_helper_book.lisp"
+defines the function CONFLICT-FN, which has not had its guards verified.
+See :DOC guards.
+
+
+* Step 4:  Write the certificate for 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/st_lst_helper_book.lisp"
+in 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/st_lst_helper_book.cert".
+
+
+* Step 5:  Compile the functions defined in 
+"/Users/ember/dev/compiler-audit/hunts/world-rollback/st_lst_helper_book.lisp".
+
+
+Note: Writing book expansion file, /Users/ember/dev/compiler-audit/hunts/world-
+rollback/st_lst_helper_book@expansion.lsp.
+
+
+Note: Deleting expansion file for the book, /Users/ember/dev/compiler-
+audit/hunts/world-rollback/st_lst_helper_book.lisp.
+
+Summary
+Form:  (CERTIFY-BOOK "st_lst_helper_book" ...)
+Rules: NIL
+Warnings:  Guards
+Time:  0.02 seconds (prove: 0.00, print: 0.00, other: 0.02)
+ "/Users/ember/dev/compiler-audit/hunts/world-rollback/st_lst_helper_book.lisp"
+ACL2 !>

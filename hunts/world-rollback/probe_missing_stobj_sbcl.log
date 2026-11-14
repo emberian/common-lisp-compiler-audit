@@ -1,0 +1,92 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !> "ACL2"
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ ST ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+ ST
+ACL2 !>
+Summary
+Form:  ( MAKE-EVENT (ER-PROGN ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :REMOVED-ST
+ACL2 !>
+To verify that the two encapsulated events correctly extend the current
+theory we will evaluate them.  The theory thus constructed is only
+ephemeral.
+
+Encapsulated Events:
+
+
+ACL2 !>>(LOCAL (DEFSTOBJ TMP DUMMY))
+
+Summary
+Form:  ( DEFSTOBJ TMP ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+TMP
+
+
+ACL2 !>>(LOCAL (MAKE-EVENT (ER-PROGN (ADD-GLOBAL-STOBJ 'ST STATE)
+                                     (VALUE '(VALUE-TRIPLE :READDED-ST)))))
+
+Summary
+Form:  ( MAKE-EVENT (ER-PROGN ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+:READDED-ST
+
+End of Encapsulated Events.
+
+ACL2 Observation in ( ENCAPSULATE NIL (LOCAL ...) ...):  The submitted
+encapsulate event has created no new ACL2 events, and thus is leaving
+the ACL2 logical world unchanged.  See :DOC encapsulate.
+
+Summary
+Form:  ( ENCAPSULATE NIL (LOCAL ...) ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :EMPTY-ENCAPSULATE
+ACL2 !>
+
+ACL2 Error in TOP-LEVEL:  Non-global stobj names, such as ST, are not
+allowed.  See :DOC add-global-stobj.
+
+ACL2 !>
+***********************************************
+************ ABORTING from raw Lisp ***********
+********** (see :DOC raw-lisp-error) **********
+Error:  The assertion (MEMBER-EQ NAME *NON-EXECUTABLE-USER-STOBJ-LST*) failed.
+***********************************************
+
+The message above might explain the error.  If not, and
+if you didn't cause an explicit interrupt (Control-C),
+then it may help to see :DOC raw-lisp-error.
+
+To enable breaks into the debugger (also see :DOC acl2-customization):
+(SET-DEBUGGER-ENABLE T)
+ACL2 !>Bye.

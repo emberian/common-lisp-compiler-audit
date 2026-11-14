@@ -1,0 +1,133 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !> "ACL2"
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ PARENT ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+ PARENT
+ACL2 !>
+To verify that the three encapsulated events correctly extend the current
+theory we will evaluate them.  The theory thus constructed is only
+ephemeral.
+
+Encapsulated Events:
+
+
+ACL2 !>>(LOCAL (DEFSTOBJ KID FLD))
+
+Summary
+Form:  ( DEFSTOBJ KID ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+KID
+
+
+ACL2 !>>(DEFUN CHECK-KID-UNVERIFIED (PARENT)
+          (DECLARE (XARGS :STOBJS PARENT
+                          :VERIFY-GUARDS NIL))
+          (TBL-BOUNDP 'KID PARENT))
+
+Since CHECK-KID-UNVERIFIED is non-recursive, its admission is trivial.
+We observe that the type of CHECK-KID-UNVERIFIED is described by the
+theorem 
+(OR (EQUAL (CHECK-KID-UNVERIFIED PARENT) T)
+    (EQUAL (CHECK-KID-UNVERIFIED PARENT)
+           NIL)).
+We used the :type-prescription rule TBL-BOUNDP.
+
+(CHECK-KID-UNVERIFIED PARENT) => *.
+
+Summary
+Form:  ( DEFUN CHECK-KID-UNVERIFIED ...)
+Rules: ((:TYPE-PRESCRIPTION TBL-BOUNDP))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+CHECK-KID-UNVERIFIED
+
+
+ACL2 !>>(DEFUN CHECK-KID-VERIFIED (PARENT)
+          (DECLARE (XARGS :STOBJS PARENT :VERIFY-GUARDS T))
+          (TBL-BOUNDP 'KID PARENT))
+
+Since CHECK-KID-VERIFIED is non-recursive, its admission is trivial.
+We observe that the type of CHECK-KID-VERIFIED is described by the
+theorem 
+(OR (EQUAL (CHECK-KID-VERIFIED PARENT) T)
+    (EQUAL (CHECK-KID-VERIFIED PARENT)
+           NIL)).
+We used the :type-prescription rule TBL-BOUNDP.
+
+(CHECK-KID-VERIFIED PARENT) => *.
+
+Computing the guard conjecture for CHECK-KID-VERIFIED....
+
+The guard conjecture for CHECK-KID-VERIFIED is trivial to prove.  
+CHECK-KID-VERIFIED is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN CHECK-KID-VERIFIED ...)
+Rules: ((:TYPE-PRESCRIPTION TBL-BOUNDP))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+CHECK-KID-VERIFIED
+
+End of Encapsulated Events.
+
+Having verified that the encapsulated events validate the signatures
+of the ENCAPSULATE event, we discard the ephemeral theory and extend
+the original theory as directed by the signatures and the non-LOCAL
+events.
+
+We export CHECK-KID-VERIFIED and CHECK-KID-UNVERIFIED.
+
+
+Summary
+Form:  ( ENCAPSULATE NIL (LOCAL ...) ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+ T
+ACL2 !>
+***********************************************
+************ ABORTING from raw Lisp ***********
+********** (see :DOC raw-lisp-error) **********
+Error:  Attempted to access a stobj-table entry for KID,
+which is not currently the name of a stobj.
+***********************************************
+
+The message above might explain the error.  If not, and
+if you didn't cause an explicit interrupt (Control-C),
+then it may help to see :DOC raw-lisp-error.
+
+To enable breaks into the debugger (also see :DOC acl2-customization):
+(SET-DEBUGGER-ENABLE T)
+
+Summary
+Form:  ( MAKE-EVENT (MV-LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+
+ACL2 Error [Failure] in ( MAKE-EVENT (MV-LET ...)):  See :DOC failure.
+
+******** FAILED ********
+ACL2 !>Bye.

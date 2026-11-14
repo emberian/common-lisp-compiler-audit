@@ -1,0 +1,174 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !> "ACL2"
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ BOGUS-ST ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+ BOGUS-ST
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ KID ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ KID
+ACL2 !>
+Summary
+Form:  ( MAKE-EVENT (ER-PROGN ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :REMOVED-KID
+ACL2 !>
+
+ACL2 Error in ( DEFSTOBJ KID ...):  The name KID is in use as a single-
+threaded object.  The redefinition feature is currently off.  See :DOC
+ld-redefinition-action.
+
+
+Note: KID was previously defined at the top level.
+
+
+Note: the current attempt to define KID is being made in the last of
+the following books.
+
+   [Included books, outermost to innermost:
+    "/Users/ember/dev/compiler-audit/hunts/world-rollback/bad_kid_book.lisp"
+   ]
+
+ACL2 Error [Failure] in ( DEFSTOBJ KID ...):  See :DOC failure.
+
+******** FAILED ********
+
+ACL2 Warning in ( INCLUDE-BOOK "bad_kid_book" ...):  The error reported
+above indicates that this book is incompatible with the current logical
+world.  The attempted INCLUDE-BOOK has failed.
+
+
+Summary
+Form:  ( INCLUDE-BOOK "bad_kid_book" ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+
+ACL2 Error [Failure] in ( INCLUDE-BOOK "bad_kid_book" ...):  See :DOC
+failure.
+
+******** FAILED ********
+
+@R FAILED-INCLUDE erp=T
+
+Summary
+Form:  ( MAKE-EVENT (MV-LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :POISONED-KID-DISCRIMINATOR
+ACL2 !>
+Summary
+Form:  ( MAKE-EVENT (ER-PROGN ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :RESTORED-KID
+ACL2 !>
+Summary
+Form:  ( DEFSTOBJ MOM ...)
+Rules: NIL
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+ MOM
+ACL2 !>
+Since READ-MOM-K is non-recursive, its admission is trivial.  We could
+deduce no constraints on the type of READ-MOM-K.
+
+(READ-MOM-K MOM) => *.
+
+Computing the guard conjecture for READ-MOM-K....
+
+The guard conjecture for READ-MOM-K is trivial to prove.  READ-MOM-K
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN READ-MOM-K ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ READ-MOM-K
+ACL2 !>
+Since READ-FRESH-MOM is non-recursive, its admission is trivial.  We
+could deduce no constraints on the type of READ-FRESH-MOM.
+
+Computing the guard conjecture for READ-FRESH-MOM....
+
+The guard conjecture for READ-FRESH-MOM is trivial to prove.  READ-FRESH-MOM
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN READ-FRESH-MOM ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ READ-FRESH-MOM
+ACL2 !>
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM READ-FRESH-MOM-IS-0 ...)
+Rules: ((:DEFINITION CREATE-KID)
+        (:DEFINITION CREATE-MOM)
+        (:DEFINITION READ-FRESH-MOM)
+        (:EXECUTABLE-COUNTERPART CONS)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART MV-NTH)
+        (:EXECUTABLE-COUNTERPART READ-MOM-K))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  22
+ READ-FRESH-MOM-IS-0
+ACL2 !>
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM READ-FRESH-MOM-IS-99 ...)
+Rules: ((:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART READ-FRESH-MOM))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  3
+ READ-FRESH-MOM-IS-99
+ACL2 !>Goal'
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM NIL-PROVED ...)
+Rules: ((:EXECUTABLE-COUNTERPART EQUAL)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Hint-events: ((:USE READ-FRESH-MOM-IS-0)
+              (:USE READ-FRESH-MOM-IS-99))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ NIL-PROVED
+ACL2 !>
+@R CREATOR-NIL-PROVED defined=T formula='NIL ttag=NIL ttags-seen=NIL
+skip-proofs=NIL redef=NIL
+
+Summary
+Form:  ( MAKE-EVENT (LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :DONE
+ACL2 !>Bye.
