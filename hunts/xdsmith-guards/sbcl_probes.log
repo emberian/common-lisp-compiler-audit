@@ -1,0 +1,855 @@
+This is SBCL 2.6.10, an implementation of ANSI Common Lisp.
+More information about SBCL is available at <http://www.sbcl.org/>.
+
+SBCL is free software, provided as is, with absolutely no warranty.
+It is mostly in the public domain; some portions are provided under
+BSD-style licenses.  See the CREDITS and COPYING files in the
+distribution for more information.
+
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ + ACL2 Version 8.7+ (a development snapshot based on ACL2 Version 8.7) +
+ +   built November 12, 2026  15:10:22.                                 +
+ +   (Git commit hash: 1d2b39a424eabeab269f189b37c29148d49fc516)        +
+ + Copyright (C) 2026, Regents of the University of Texas.              +
+ + ACL2 comes with ABSOLUTELY NO WARRANTY.  This is free software and   +
+ + you are welcome to redistribute it under certain conditions.  For    +
+ + details, see the LICENSE file distributed with ACL2.                 +
+ ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Project-dir-alist:
+((:SYSTEM . "/Users/ember/dev/acl2-fix/head-worktree/books/")).
+Type :help for help.
+Type (quit) to quit completely out of ACL2.
+
+ACL2 !>
+Summary
+Form:  ( DEFUN CHECK-SOUNDNESS-BUG-PROBE ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ CHECK-SOUNDNESS-BUG-PROBE
+ACL2 !>
+Since PROBE-FLET-DF-V is non-recursive, its admission is trivial. 
+We observe that the type of PROBE-FLET-DF-V is described by the theorem
+(EQUAL (PROBE-FLET-DF-V) T).  
+
+Computing the guard conjecture for PROBE-FLET-DF-V....
+
+The guard conjecture for PROBE-FLET-DF-V is trivial to prove, given
+the :executable-counterpart of DFP.  PROBE-FLET-DF-V is compliant with
+Common Lisp.
+
+Summary
+Form:  ( DEFUN PROBE-FLET-DF-V ...)
+Rules: ((:EXECUTABLE-COUNTERPART DFP))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-FLET-DF-V
+ACL2 !>
+Since PROBE-FLET-DF-U is non-recursive, its admission is trivial. 
+We observe that the type of PROBE-FLET-DF-U is described by the theorem
+(EQUAL (PROBE-FLET-DF-U) T).  
+
+Summary
+Form:  ( DEFUN PROBE-FLET-DF-U ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-FLET-DF-U
+ACL2 !>XDS-CONFIRMED-BUG|PROBE=BUG1-FLET-KNOWN-DFS|VERIFIED=NIL|LOGIC=T
+
+Summary
+Form:  ( MAKE-EVENT (LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :OK
+ACL2 !>
+Since PROBE-MACROLET-DF-V is non-recursive, its admission is trivial.
+We observe that the type of PROBE-MACROLET-DF-V is described by the
+theorem (EQUAL (PROBE-MACROLET-DF-V) T).  
+
+Computing the guard conjecture for PROBE-MACROLET-DF-V....
+
+The guard conjecture for PROBE-MACROLET-DF-V is trivial to prove, given
+the :executable-counterpart of DFP.  PROBE-MACROLET-DF-V is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN PROBE-MACROLET-DF-V ...)
+Rules: ((:EXECUTABLE-COUNTERPART DFP))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-MACROLET-DF-V
+ACL2 !>
+Since PROBE-MACROLET-DF-U is non-recursive, its admission is trivial.
+We observe that the type of PROBE-MACROLET-DF-U is described by the
+theorem (EQUAL (PROBE-MACROLET-DF-U) T).  
+
+Summary
+Form:  ( DEFUN PROBE-MACROLET-DF-U ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-MACROLET-DF-U
+ACL2 !>XDS-CONFIRMED-BUG|PROBE=BUG1B-MACROLET-KNOWN-DFS|VERIFIED=NIL|LOGIC=T
+
+Summary
+Form:  ( MAKE-EVENT (LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :OK
+ACL2 !>
+The admission of PROBE-REC-MV-DF-V is trivial, using the relation O<
+(which is known to be well-founded on the domain recognized by O-P)
+and the measure (ACL2-COUNT N).  We observe that the type of 
+PROBE-REC-MV-DF-V is described by the theorem 
+(AND (CONSP (PROBE-REC-MV-DF-V N D)) (TRUE-LISTP (PROBE-REC-MV-DF-V N D))).
+We used primitive type reasoning.
+
+(PROBE-REC-MV-DF-V * :DF) => (MV * *).
+
+Computing the guard conjecture for PROBE-REC-MV-DF-V....
+
+The guard conjecture for PROBE-REC-MV-DF-V is trivial to prove, given
+the :compound-recognizer rules NATP-COMPOUND-RECOGNIZER and 
+ZP-COMPOUND-RECOGNIZER and primitive type reasoning.  PROBE-REC-MV-DF-V
+is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PROBE-REC-MV-DF-V ...)
+Rules: ((:COMPOUND-RECOGNIZER NATP-COMPOUND-RECOGNIZER)
+        (:COMPOUND-RECOGNIZER ZP-COMPOUND-RECOGNIZER)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-REC-MV-DF-V
+ACL2 !>
+The admission of PROBE-REC-MV-DF-U is trivial, using the relation O<
+(which is known to be well-founded on the domain recognized by O-P)
+and the measure (ACL2-COUNT N).  We observe that the type of 
+PROBE-REC-MV-DF-U is described by the theorem 
+(AND (CONSP (PROBE-REC-MV-DF-U N D)) (TRUE-LISTP (PROBE-REC-MV-DF-U N D))).
+We used primitive type reasoning.
+
+(PROBE-REC-MV-DF-U * :DF) => (MV * *).
+
+Summary
+Form:  ( DEFUN PROBE-REC-MV-DF-U ...)
+Rules: ((:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-REC-MV-DF-U
+ACL2 !>
+ACL2 Warning [Guards] in TOP-LEVEL:  Guard-checking will be inhibited
+for some recursive calls, including PROBE-REC-MV-DF-U; see :DOC guard-
+checking-inhibited.
+
+XDS-CONFIRMED-BUG|PROBE=BUG2-MVLET-RETRY-KNOWN-DFS|VERIFIED=NIL|LOGIC=T
+
+Summary
+Form:  ( MAKE-EVENT (MV-LET ...))
+Rules: NIL
+Warnings:  Guards
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :OK
+ACL2 !>
+Since PROBE-FOR-DF-V is non-recursive, its admission is trivial.  We
+observe that the type of PROBE-FOR-DF-V is described by the theorem
+(TRUE-LISTP (PROBE-FOR-DF-V K)).  We used the :type-prescription rule
+COLLECT$.
+
+Computing the guard conjecture for PROBE-FOR-DF-V....
+
+The non-trivial part of the guard conjecture for PROBE-FOR-DF-V, given
+the :executable-counterparts of APPLY$-GUARD, DFP, EQL and NOT, is
+
+Goal
+(AND (IMPLIES (EQUAL K 100)
+              (LET ((LST (LIST (EXPT 2 K))))
+                (AND (TRUE-LISTP LST)
+                     (OR (NOT (MEMBER-EQUAL NEWV LST))
+                         (DFP NEWV)))))
+     (IMPLIES (DFP LOOP$-IVAR)
+              (LET ((X LOOP$-IVAR))
+                (AND (DFP X) (DFP (DF+ X 0)))))).
+Goal'
+
+Q.E.D.
+
+That completes the proof of the guard theorem for PROBE-FOR-DF-V. 
+PROBE-FOR-DF-V is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PROBE-FOR-DF-V ...)
+Rules: ((:CONGRUENCE IFF-IMPLIES-EQUAL-NOT)
+        (:DEFINITION BINARY-DF+)
+        (:DEFINITION MEMBER-EQUAL)
+        (:DEFINITION NOT)
+        (:EXECUTABLE-COUNTERPART APPLY$-GUARD)
+        (:EXECUTABLE-COUNTERPART CAR)
+        (:EXECUTABLE-COUNTERPART CDR)
+        (:EXECUTABLE-COUNTERPART CONS)
+        (:EXECUTABLE-COUNTERPART CONSP)
+        (:EXECUTABLE-COUNTERPART DFP)
+        (:EXECUTABLE-COUNTERPART EQL)
+        (:EXECUTABLE-COUNTERPART EXPT)
+        (:EXECUTABLE-COUNTERPART NOT)
+        (:EXECUTABLE-COUNTERPART TRUE-LISTP)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE DFP-DF-ROUND)
+        (:TYPE-PRESCRIPTION COLLECT$))
+Time:  0.01 seconds (prove: 0.00, print: 0.00, other: 0.01)
+Prover steps counted:  134
+ PROBE-FOR-DF-V
+ACL2 !>
+Since PROBE-FOR-DF-U is non-recursive, its admission is trivial.  We
+observe that the type of PROBE-FOR-DF-U is described by the theorem
+(TRUE-LISTP (PROBE-FOR-DF-U K)).  We used the :type-prescription rule
+COLLECT$.
+
+Summary
+Form:  ( DEFUN PROBE-FOR-DF-U ...)
+Rules: ((:TYPE-PRESCRIPTION COLLECT$))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-FOR-DF-U
+ACL2 !>XDS-CONFIRMED-BUG|PROBE=BUG3-LOOP-FOR-OFTYPE-DF|VERIFIED=(0)|LOGIC=
+(1267650600228229401496703205376)
+
+Summary
+Form:  ( MAKE-EVENT (LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :OK
+ACL2 !>Goal'
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM PROBE-EV$-ON-QUOTED-CONS ...)
+Rules: ((:DEFINITION EV$)
+        (:DEFINITION NOT)
+        (:EXECUTABLE-COUNTERPART SYNP)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:TYPE-PRESCRIPTION TAMEP))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  683
+ PROBE-EV$-ON-QUOTED-CONS
+ACL2 !>Subgoal 2
+Subgoal 1
+
+Q.E.D.
+
+Summary
+Form:  ( DEFTHM PROBE-EV$-ON-QUOTED-VAR-OR-QUOTE ...)
+Rules: ((:DEFINITION EV$)
+        (:DEFINITION TAMEP)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART SYNP)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  260
+ PROBE-EV$-ON-QUOTED-VAR-OR-QUOTE
+ACL2 !>
+ACL2 Warning [Non-rec] in ( DEFTHM PROBE-DFP-DF+-0 ...):  A :REWRITE
+rule generated from PROBE-DFP-DF+-0 will be triggered only by terms
+containing the function symbol BINARY-DF+, which has a non-recursive
+definition.  Unless this definition is disabled, this rule is unlikely
+ever to be used.
+
+
+Q.E.D.
+
+The storage of PROBE-DFP-DF+-0 depends upon the :compound-recognizer
+rule DFP-IMPLIES-RATIONALP and the :type-prescription rule DFP.
+
+Summary
+Form:  ( DEFTHM PROBE-DFP-DF+-0 ...)
+Rules: ((:COMPOUND-RECOGNIZER DFP-IMPLIES-RATIONALP)
+        (:DEFINITION BINARY-DF+)
+        (:EXECUTABLE-COUNTERPART IF)
+        (:REWRITE DFP-DF-ROUND)
+        (:TYPE-PRESCRIPTION DFP))
+Warnings:  Non-rec
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+Prover steps counted:  16
+ PROBE-DFP-DF+-0
+ACL2 !>
+Since PROBE-DO-DF-SHADOW-A-U is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PROBE-DO-DF-SHADOW-A-U.
+
+Summary
+Form:  ( DEFUN PROBE-DO-DF-SHADOW-A-U ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-DO-DF-SHADOW-A-U
+ACL2 !>
+Summary
+Form:  ( DEFCONST *PROBE-DO-A-LOGIC* ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+
+Summary
+Form:  ( MAKE-EVENT (CONS ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ *PROBE-DO-A-LOGIC*
+ACL2 !>
+Since PROBE-DO-DF-SHADOW-A-V is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PROBE-DO-DF-SHADOW-A-V.
+
+ACL2 Warning [Theory] in ( DEFUN PROBE-DO-DF-SHADOW-A-V ...):  The
+:DEFINITION rule for the built-in function FROM-DF is disabled by the
+theory expression 
+(E/D (APPLY$ APPLY$-LAMBDA EV$-LIST (:E TAMEP)
+             APPLY$-PRIMP
+             APPLY$-PRIM DO-BODY-GUARD-WRAPPER ...)
+     (EV$ DFP BINARY-DF+
+          FROM-DF TO-DF LEX-FIX L< ...)),
+but some expansions of its calls may still occur.  See :DOC theories-
+and-primitives.
+(See :DOC set-iprint to be able to see elided values in this message.)
+
+
+Computing the guard conjecture for PROBE-DO-DF-SHADOW-A-V....
+
+The non-trivial part of the guard conjecture for PROBE-DO-DF-SHADOW-A-V,
+given the :executable-counterparts of APPLY$-GUARD, DFP, EQL and NOT,
+primitive type reasoning and the :type-prescription rules ASSOC-EQ-SAFE
+and DO-BODY-GUARD-WRAPPER, is
+
+Goal
+(AND
+ (IMPLIES
+  (EQUAL K 100)
+  (LET ((V (EXPT 2 K)))
+   (AND
+    (DO-BODY-GUARD-WRAPPER
+         (AND (ALISTP (LIST (CONS 'V V)))
+              (DFP (CDR (ASSOC-EQ-SAFE 'V (LIST (CONS 'V V))))))
+         NIL)
+    (LET
+     ((TRIPLE
+       (TRUE-LIST-FIX
+        (APPLY$
+         (LAMBDA$ (ALIST)
+          (DECLARE
+           (XARGS
+            :GUARD
+            (DO-BODY-GUARD-WRAPPER (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'V ALIST))))
+                                   'NIL)))
+          (LET ((V (CDR (ASSOC-EQ-SAFE 'V ALIST))))
+            (DECLARE (IGNORABLE V))
+            (CONS ':RETURN
+                  (CONS (FROM-DF (BINARY-DF+ V (TO-DF '0)))
+                        (CONS (CONS (CONS 'V V) 'NIL) 'NIL)))))
+         (LIST ALIST)))))
+     (LET ((EXIT-FLG (CAR TRIPLE))
+           (NEW-ALIST (CADDR TRIPLE)))
+      (IMPLIES
+       (DO-BODY-GUARD-WRAPPER (AND (ALISTP ALIST)
+                                   (DFP (CDR (ASSOC-EQ-SAFE 'V ALIST))))
+                              NIL)
+       (CASE EXIT-FLG
+        ((NIL)
+         (AND
+          (DO-BODY-GUARD-WRAPPER
+               (AND (ALISTP NEW-ALIST)
+                    (DFP (CDR (ASSOC-EQ-SAFE 'V NEW-ALIST))))
+               NIL)
+          (L<
+           (LEX-FIX
+            (APPLY$
+             (LAMBDA$ (ALIST)
+              (DECLARE
+                (XARGS :GUARD (DO-BODY-GUARD-WRAPPER
+                                   (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'V ALIST))))
+                                   'NIL)))
+              (LET ((V (CDR (ASSOC-EQ-SAFE 'V ALIST))))
+                (DECLARE (IGNORABLE V))
+                (ACL2-COUNT '0)))
+             (LIST NEW-ALIST)))
+           (LEX-FIX
+            (APPLY$
+             (LAMBDA$ (ALIST)
+              (DECLARE
+                (XARGS :GUARD (DO-BODY-GUARD-WRAPPER
+                                   (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'V ALIST))))
+                                   'NIL)))
+              (LET ((V (CDR (ASSOC-EQ-SAFE 'V ALIST))))
+                (DECLARE (IGNORABLE V))
+                (ACL2-COUNT '0)))
+             (LIST ALIST))))))
+        (:LOOP-FINISH (DO-BODY-GUARD-WRAPPER
+                           (AND (ALISTP NEW-ALIST)
+                                (DFP (CDR (ASSOC-EQ-SAFE 'V NEW-ALIST))))
+                           NIL))
+        (OTHERWISE T))))))))
+ (IMPLIES (AND (DO-BODY-GUARD-WRAPPER (DFP (CDR (ASSOC-EQ-SAFE 'V ALIST)))
+                                      NIL)
+               (ALISTP ALIST))
+          (LET ((V (CDR (ASSOC-EQ-SAFE 'V ALIST))))
+            (AND (DFP V) (DFP (DF+ V 0)))))).
+Subgoal 2
+Subgoal 2.5
+Subgoal 2.5'
+Subgoal 2.4
+Subgoal 2.4'
+Subgoal 2.3
+Subgoal 2.3'
+Subgoal 2.2
+Subgoal 2.2'
+Subgoal 2.1
+Subgoal 2.1'
+Subgoal 1
+
+Q.E.D.
+
+That completes the proof of the guard theorem for PROBE-DO-DF-SHADOW-A-V.
+PROBE-DO-DF-SHADOW-A-V is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PROBE-DO-DF-SHADOW-A-V ...)
+Rules: ((:COMPOUND-RECOGNIZER DFP-IMPLIES-RATIONALP)
+        (:DEFINITION APPLY$)
+        (:DEFINITION APPLY$-LAMBDA)
+        (:DEFINITION APPLY$-PRIM)
+        (:DEFINITION ASSOC-EQUAL)
+        (:DEFINITION DO-BODY-GUARD-WRAPPER)
+        (:DEFINITION EV$-LIST)
+        (:DEFINITION NOT)
+        (:DEFINITION PAIRLIS$)
+        (:DEFINITION SYNP)
+        (:DEFINITION TRUE-LIST-FIX)
+        (:EXECUTABLE-COUNTERPART ALISTP)
+        (:EXECUTABLE-COUNTERPART APPLY$-GUARD)
+        (:EXECUTABLE-COUNTERPART APPLY$-PRIM)
+        (:EXECUTABLE-COUNTERPART APPLY$-PRIMP)
+        (:EXECUTABLE-COUNTERPART ASSOC-EQ-SAFE)
+        (:EXECUTABLE-COUNTERPART CAR)
+        (:EXECUTABLE-COUNTERPART CDR)
+        (:EXECUTABLE-COUNTERPART CONS)
+        (:EXECUTABLE-COUNTERPART CONSP)
+        (:EXECUTABLE-COUNTERPART DFP)
+        (:EXECUTABLE-COUNTERPART EQL)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART EXPT)
+        (:EXECUTABLE-COUNTERPART LAMBDA-OBJECT-BODY)
+        (:EXECUTABLE-COUNTERPART LAMBDA-OBJECT-FORMALS)
+        (:EXECUTABLE-COUNTERPART NOT)
+        (:EXECUTABLE-COUNTERPART PAIRLIS$)
+        (:EXECUTABLE-COUNTERPART TAMEP)
+        (:EXECUTABLE-COUNTERPART TRUE-LIST-FIX)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE CAR-CONS)
+        (:REWRITE CDR-CONS)
+        (:REWRITE PROBE-DFP-DF+-0)
+        (:REWRITE PROBE-EV$-ON-QUOTED-CONS)
+        (:REWRITE PROBE-EV$-ON-QUOTED-VAR-OR-QUOTE)
+        (:TYPE-PRESCRIPTION ASSOC-EQ-SAFE)
+        (:TYPE-PRESCRIPTION DO-BODY-GUARD-WRAPPER))
+Warnings:  Theory
+Time:  0.02 seconds (prove: 0.01, print: 0.00, other: 0.01)
+Prover steps counted:  35822
+ PROBE-DO-DF-SHADOW-A-V
+ACL2 !>XDS-CONFIRMED-BUG|PROBE=BUG4A-DO-WITH-PREMATURE-KNOWN-DFS|VERIFIED=0|LOGIC=
+1267650600228229401496703205376
+
+Summary
+Form:  ( MAKE-EVENT (LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :OK
+ACL2 !>
+Since PROBE-DO-DF-SHADOW-B-U is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PROBE-DO-DF-SHADOW-B-U.
+
+(PROBE-DO-DF-SHADOW-B-U :DF) => *.
+
+Summary
+Form:  ( DEFUN PROBE-DO-DF-SHADOW-B-U ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-DO-DF-SHADOW-B-U
+ACL2 !>
+Summary
+Form:  ( DEFCONST *PROBE-DO-B-LOGIC* ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+
+Summary
+Form:  ( MAKE-EVENT (CONS ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ *PROBE-DO-B-LOGIC*
+ACL2 !>
+Since PROBE-DO-DF-SHADOW-B-V is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PROBE-DO-DF-SHADOW-B-V.
+
+(PROBE-DO-DF-SHADOW-B-V :DF) => *.
+
+ACL2 Warning [Theory] in ( DEFUN PROBE-DO-DF-SHADOW-B-V ...):  The
+:DEFINITION rule for the built-in function FROM-DF is disabled by the
+theory expression 
+(E/D (APPLY$ APPLY$-LAMBDA EV$-LIST (:E TAMEP)
+             APPLY$-PRIMP
+             APPLY$-PRIM DO-BODY-GUARD-WRAPPER ...)
+     (EV$ DFP BINARY-DF+
+          FROM-DF TO-DF LEX-FIX L< ...)),
+but some expansions of its calls may still occur.  See :DOC theories-
+and-primitives.
+(See :DOC set-iprint to be able to see elided values in this message.)
+
+
+Computing the guard conjecture for PROBE-DO-DF-SHADOW-B-V....
+
+The non-trivial part of the guard conjecture for PROBE-DO-DF-SHADOW-B-V,
+given the :executable-counterparts of ALISTP, APPLY$-GUARD, ASSOC-EQ-SAFE,
+CDR, CONS, DFP, DO-BODY-GUARD-WRAPPER and EXPT, primitive type reasoning
+and the :type-prescription rules ASSOC-EQ-SAFE and DO-BODY-GUARD-WRAPPER,
+is
+
+Goal
+(AND
+ (LET
+  ((TRIPLE
+    (TRUE-LIST-FIX
+     (APPLY$
+      (LAMBDA$ (ALIST)
+       (DECLARE
+        (XARGS
+            :GUARD
+            (DO-BODY-GUARD-WRAPPER (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'Y ALIST))))
+                                   'NIL)))
+       (LET ((X (CDR (ASSOC-EQ-SAFE 'X ALIST)))
+             (Y (CDR (ASSOC-EQ-SAFE 'Y ALIST))))
+         (DECLARE (IGNORABLE X Y))
+         (CONS ':RETURN
+               (CONS (FROM-DF (BINARY-DF+ Y (TO-DF '0)))
+                     (CONS (CONS (CONS 'X X)
+                                 (CONS (CONS 'Y Y) 'NIL))
+                           'NIL)))))
+      (LIST ALIST)))))
+  (LET ((EXIT-FLG (CAR TRIPLE))
+        (NEW-ALIST (CADDR TRIPLE)))
+   (IMPLIES
+    (DO-BODY-GUARD-WRAPPER (AND (ALISTP ALIST)
+                                (DFP (CDR (ASSOC-EQ-SAFE 'Y ALIST))))
+                           NIL)
+    (CASE EXIT-FLG
+     ((NIL)
+      (AND
+       (DO-BODY-GUARD-WRAPPER (AND (ALISTP NEW-ALIST)
+                                   (DFP (CDR (ASSOC-EQ-SAFE 'Y NEW-ALIST))))
+                              NIL)
+       (L<
+        (LEX-FIX
+         (APPLY$
+          (LAMBDA$ (ALIST)
+           (DECLARE
+                (XARGS :GUARD (DO-BODY-GUARD-WRAPPER
+                                   (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'Y ALIST))))
+                                   'NIL)))
+           (LET ((X (CDR (ASSOC-EQ-SAFE 'X ALIST)))
+                 (Y (CDR (ASSOC-EQ-SAFE 'Y ALIST))))
+             (DECLARE (IGNORABLE X Y))
+             (ACL2-COUNT '0)))
+          (LIST NEW-ALIST)))
+        (LEX-FIX
+         (APPLY$
+          (LAMBDA$ (ALIST)
+           (DECLARE
+                (XARGS :GUARD (DO-BODY-GUARD-WRAPPER
+                                   (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'Y ALIST))))
+                                   'NIL)))
+           (LET ((X (CDR (ASSOC-EQ-SAFE 'X ALIST)))
+                 (Y (CDR (ASSOC-EQ-SAFE 'Y ALIST))))
+             (DECLARE (IGNORABLE X Y))
+             (ACL2-COUNT '0)))
+          (LIST ALIST))))))
+     (:LOOP-FINISH
+        (DO-BODY-GUARD-WRAPPER (AND (ALISTP NEW-ALIST)
+                                    (DFP (CDR (ASSOC-EQ-SAFE 'Y NEW-ALIST))))
+                               NIL))
+     (OTHERWISE T)))))
+ (IMPLIES (AND (DO-BODY-GUARD-WRAPPER (DFP (CDR (ASSOC-EQ-SAFE 'Y ALIST)))
+                                      NIL)
+               (ALISTP ALIST))
+          (LET ((Y (CDR (ASSOC-EQ-SAFE 'Y ALIST))))
+            (AND (DFP Y) (DFP (DF+ Y 0)))))).
+Subgoal 2
+Subgoal 2.5
+Subgoal 2.4
+Subgoal 2.3
+Subgoal 2.2
+Subgoal 2.1
+Subgoal 1
+
+Q.E.D.
+
+That completes the proof of the guard theorem for PROBE-DO-DF-SHADOW-B-V.
+PROBE-DO-DF-SHADOW-B-V is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PROBE-DO-DF-SHADOW-B-V ...)
+Rules: ((:COMPOUND-RECOGNIZER DFP-IMPLIES-RATIONALP)
+        (:DEFINITION APPLY$)
+        (:DEFINITION APPLY$-LAMBDA)
+        (:DEFINITION APPLY$-PRIM)
+        (:DEFINITION ASSOC-EQUAL)
+        (:DEFINITION DO-BODY-GUARD-WRAPPER)
+        (:DEFINITION EV$-LIST)
+        (:DEFINITION NOT)
+        (:DEFINITION PAIRLIS$)
+        (:DEFINITION SYNP)
+        (:DEFINITION TRUE-LIST-FIX)
+        (:EXECUTABLE-COUNTERPART ALISTP)
+        (:EXECUTABLE-COUNTERPART APPLY$-GUARD)
+        (:EXECUTABLE-COUNTERPART APPLY$-PRIM)
+        (:EXECUTABLE-COUNTERPART APPLY$-PRIMP)
+        (:EXECUTABLE-COUNTERPART ASSOC-EQ-SAFE)
+        (:EXECUTABLE-COUNTERPART CAR)
+        (:EXECUTABLE-COUNTERPART CDR)
+        (:EXECUTABLE-COUNTERPART CONS)
+        (:EXECUTABLE-COUNTERPART CONSP)
+        (:EXECUTABLE-COUNTERPART DFP)
+        (:EXECUTABLE-COUNTERPART DO-BODY-GUARD-WRAPPER)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART EXPT)
+        (:EXECUTABLE-COUNTERPART LAMBDA-OBJECT-BODY)
+        (:EXECUTABLE-COUNTERPART LAMBDA-OBJECT-FORMALS)
+        (:EXECUTABLE-COUNTERPART PAIRLIS$)
+        (:EXECUTABLE-COUNTERPART TAMEP)
+        (:EXECUTABLE-COUNTERPART TRUE-LIST-FIX)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE CAR-CONS)
+        (:REWRITE CDR-CONS)
+        (:REWRITE PROBE-DFP-DF+-0)
+        (:REWRITE PROBE-EV$-ON-QUOTED-CONS)
+        (:REWRITE PROBE-EV$-ON-QUOTED-VAR-OR-QUOTE)
+        (:TYPE-PRESCRIPTION ASSOC-EQ-SAFE)
+        (:TYPE-PRESCRIPTION DO-BODY-GUARD-WRAPPER))
+Warnings:  Theory
+Time:  0.02 seconds (prove: 0.01, print: 0.00, other: 0.01)
+Prover steps counted:  20807
+ PROBE-DO-DF-SHADOW-B-V
+ACL2 !>XDS-CONFIRMED-BUG|PROBE=BUG4B-DO-WITH-UNREMOVED-KNOWN-DFS|VERIFIED=0|LOGIC=
+1267650600228229401496703205376
+
+Summary
+Form:  ( MAKE-EVENT (LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :OK
+ACL2 !>
+Since PROBE-LEGAL-DO-DF-U is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PROBE-LEGAL-DO-DF-U.
+
+Summary
+Form:  ( DEFUN PROBE-LEGAL-DO-DF-U ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-LEGAL-DO-DF-U
+ACL2 !>
+Summary
+Form:  ( DEFCONST *PROBE-DO-CACHE-BEFORE* ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+
+Summary
+Form:  ( MAKE-EVENT (CONS ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ *PROBE-DO-CACHE-BEFORE*
+ACL2 !>
+Since PROBE-LEGAL-DO-DF-V is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PROBE-LEGAL-DO-DF-V.
+
+ACL2 Warning [Theory] in ( DEFUN PROBE-LEGAL-DO-DF-V ...):  The :DEFINITION
+rule for the built-in function FROM-DF is disabled by the theory expression
+(E/D (APPLY$ APPLY$-LAMBDA EV$-LIST (:E TAMEP)
+             APPLY$-PRIMP
+             APPLY$-PRIM DO-BODY-GUARD-WRAPPER ...)
+     (EV$ DFP BINARY-DF+
+          FROM-DF TO-DF LEX-FIX L< ...)),
+but some expansions of its calls may still occur.  See :DOC theories-
+and-primitives.
+(See :DOC set-iprint to be able to see elided values in this message.)
+
+
+Computing the guard conjecture for PROBE-LEGAL-DO-DF-V....
+
+The non-trivial part of the guard conjecture for PROBE-LEGAL-DO-DF-V,
+given the :executable-counterparts of ALISTP, APPLY$-GUARD, ASSOC-EQ-SAFE,
+CDR, CONS, DFP, DO-BODY-GUARD-WRAPPER, EXPT, RATIONALP and TO-DF, primitive
+type reasoning and the :type-prescription rules ASSOC-EQ-SAFE and 
+DO-BODY-GUARD-WRAPPER, is
+
+Goal
+(AND
+ (LET
+  ((TRIPLE
+    (TRUE-LIST-FIX
+     (APPLY$
+      (LAMBDA$ (ALIST)
+       (DECLARE
+        (XARGS
+            :GUARD
+            (DO-BODY-GUARD-WRAPPER (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'Z ALIST))))
+                                   'NIL)))
+       (LET ((Z (CDR (ASSOC-EQ-SAFE 'Z ALIST))))
+         (DECLARE (IGNORABLE Z))
+         (CONS ':RETURN
+               (CONS (FROM-DF (BINARY-DF+ Z (TO-DF '0)))
+                     (CONS (CONS (CONS 'Z Z) 'NIL) 'NIL)))))
+      (LIST ALIST)))))
+  (LET ((EXIT-FLG (CAR TRIPLE))
+        (NEW-ALIST (CADDR TRIPLE)))
+   (IMPLIES
+    (DO-BODY-GUARD-WRAPPER (AND (ALISTP ALIST)
+                                (DFP (CDR (ASSOC-EQ-SAFE 'Z ALIST))))
+                           NIL)
+    (CASE EXIT-FLG
+     ((NIL)
+      (AND
+       (DO-BODY-GUARD-WRAPPER (AND (ALISTP NEW-ALIST)
+                                   (DFP (CDR (ASSOC-EQ-SAFE 'Z NEW-ALIST))))
+                              NIL)
+       (L<
+        (LEX-FIX
+         (APPLY$
+          (LAMBDA$ (ALIST)
+           (DECLARE
+                (XARGS :GUARD (DO-BODY-GUARD-WRAPPER
+                                   (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'Z ALIST))))
+                                   'NIL)))
+           (LET ((Z (CDR (ASSOC-EQ-SAFE 'Z ALIST))))
+             (DECLARE (IGNORABLE Z))
+             (ACL2-COUNT '0)))
+          (LIST NEW-ALIST)))
+        (LEX-FIX
+         (APPLY$
+          (LAMBDA$ (ALIST)
+           (DECLARE
+                (XARGS :GUARD (DO-BODY-GUARD-WRAPPER
+                                   (AND (ALISTP ALIST)
+                                        (DFP (CDR (ASSOC-EQ-SAFE 'Z ALIST))))
+                                   'NIL)))
+           (LET ((Z (CDR (ASSOC-EQ-SAFE 'Z ALIST))))
+             (DECLARE (IGNORABLE Z))
+             (ACL2-COUNT '0)))
+          (LIST ALIST))))))
+     (:LOOP-FINISH
+        (DO-BODY-GUARD-WRAPPER (AND (ALISTP NEW-ALIST)
+                                    (DFP (CDR (ASSOC-EQ-SAFE 'Z NEW-ALIST))))
+                               NIL))
+     (OTHERWISE T)))))
+ (IMPLIES (AND (DO-BODY-GUARD-WRAPPER (DFP (CDR (ASSOC-EQ-SAFE 'Z ALIST)))
+                                      NIL)
+               (ALISTP ALIST))
+          (LET ((Z (CDR (ASSOC-EQ-SAFE 'Z ALIST))))
+            (AND (DFP Z) (DFP (DF+ Z 0)))))).
+Subgoal 2
+Subgoal 2.5
+Subgoal 2.4
+Subgoal 2.3
+Subgoal 2.2
+Subgoal 2.1
+Subgoal 1
+
+Q.E.D.
+
+That completes the proof of the guard theorem for PROBE-LEGAL-DO-DF-V.
+PROBE-LEGAL-DO-DF-V is compliant with Common Lisp.
+
+Summary
+Form:  ( DEFUN PROBE-LEGAL-DO-DF-V ...)
+Rules: ((:COMPOUND-RECOGNIZER DFP-IMPLIES-RATIONALP)
+        (:DEFINITION APPLY$)
+        (:DEFINITION APPLY$-LAMBDA)
+        (:DEFINITION APPLY$-PRIM)
+        (:DEFINITION ASSOC-EQUAL)
+        (:DEFINITION DO-BODY-GUARD-WRAPPER)
+        (:DEFINITION EV$-LIST)
+        (:DEFINITION NOT)
+        (:DEFINITION PAIRLIS$)
+        (:DEFINITION SYNP)
+        (:DEFINITION TRUE-LIST-FIX)
+        (:EXECUTABLE-COUNTERPART ALISTP)
+        (:EXECUTABLE-COUNTERPART APPLY$-GUARD)
+        (:EXECUTABLE-COUNTERPART APPLY$-PRIM)
+        (:EXECUTABLE-COUNTERPART APPLY$-PRIMP)
+        (:EXECUTABLE-COUNTERPART ASSOC-EQ-SAFE)
+        (:EXECUTABLE-COUNTERPART CAR)
+        (:EXECUTABLE-COUNTERPART CDR)
+        (:EXECUTABLE-COUNTERPART CONS)
+        (:EXECUTABLE-COUNTERPART CONSP)
+        (:EXECUTABLE-COUNTERPART DFP)
+        (:EXECUTABLE-COUNTERPART DO-BODY-GUARD-WRAPPER)
+        (:EXECUTABLE-COUNTERPART EQUAL)
+        (:EXECUTABLE-COUNTERPART EXPT)
+        (:EXECUTABLE-COUNTERPART LAMBDA-OBJECT-BODY)
+        (:EXECUTABLE-COUNTERPART LAMBDA-OBJECT-FORMALS)
+        (:EXECUTABLE-COUNTERPART PAIRLIS$)
+        (:EXECUTABLE-COUNTERPART RATIONALP)
+        (:EXECUTABLE-COUNTERPART TAMEP)
+        (:EXECUTABLE-COUNTERPART TO-DF)
+        (:EXECUTABLE-COUNTERPART TRUE-LIST-FIX)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:REWRITE CAR-CONS)
+        (:REWRITE CDR-CONS)
+        (:REWRITE PROBE-DFP-DF+-0)
+        (:REWRITE PROBE-EV$-ON-QUOTED-CONS)
+        (:REWRITE PROBE-EV$-ON-QUOTED-VAR-OR-QUOTE)
+        (:TYPE-PRESCRIPTION ASSOC-EQ-SAFE)
+        (:TYPE-PRESCRIPTION DO-BODY-GUARD-WRAPPER))
+Warnings:  Theory
+Time:  0.01 seconds (prove: 0.01, print: 0.00, other: 0.01)
+Prover steps counted:  15977
+ PROBE-LEGAL-DO-DF-V
+ACL2 !>XDS-CONFIRMED-BUG|PROBE=BUG5-DO-CLAUSE-LAMBDA-CL-CACHE|VERIFIED=0|LOGIC=
+1267650600228229401496703205376
+
+Summary
+Form:  ( MAKE-EVENT (LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :OK
+ACL2 !>
+Since PROBE-LOOP-MEMBER-V is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PROBE-LOOP-MEMBER-V.
+
+Computing the guard conjecture for PROBE-LOOP-MEMBER-V....
+
+The guard conjecture for PROBE-LOOP-MEMBER-V is trivial to prove, given
+the :executable-counterpart of APPLY$-GUARD, primitive type reasoning
+and the :type-prescription rule COLLECT$.  PROBE-LOOP-MEMBER-V is compliant
+with Common Lisp.
+
+Summary
+Form:  ( DEFUN PROBE-LOOP-MEMBER-V ...)
+Rules: ((:EXECUTABLE-COUNTERPART APPLY$-GUARD)
+        (:FAKE-RUNE-FOR-TYPE-SET NIL)
+        (:TYPE-PRESCRIPTION COLLECT$))
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-LOOP-MEMBER-V
+ACL2 !>
+Since PROBE-LOOP-MEMBER-U is non-recursive, its admission is trivial.
+We could deduce no constraints on the type of PROBE-LOOP-MEMBER-U.
+
+Summary
+Form:  ( DEFUN PROBE-LOOP-MEMBER-U ...)
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ PROBE-LOOP-MEMBER-U
+ACL2 !>XDS-CONFIRMED-BUG|PROBE=BUG6-PLAIN-LOOP-DROPPED-OFTYPE-AND-BODY-GUARD|VERIFIED\
+=NIL|LOGIC=T
+
+Summary
+Form:  ( MAKE-EVENT (MV-LET ...))
+Rules: NIL
+Time:  0.00 seconds (prove: 0.00, print: 0.00, other: 0.00)
+ :OK
+ACL2 !>
+Exiting the ACL2 read-eval-print loop.  To re-enter, execute (LP).
+* 

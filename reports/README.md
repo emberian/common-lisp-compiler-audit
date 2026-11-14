@@ -19,6 +19,14 @@ directory so previously shared URLs remain stable:
   and compiling all `inline` functions at `(safety 0)` whenever `(space 0)` is active;
   `CCL-CG-3` unsound `(/ (* c1 x) c2)` float rewrite erasing overflow and flipping `-0.0d0`;
   `CCL-CG-4a/4b` P2 compiler crashes & unsigned bit-offset shift).
+- **[ACL2-XDSMITH-GUARDS.md](ACL2-XDSMITH-GUARDS.md)** — Five new ACL2 soundness bug classes
+  (7 root causes, all proving `(defthm nil-proved nil)` on both SBCL 2.6.10 and CCL 1.14 with
+  `:ttag nil` and `:skip-proofs-seen nil`) + 3 robustness/host-divergence bugs uncovered by
+  XDsmith negative-guard fuzzing and guard-obligation source audit (`XDS-S1` plain `FOR`
+  `loop$` `of-type` `(member ...)`/`real`/`complex`/`(or)` dropping all loop & body guard
+  obligations; `XDS-S2` `flet`/`macrolet` dropping `known-dfs`; `XDS-S3` `mv-let` retry
+  dropping `known-dfs`; `XDS-S4` `FOR` `loop$` `of-type double-float`; `XDS-S5a/b/c` `DO`
+  `loop$` `known-dfs` + `*cl-cache*` poisoning; `XDS-R1..R3`).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
