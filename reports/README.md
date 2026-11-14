@@ -38,6 +38,14 @@ directory so previously shared URLs remain stable:
   obligations; `XDS-S2` `flet`/`macrolet` dropping `known-dfs`; `XDS-S3` `mv-let` retry
   dropping `known-dfs`; `XDS-S4` `FOR` `loop$` `of-type double-float`; `XDS-S5a/b/c` `DO`
   `loop$` `known-dfs` + `*cl-cache*` poisoning; `XDS-R1..R3`).
+- **[ACL2-STATE-CACHE-RISK.md](ACL2-STATE-CACHE-RISK.md)** — Three new certifiable-book ACL2
+  soundness bugs (all proving `(defthm nil-proved nil)` + `(certify-book ... :ttags nil)` on
+  both SBCL 2.6.10 and CCL 1.14) + 1 guard-verified `serialize-read` crash + 5 latent source
+  defects (`SCR-S1` `(memoize fn :aokp t)` + `apply$` + `defattach` + `:clause-processor`;
+  `SCR-S2` default `(memoize fn)` `:aokp nil` + `apply$-lambda` `*cl-cache*` `:GOOD` fast-path
+  bypassing `*warrant-reqs*` and `*aokp*`; `SCR-S3` `defattach` failing to propagate or enforce
+  `invariant-risk` on constrained stobj/array updaters; `SCR-R1` `(serialize-read file :hons-mode :never)`
+  stream desynchronization; `SCR-L1..L5`).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
