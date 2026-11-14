@@ -111,6 +111,11 @@ directory so previously shared URLs remain stable:
   `derive-type`; plus CCL 1.14 `x862-vset1` misplaced paren silently dropping `(safety 3)` 64-bit
   stores at `#x10000000` (`HC-W3-8`), `(complex single-float)` register clobber (`HC-W3-6`),
   for-effect `bad regspec: NIL` compiler crashes (`HC-W3-7`), and x86-64 `COMISD` `NaN` (`HC-W3-9`).
+- **[ACL2-ON-SBCL-2.6.10-SOUNDNESS.md](ACL2-ON-SBCL-2.6.10-SOUNDNESS.md)** — Focused ACL2-maintainer
+  digest consolidating the **three pure `:logic`-mode proofs of `NIL` in ACL2 caused by SBCL 2.6.10
+  `(safety 3)` compiler bugs** (`HC-W3-1` modular `ash-inverted`, `HC-W3-2` `char-code` `constraint-back`,
+  and `Z3-1-ACL2` `char-equal` `inherit-equality-p`), complete with minimal 16–22 line ACL2 scripts
+  and ready-to-drop `acl2-check.lisp` boot-time sanity assertions.
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
