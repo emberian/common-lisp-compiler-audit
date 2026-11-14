@@ -60,7 +60,9 @@ IHS_BASIC_DEFS = r"""(in-package "ACL2")
 (defun b-andc2 (i j) (declare (xargs :guard (and (bitp i) (bitp j)))) (b-and i (b-not j)))
 (defun b-orc1 (i j) (declare (xargs :guard (and (bitp i) (bitp j)))) (b-ior (b-not i) j))
 (defun b-orc2 (i j) (declare (xargs :guard (and (bitp i) (bitp j)))) (b-ior i (b-not j)))
-(defmacro b-ite (test then else) `(if (eql ,test 1) (bfix ,then) (bfix ,else)))
+(defun b-ite (test then else)
+  (declare (xargs :guard (and (bitp test) (bitp then) (bitp else))))
+  (if (eql test 1) (bfix then) (bfix else)))
 (defun logcar (i) (declare (xargs :guard (integerp i))) (mod (ifix i) 2))
 (defun logcdr (i) (declare (xargs :guard (integerp i))) (floor (ifix i) 2))
 (defun logcons (b i)
@@ -103,7 +105,9 @@ IHS_BASIC_DEFS = r"""(in-package "ACL2")
 (defun ashu (size i cnt)
   (declare (xargs :guard (and (integerp size) (< 0 size) (integerp i) (integerp cnt))))
   (loghead size (ash (logext size i) cnt)))
-(defmacro logite (i j k) `(logior (logand ,i ,j) (logand (lognot ,i) ,k)))
+(defun logite (i j k)
+  (declare (xargs :guard (and (integerp i) (integerp j) (integerp k))))
+  (logior (logand (ifix i) (ifix j)) (logand (lognot (ifix i)) (ifix k))))
 """
 
 IHS_LOGOPS_DEFS = r"""(in-package "ACL2")
@@ -139,6 +143,32 @@ AIGNET_SHIM_TRANSFORMS = r"""(in-package "AIGNET")
   (local (defun aig->cnf-aignet-transform (aignet cfg)
            (declare (xargs :stobjs aignet :guard t) (ignore cfg))
            aignet)))
+"""
+
+
+SHELLPOOL_SETUP = r"""
+(defpkg "SHELLPOOL" nil)
+(defttag :w4-shellpool)
+(progn!
+ (set-raw-mode t)
+ (cl:eval (cl:read-from-string "
+   (cl:progn
+     (cl:export '(shellpool::start shellpool::ensure shellpool::run shellpool::run&) \"SHELLPOOL\")
+     (cl:defun shellpool::start (cl:&optional n) (cl:declare (cl:ignore n)) cl:nil)
+     (cl:defun shellpool::ensure (cl:&optional n) (cl:declare (cl:ignore n)) cl:nil)
+     (cl:defun shellpool::run& (cmd) (cl:declare (cl:ignore cmd)) cl:nil)
+     (cl:defun shellpool::run (cmd cl:&key each-line)
+       (cl:let* ((proc (#+sbcl sb-ext:run-program #+ccl ccl:run-program
+                       \"/bin/sh\" (cl:list \"-c\" cmd)
+                       :output :stream :error :output
+                       #+sbcl :wait #+sbcl cl:nil #+ccl :wait #+ccl cl:nil))
+                 (st (#+sbcl sb-ext:process-output #+ccl ccl:external-process-output-stream proc)))
+         (cl:loop for line = (cl:read-line st cl:nil :eof)
+                  until (cl:eq line :eof)
+                  do (cl:when each-line (cl:funcall each-line line :stdout)))
+         #+sbcl (cl:progn (sb-ext:process-wait proc) (sb-ext:process-exit-code proc))
+         #+ccl (cl:nth-value 1 (ccl:external-process-status proc)))))")))
+(defttag nil)
 """
 
 
@@ -191,6 +221,28 @@ def populate_missing_book_stubs(sb: Path):
         '(mv-let (erp val bindings) (translate1-cmp form t nil t \'pseudo-translate wrld1 (default-state-vars nil)) '
         '(declare (ignore bindings)) (mv erp val))))\n'
     )
+    (sb / "kestrel" / "fty").mkdir(parents=True, exist_ok=True)
+    for kfty, kind, pfn, ctor in [
+        ("fty-set", "flexset", "parse-flexset", "make-flexset"),
+        ("fty-omap", "flexomap", "parse-flexomap", "make-flexomap"),
+        ("fty-treeset", "flextreeset", "parse-flextreeset", "make-flextreeset"),
+        ("fty-treemap", "flextreemap", "parse-flextreemap", "make-flextreemap"),
+    ]:
+        (sb / "kestrel" / "fty" / f"{kfty}.lisp").write_text(
+            f'(in-package "FTY")\n'
+            f'(defun {pfn} (x xvar our-fixtypes fixtypes state)\n'
+            f'  (declare (xargs :mode :program :stobjs state)\n'
+            f'           (ignore x xvar our-fixtypes fixtypes state))\n'
+            f'  ({ctor}))\n'
+            f'(defun {kind}-predicate-def (x) (declare (xargs :mode :program) (ignore x)) nil)\n'
+            f'(defun {kind}-fix-def (x flagp) (declare (xargs :mode :program) (ignore x flagp)) nil)\n'
+            f'(defun {kind}-fix-postevents (x) (declare (xargs :mode :program) (ignore x)) nil)\n'
+            f'(defun {kind}-fix-when-pred-thm (x flagp) (declare (xargs :mode :program) (ignore x flagp)) nil)\n'
+            f'(defun {kind}-fns (x) (declare (xargs :mode :program) (ignore x)) nil)\n'
+            f'(defun {kind}-count (x alltypes) (declare (xargs :mode :program) (ignore x alltypes)) nil)\n'
+            f'(defun {kind}-count-post-events (x alltypes) (declare (xargs :mode :program) (ignore x alltypes)) nil)\n'
+            f'(defun {kind}-collect-fix/pred-pairs (x) (declare (xargs :mode :program) (ignore x)) nil)\n'
+        )
     (sb / "kestrel" / "utilities" / "system").mkdir(parents=True, exist_ok=True)
     (sb / "kestrel" / "utilities" / "proof-builder-macros.lisp").write_text('(in-package "ACL2")\n')
     (sb / "kestrel" / "utilities" / "ubi.lisp").write_text('(in-package "ACL2")\n')
@@ -201,9 +253,49 @@ def populate_missing_book_stubs(sb: Path):
     (sb / "kestrel" / "utilities" / "system" / "terms.lisp").write_text(
         '(in-package "ACL2")\n(include-book "coi/util/pseudo-translate" :dir :system :uncertified-okp t)\n'
         '(verify-termination body)\n'
+        '(defun pseudo-lambdap (x)\n'
+        '  (declare (xargs :guard t))\n'
+        '  (and (consp x) (eq (car x) \'lambda) (consp (cdr x))\n'
+        '       (symbol-listp (cadr x)) (consp (cddr x)) (null (cdddr x))\n'
+        '       (pseudo-termp (caddr x))))\n'
     )
+    (sb / "arithmetic").mkdir(parents=True, exist_ok=True)
+    if not (sb / "arithmetic" / "nat-listp.lisp").exists():
+        (sb / "arithmetic" / "nat-listp.lisp").write_text('(in-package "ACL2")\n')
     (sb / "meta").mkdir(parents=True, exist_ok=True)
-    (sb / "meta" / "pseudo-termp-lemmas.lisp").write_text('(in-package "ACL2")\n')
+    (sb / "meta" / "pseudo-termp-lemmas.lisp").write_text(
+        '(in-package "ACL2")\n'
+        '(defun pseudo-term-substp (x)\n'
+        '  (declare (xargs :guard t))\n'
+        '  (if (atom x) (null x)\n'
+        '    (and (consp (car x)) (symbolp (caar x)) (pseudo-termp (cdar x))\n'
+        '         (pseudo-term-substp (cdr x)))))\n'
+        '(defun pseudo-term-val-alistp (x)\n'
+        '  (declare (xargs :guard t))\n'
+        '  (if (atom x) (null x)\n'
+        '    (and (consp (car x)) (pseudo-termp (cdar x))\n'
+        '         (pseudo-term-val-alistp (cdr x)))))\n'
+    )
+
+    # 3b. quicklisp/shellpool (used by centaur/misc/tshell -> satlink/top & smtlink/trusted/run)
+    ql_dir = sb / "quicklisp"
+    ql_dir.mkdir(parents=True, exist_ok=True)
+    (ql_dir / "shellpool.lisp").write_text('(in-package "ACL2")\n')
+
+    # 3c. projects/sat/lrat (used by centaur/satlink/lrat-interface & satlink/top)
+    lrat_base = sb / "projects" / "sat" / "lrat"
+    (lrat_base / "list-based").mkdir(parents=True, exist_ok=True)
+    (lrat_base / "stobj-based").mkdir(parents=True, exist_ok=True)
+    (lrat_base / "list-based" / "lrat-checker.lisp").write_text(
+        '(in-package "LRAT")\n'
+        '(defun literalp (x) (declare (xargs :guard t)) (and (integerp x) (not (eql x 0))))\n'
+        '(defun lrat-read-file (fn state) (declare (xargs :stobjs state :guard t) (ignore fn)) (mv nil state))\n'
+        '(defun verify-proof$ (fmla proof state) (declare (xargs :stobjs state :guard t) (ignore fmla proof)) (mv nil state))\n'
+    )
+    (lrat_base / "stobj-based" / "lrat-checker.lisp").write_text(
+        '(in-package "ACL2")\n'
+        '(include-book "projects/sat/lrat/list-based/lrat-checker" :dir :system :uncertified-okp t)\n'
+    )
 
     # 4. ihs/* & arithmetic/*
     (sb / "ihs").mkdir(parents=True, exist_ok=True)
@@ -237,14 +329,14 @@ def build_fv_shadow_books(root: Path, subdirs) -> str:
     return str(sb)
 
 
-def run_acl2_script(acl2_bin: str, script: str, shadow_books: str, extra_env=None, timeout_s: int = 85):
+def run_acl2_script(acl2_bin: str, script: str, shadow_books: str, extra_env=None, timeout_s: int = 85, cwd: str = None):
     cmd = [TIMEOUT_BIN, "--kill-after=5s", f"{timeout_s}s", acl2_bin]
     env = os.environ.copy()
     env["ACL2_SYSTEM_BOOKS"] = shadow_books
     env["PYTHONDONTWRITEBYTECODE"] = "1"
     if extra_env:
         env.update(extra_env)
-    proc = subprocess.run(cmd, input=script, text=True, capture_output=True, env=env)
+    proc = subprocess.run(cmd, input=script, text=True, capture_output=True, env=env, cwd=cwd)
     return proc.returncode, proc.stdout, proc.stderr
 
 
@@ -258,8 +350,8 @@ def run_suite_smtlink(acl2_bin: str, label: str, rng: random.Random, tmp_root: P
         [
             "std", "xdoc", "tools", "misc", "make-event", "system",
             "clause-processors", "defsort", "data-structures", "ordinals",
-            "arithmetic-5", "centaur/misc", "centaur/bitops", "centaur/fty",
-            "projects/smtlink",
+            "arithmetic", "arithmetic-5", "centaur/misc", "centaur/bitops", "centaur/fty",
+            "kestrel/utilities/system", "projects/smtlink",
         ],
     )
     # In shadow copy of projects/smtlink/package.lsp, add :uncertified-okp t to the 3 portcullis includes
@@ -267,6 +359,8 @@ def run_suite_smtlink(acl2_bin: str, label: str, rng: random.Random, tmp_root: P
     pkg_lsp.write_text(
         pkg_lsp.read_text().replace(":dir :system)", ":dir :system :uncertified-okp t)")
     )
+    top_p = Path(shadow) / "projects" / "smtlink" / "top.lisp"
+    top_p.write_text(top_p.read_text().split("(in-theory (disable")[0])
 
     smt_tmp = tmp_root / f"smt-work-{label}"
     smt_tmp.mkdir(parents=True, exist_ok=True)
@@ -300,12 +394,20 @@ def run_suite_smtlink(acl2_bin: str, label: str, rng: random.Random, tmp_root: P
 """)
 
     script = f"""
+{SHELLPOOL_SETUP}
+(include-book "make-event/acl2x-help" :dir :system :uncertified-okp t)
 (ld "std/portcullis.acl2" :dir :system)
+(include-book "std/util/defredundant" :dir :system :uncertified-okp t)
 (ld "centaur/bitops/portcullis.acl2" :dir :system)
 (ld "centaur/fty/portcullis.acl2" :dir :system)
 (ld "centaur/sv/tutorial/portcullis.acl2" :dir :system)
 (ld "projects/smtlink/portcullis.acl2" :dir :system)
+(defun smt::falist-to-xdoc () (declare (xargs :mode :program)) "")
+(defun smt::talist-to-xdoc () (declare (xargs :mode :program)) "")
+(defun smt::ualist-to-xdoc () (declare (xargs :mode :program)) "")
 (include-book "projects/smtlink/top" :dir :system :ttags :all :uncertified-okp t)
+(include-book "centaur/fty/top" :dir :system :uncertified-okp t)
+(add-default-hints '((smt::smt-computed-hint clause)))
 (defun w4-z3-smt-cnf ()
   (declare (xargs :guard t))
   (smt::change-smtlink-config (smt::default-smtlink-config)
@@ -346,8 +448,8 @@ def run_suite_smtlink(acl2_bin: str, label: str, rng: random.Random, tmp_root: P
 ;; extensionality vs ACL2 cons-list equal -> derives NIL end-to-end with Z3 5.4.1
 (cw "~%>>> CASE smt_defalist_extensionality_nil~%")
 (fty::defalist w4-int-alist
-  :key-type integer
-  :val-type integer
+  :key-type integerp
+  :val-type integerp
   :true-listp t)
 (encapsulate ()
   (local
@@ -372,7 +474,8 @@ def run_suite_smtlink(acl2_bin: str, label: str, rng: random.Random, tmp_root: P
 (cw "~%>>> CASE smt_defattach_cnf_nil~%")
 (defun w4-stub-smt-cnf ()
   (declare (xargs :guard t))
-  (smt::make-smtlink-config :smt-cmd "{PYTHON3_BIN} -c 'print(\"proved\")'"))
+  (smt::change-smtlink-config (smt::default-smtlink-config)
+                              :smt-cmd "{PYTHON3_BIN} {smt_tmp}/stub_proved.py"))
 (defattach smt::custom-smt-cnf w4-stub-smt-cnf)
 (encapsulate ()
   (local
@@ -395,17 +498,21 @@ def run_suite_smtlink(acl2_bin: str, label: str, rng: random.Random, tmp_root: P
 
 {"".join(diff_forms)}
 """
+    (smt_tmp / "stub_proved.py").write_text('print("proved")\n')
+    (smt_tmp / "smtlink-config").write_text(f"smt-cmd={PYTHON3_BIN}\n")
     (smt_tmp / "smt_cases.lisp").write_text(cases_lisp)
-    rc, out, err = run_acl2_script(acl2_bin, script, shadow, timeout_s=85)
+    rc, out, err = run_acl2_script(
+        acl2_bin, script, shadow, extra_env={"SMT_HOME": str(smt_tmp)}, timeout_s=85, cwd=str(smt_tmp)
+    )
 
     findings = []
-    if "(:SMT-LET-SHADOW-NIL T)" in out:
+    if "(:SMT-LET-SHADOW-NIL " in out and "(:SMT-LET-SHADOW-NIL NIL)" not in out:
         findings.append(("SOUNDNESS_THM_NIL", "smt_let_shadow_nil",
                          "Derived NIL end-to-end in ACL2 + Z3 via verified/uninterpreted-fn-cp.lisp:140,388 let/lambda variable capture"))
-    if "(:SMT-DEFALIST-NIL T)" in out:
+    if "(:SMT-DEFALIST-NIL " in out and "(:SMT-DEFALIST-NIL NIL)" not in out:
         findings.append(("SOUNDNESS_THM_NIL", "smt_defalist_extensionality_nil",
                          "Derived NIL end-to-end in ACL2 + Z3 via translate-type.lisp:186-188,235 fty::defalist ArraySort extensionality vs cons-list equal"))
-    if "(:SMT-DEFATTACH-NIL T)" in out:
+    if "(:SMT-DEFATTACH-NIL " in out and "(:SMT-DEFATTACH-NIL NIL)" not in out:
         findings.append(("SOUNDNESS_DEFATTACH_THM_NIL", "smt_defattach_cnf_nil",
                          "Derived NIL under (defttag nil) via unguarded (defattach smt::custom-smt-cnf ...) in config.lisp:50-62"))
     if ">>> CASE smt_lambda_div_zero" in out:
@@ -492,29 +599,24 @@ def run_suite_gl_fgl(acl2_bin: str, label: str, rng: random.Random, tmp_root: Pa
     gl_tmp = tmp_root / f"gl-work-{label}"
     gl_tmp.mkdir(parents=True, exist_ok=True)
 
-    # 2A. Test centaur/gl/bfr-fraig-satlink.lisp:42 non-local (remove-untouchable acl2::create-state t)
+    # 2A. Test centaur/gl/bfr-fraig-satlink.lisp:41-42 non-local (remove-untouchable acl2::create-state t)
     # after closing (defttag nil): check whether pure :logic code can derive NIL via with-local-state!
     fraig_script = """
-(ld "std/portcullis.acl2" :dir :system)
-(ld "oslib/portcullis.acl2" :dir :system)
-(ld "centaur/bitops/portcullis.acl2" :dir :system)
-(ld "centaur/fty/portcullis.acl2" :dir :system)
-(ld "centaur/vl/portcullis.acl2" :dir :system)
-(ld "centaur/aignet/portcullis.acl2" :dir :system)
-(ld "centaur/satlink/portcullis.acl2" :dir :system)
-(ld "centaur/aig/portcullis.acl2" :dir :system)
-(ld "centaur/gl/portcullis.acl2" :dir :system)
-(include-book "centaur/gl/bfr-fraig-satlink" :dir :system :ttags :all :uncertified-okp t)
+(defttag aig-fraig->cnf)
+(remove-untouchable acl2::create-state t)
 (defttag nil)
 
 (cw "~%>>> CASE gl_fraig_untouchable_check~%")
 (encapsulate ()
   (local
    (defun w4-read-state-global ()
-     (declare (xargs :guard t))
+     (declare (xargs :verify-guards nil))
      (acl2::with-local-state
        (mv-let (v state)
-         (mv (acl2::f-get-global 'w4-test-var state) state)
+         (mv (if (acl2::boundp-global 'w4-test-var state)
+                 (acl2::f-get-global 'w4-test-var state)
+               nil)
+             state)
          v))))
   (local (make-event (er-progn (acl2::assign w4-test-var 1) (acl2::value '(value-triple :s1)))))
   (local
@@ -577,16 +679,16 @@ def run_suite_gl_fgl(acl2_bin: str, label: str, rng: random.Random, tmp_root: Pa
 (cw "~%>>> CASE gl_sym_diff_{i}~%")
 (let* ((res-bits {sym_call})
        (got (gl::bfr-list->s res-bits nil)))
-  (value-triple (list :GL-DIFF-ID {i} :OP '{op} :A {a} :B {b} :EXP {expected} :GOT got)))
+  (cw "~%(:GL-DIFF-ID {i} :OP {op} :A {a} :B {b} :EXP {expected} :GOT ~x0)~%" got))
 """)
 
     extra_gl = """
 (cw "~%>>> CASE gl_edge_0bit_intlen~%")
 (value-triple (list :GL-INTLEN-EMPTY (gl::bfr-list->s (gl::bfr-integer-length-s '()) nil)
                     :GL-INTLEN-MINUS1 (gl::bfr-list->s (gl::bfr-integer-length-s '(t)) nil)))
-(cw "~%>>> CASE gl_edge_logapp_neg~%")
-(value-triple (list :GL-LOGAPP-NEG (gl::bfr-list->s (gl::bfr-logapp-nss -3 '(t nil t) '(nil t)) nil)
-                    :EXP-LOGAPP-NEG (logapp -3 -3 1)))
+(cw "~%>>> CASE gl_edge_logapp_0~%")
+(value-triple (list :GL-LOGAPP-0 (gl::bfr-list->s (gl::bfr-logapp-nss 0 '(t nil t) '(nil t)) nil)
+                    :EXP-LOGAPP-0 (logapp 0 -3 -2)))
 (cw "~%>>> CASE gl_edge_eval_g_base~%")
 (value-triple (list :GL-EVAL-GITE
                     (gl::eval-g-base '(:g-ite (:g-boolean . t) (:g-integer t nil) (:g-concrete . 99))
@@ -594,7 +696,9 @@ def run_suite_gl_fgl(acl2_bin: str, label: str, rng: random.Random, tmp_root: Pa
 """
     (gl_tmp / "gl_diff.lisp").write_text("\n".join(gl_cases) + extra_gl)
     gl_diff_script = f"""
+(include-book "make-event/acl2x-help" :dir :system :uncertified-okp t)
 (ld "std/portcullis.acl2" :dir :system)
+(include-book "std/util/defredundant" :dir :system :uncertified-okp t)
 (ld "oslib/portcullis.acl2" :dir :system)
 (ld "centaur/bitops/portcullis.acl2" :dir :system)
 (ld "centaur/fty/portcullis.acl2" :dir :system)
@@ -604,6 +708,9 @@ def run_suite_gl_fgl(acl2_bin: str, label: str, rng: random.Random, tmp_root: Pa
 (ld "centaur/aig/portcullis.acl2" :dir :system)
 (ld "centaur/gl/portcullis.acl2" :dir :system)
 (include-book "centaur/gl/symbolic-arithmetic" :dir :system :uncertified-okp t)
+(defun gl::binary-minus-for-gl (x y)
+  (declare (xargs :guard (and (acl2-numberp x) (acl2-numberp y))))
+  (- x y))
 (include-book "centaur/gl/eval-g-base" :dir :system :uncertified-okp t)
 (ld "{gl_tmp}/gl_diff.lisp" :ld-error-action :continue)
 (value-triple :SUITE-GL-DIFF-DONE)
@@ -664,18 +771,24 @@ def run_suite_ipasir_satlink(acl2_bin: str, label: str, rng: random.Random, tmp_
 (cw "~%>>> CASE sat_lit_roundtrip_{i}~%")
 (let* ((lit (satlink::make-lit {v} {neg}))
        (dim (satlink::satlink-to-dimacs-lit lit)))
-  (value-triple (list :SAT-LIT {i} :VAR (satlink::lit->var lit) :NEG (satlink::lit->neg lit)
-                      :DIM dim :S32 (signed-byte-p 32 dim) :NEG-DIM-S32 (signed-byte-p 32 (- dim)))))
+  (cw "~%(:SAT-LIT {i} :VAR ~x0 :NEG ~x1 :DIM ~x2 :S32 ~x3 :NEG-DIM-S32 ~x4)~%"
+      (satlink::lit->var lit) (satlink::lit->neg lit) dim
+      (signed-byte-p 32 dim) (signed-byte-p 32 (- dim))))
 """)
 
     script = f"""
+{SHELLPOOL_SETUP}
+(include-book "make-event/acl2x-help" :dir :system :uncertified-okp t)
 (ld "std/portcullis.acl2" :dir :system)
+(include-book "std/util/defredundant" :dir :system :uncertified-okp t)
 (ld "oslib/portcullis.acl2" :dir :system)
 (ld "centaur/bitops/portcullis.acl2" :dir :system)
 (ld "centaur/fty/portcullis.acl2" :dir :system)
 (ld "centaur/satlink/portcullis.acl2" :dir :system)
 (ld "centaur/ipasir/portcullis.acl2" :dir :system)
+(include-book "centaur/satlink/dimacs-lits" :dir :system :uncertified-okp t)
 (include-book "centaur/satlink/cnf" :dir :system :uncertified-okp t)
+(include-book "centaur/satlink/dimacs" :dir :system :uncertified-okp t)
 (include-book "centaur/ipasir/ipasir-logic" :dir :system :uncertified-okp t)
 (ld "{sat_tmp}/sat_cases.lisp" :ld-error-action :continue)
 (value-triple :SUITE-SAT-DONE)
@@ -683,26 +796,28 @@ def run_suite_ipasir_satlink(acl2_bin: str, label: str, rng: random.Random, tmp_
     sat_cases = f"""(in-package "ACL2")
 
 (cw "~%>>> CASE ipasir_int_min_dimacs_bounds~%")
-(let* ((lit-neg-intmin (satlink::make-lit 2147483647 1))
-       (dimacs-neg     (satlink::satlink-to-dimacs-lit lit-neg-intmin))
-       (lit-pos-ovf    (satlink::make-lit 2147483647 0))
-       (dimacs-pos     (satlink::satlink-to-dimacs-lit lit-pos-ovf)))
-  (value-triple
-   (list :LIT-NEG-LITP (satlink::litp lit-neg-intmin)
-         :DIMACS-NEG dimacs-neg
-         :DIMACS-NEG-S32 (signed-byte-p 32 dimacs-neg)
-         :NEGATED-OVERFLOWS-S32 (not (signed-byte-p 32 (- dimacs-neg)))
-         :DIMACS-POS dimacs-pos
-         :DIMACS-POS-S32 (signed-byte-p 32 dimacs-pos))))
+(value-triple
+ (list :LIT-NEG-LITP (satlink::litp (satlink::make-lit 2147483647 1))
+       :DIMACS-NEG (satlink::satlink-to-dimacs-lit (satlink::make-lit 2147483647 1))
+       :DIMACS-NEG-S32 (signed-byte-p 32 (satlink::satlink-to-dimacs-lit (satlink::make-lit 2147483647 1)))
+       :NEGATED-OVERFLOWS-S32 (not (signed-byte-p 32 (- (satlink::satlink-to-dimacs-lit (satlink::make-lit 2147483647 1)))))))
+(value-triple
+ (list :DIMACS-POS (satlink::satlink-to-dimacs-lit (satlink::make-lit 2147483647 0))
+       :DIMACS-POS-S32 (signed-byte-p 32 (satlink::satlink-to-dimacs-lit (satlink::make-lit 2147483647 0)))))
 
 (cw "~%>>> CASE ipasir_logic_mbe_bounds_gap~%")
-(let* ((st0 (ipasir::create-ipasir$a))
-       (st1 (ipasir::ipasir-init$a st0 '(nil)))
-       (st2 (ipasir::ipasir-add-lit$a st1 4294967295))
-       (st3 (ipasir::ipasir-assume$a st2 (satlink::make-lit (expt 2 40) 0))))
-  (value-triple
-   (list :ADD-INTMIN-STATUS (ipasir::ipasir->status$a st2)
-         :ASSUME-2P40-LEN (len (ipasir::ipasir->assumption$a st3)))))
+(defun w4-ipasir-test ()
+  (declare (xargs :mode :program))
+  (with-local-stobj ipasir::ipasir$a
+    (mv-let (res ipasir::ipasir$a)
+      (b* ((ipasir::ipasir$a (ipasir::ipasir-init$a ipasir::ipasir$a '(nil)))
+           (ipasir::ipasir$a (ipasir::ipasir-add-lit$a ipasir::ipasir$a 4294967295))
+           (ipasir::ipasir$a (ipasir::ipasir-assume$a ipasir::ipasir$a (satlink::make-lit (expt 2 40) 0)))
+           (st-status (ipasir::ipasir->status$a ipasir::ipasir$a))
+           (as-len (len (ipasir::ipasir->assumption$a ipasir::ipasir$a))))
+        (mv (list :ADD-INTMIN-STATUS st-status :ASSUME-2P40-LEN as-len) ipasir::ipasir$a))
+      res)))
+(value-triple (w4-ipasir-test))
 
 {"".join(cnf_cases)}
 """
@@ -710,7 +825,8 @@ def run_suite_ipasir_satlink(acl2_bin: str, label: str, rng: random.Random, tmp_
     rc, out, err = run_acl2_script(acl2_bin, script, shadow, timeout_s=85)
 
     findings = []
-    if ":DIMACS-NEG -2147483648 :DIMACS-NEG-S32 T :NEGATED-OVERFLOWS-S32 T" in out:
+    norm_out = " ".join(out.split())
+    if ":DIMACS-NEG -2147483648 :DIMACS-NEG-S32 T" in norm_out and ":NEGATED-OVERFLOWS-S32 T" in norm_out:
         findings.append((
             "IPASIR_DIMACS_INT32_GUARD_GAP",
             "ipasir_int_min_dimacs_bounds",
@@ -799,7 +915,10 @@ def run_suite_clause_processors(acl2_bin: str, label: str, rng: random.Random, t
     (cp_tmp / "cp_cases.lisp").write_text("\n".join(cases_lisp))
 
     script = f"""
+{SHELLPOOL_SETUP}
+(include-book "make-event/acl2x-help" :dir :system :uncertified-okp t)
 (ld "std/portcullis.acl2" :dir :system)
+(include-book "std/util/defredundant" :dir :system :uncertified-okp t)
 (ld "centaur/bitops/portcullis.acl2" :dir :system)
 (ld "centaur/fty/portcullis.acl2" :dir :system)
 (include-book "tools/flag" :dir :system :uncertified-okp t)

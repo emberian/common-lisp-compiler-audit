@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+HERE="$(cd "$(dirname "$0")" && pwd)"
+SRC_BOOKS="/Users/ember/dev/acl2-fix/head-worktree/books"
+SBCL_ACL2="/Users/ember/dev/acl2-fix/head-worktree/saved_acl2"
+CCL_ACL2="/Users/ember/dev/acl2-fix/ccl-worktree/saved_acl2"
+TIMEOUT_BIN="/opt/homebrew/bin/timeout"
+
+TMPDIR_ROOT="$(mktemp -d /tmp/w4-fv-defdata.XXXXXX)"
+cleanup() {
+  rm -rf "$TMPDIR_ROOT"
+}
+trap cleanup EXIT
+
+SHADOW_BOOKS="$TMPDIR_ROOT/books"
+mkdir -p "$SHADOW_BOOKS"
+
+for d in acl2s xdoc misc data-structures hacking std ordinals tools arithmetic-5 make-event clause-processors system defsort; do
+  cp -R "$SRC_BOOKS/$d" "$SHADOW_BOOKS/$d"
+done
+
+mkdir -p "$SHADOW_BOOKS/centaur/fty" \
+         "$SHADOW_BOOKS/coi/symbol-fns" \
+         "$SHADOW_BOOKS/coi/util" \
+         "$SHADOW_BOOKS/ihs" \
+         "$SHADOW_BOOKS/tau/bounders" \
+         "$SHADOW_BOOKS/kestrel/utilities/system"
+cp -R "$SRC_BOOKS/centaur/misc" "$SHADOW_BOOKS/centaur/misc"
+
+cat > "$SHADOW_BOOKS/centaur/fty/basetypes.lisp" <<'EOF'
+(in-package "ACL2")
+(include-book "std/basic/defs" :dir :system :uncertified-okp t)
+(include-book "std/basic/pos-fix" :dir :system :uncertified-okp t)
+(defun int-equiv (x y) (declare (xargs :guard t)) (equal (ifix x) (ifix y)))
+(defequiv int-equiv)
+(defcong int-equiv equal (ifix x) 1)
+(defun nat-equiv (x y) (declare (xargs :guard t)) (equal (nfix x) (nfix y)))
+(defequiv nat-equiv)
+(defcong nat-equiv equal (nfix x) 1)
+(defun bit-equiv (x y) (declare (xargs :guard t)) (equal (bfix x) (bfix y)))
+(defequiv bit-equiv)
+(defcong bit-equiv equal (bfix x) 1)
+EOF
+cat > "$SHADOW_BOOKS/centaur/fty/fixtype.lisp" <<'EOF'
+(in-package "FTY")
+(defmacro deffixtype (&rest args) (declare (ignore args)) '(value-triple :deffixtype-stub))
+(defmacro deffixcong (&rest args) (declare (ignore args)) '(value-triple :deffixcong-stub))
+(defmacro deffixequiv (&rest args) (declare (ignore args)) '(value-triple :deffixequiv-stub))
+EOF
+cp "$SHADOW_BOOKS/centaur/fty/fixtype.lisp" "$SHADOW_BOOKS/centaur/fty/fixequiv.lisp"
+
+cat > "$SHADOW_BOOKS/coi/symbol-fns/portcullis.acl2" <<'EOF'
+(in-package "ACL2")
+(defpkg "SYMBOL-FNS" (union-eq *acl2-exports* *common-lisp-symbols-from-main-lisp-package*))
+EOF
+echo '(in-package "ACL2")' > "$SHADOW_BOOKS/coi/symbol-fns/portcullis.lisp"
+cat > "$SHADOW_BOOKS/coi/symbol-fns/symbol-fns.lisp" <<'EOF'
+(in-package "SYMBOL-FNS")
+(defun join-symbols-lst (pkg lst)
+  (declare (xargs :mode :logic :guard (symbol-listp lst)) (ignore pkg))
+  (if (endp lst) "" (concatenate 'string (symbol-name (car lst)) (join-symbols-lst pkg (cdr lst)))))
+(defun join-symbols-fn (pkg lst)
+  (declare (xargs :mode :logic :guard (and (symbolp pkg) (symbol-listp lst))))
+  (intern$ (join-symbols-lst pkg lst) (if (symbolp pkg) (symbol-package-name pkg) "ACL2")))
+(defmacro suffix (&rest args) `(join-symbols-fn ,(car args) (list ,@args)))
+(defmacro prefix (&rest args) `(let ((xs (list ,@args))) (join-symbols-fn (car (last xs)) xs)))
+(defun item-to-numbered-symbol-list-rec (x k)
+  (declare (xargs :mode :logic :guard (and (symbolp x) (natp k))))
+  (if (zp k) nil
+    (cons (intern$ (concatenate 'string (symbol-name x) (coerce (explode-atom k 10) 'string))
+                   (if (symbolp x) (symbol-package-name x) "ACL2"))
+          (item-to-numbered-symbol-list-rec x (1- k)))))
+EOF
+cat > "$SHADOW_BOOKS/coi/util/pseudo-translate.lisp" <<'EOF'
+(in-package "ACL2")
+(program)
+(defun pseudo-translate-add-fns (fns-args wrld)
+  (if (endp fns-args) wrld
+    (let* ((fn (caar fns-args))
+           (args (cdar fns-args))
+           (wrld (putprop fn 'formals args wrld))
+           (wrld (putprop fn 'stobjs-in (make-list (len args)) wrld))
+           (wrld (putprop fn 'stobjs-out '(nil) wrld)))
+      (pseudo-translate-add-fns (cdr fns-args) wrld))))
+(defun pseudo-translate (form new-fns-and-args wrld)
+  (let ((wrld1 (pseudo-translate-add-fns new-fns-and-args wrld)))
+    (mv-let (erp val bindings)
+      (translate1-cmp form t nil t 'pseudo-translate wrld1 (default-state-vars nil))
+      (declare (ignore bindings))
+      (mv erp val))))
+EOF
+echo '(in-package "ACL2")' > "$SHADOW_BOOKS/tau/bounders/elementary-bounders.lisp"
+cat > "$SHADOW_BOOKS/ihs/basic-definitions.lisp" <<'EOF'
+(in-package "ACL2")
+(defun zbp (x) (declare (xargs :guard t)) (or (not (integerp x)) (= x 0)))
+(defun loghead (size i) (declare (xargs :guard (and (integerp size) (<= 0 size) (integerp i)))) (mod (ifix i) (expt 2 (nfix size))))
+(defun logtail (pos i) (declare (xargs :mode :logic :guard (and (integerp pos) (<= 0 pos) (integerp i)))) (floor (ifix i) (expt 2 (nfix pos))))
+(defun logcons (b i) (declare (xargs :guard (and (bitp b) (integerp i)))) (let ((i (ifix i))) (+ (if (= b 1) 1 0) (* 2 i))))
+(defthm unsigned-byte-p-loghead (implies (and (integerp size) (<= 0 size) (integerp i)) (unsigned-byte-p size (loghead size i))))
+(defthm logcons-type (implies (and (bitp b) (integerp i)) (integerp (logcons b i))) :rule-classes :type-prescription)
+(defthm unsigned-byte-p-logcons (implies (and (bitp b) (integerp size) (< 0 size) (unsigned-byte-p (1- size) i)) (unsigned-byte-p size (logcons b i))))
+EOF
+echo '(in-package "ACL2")' > "$SHADOW_BOOKS/kestrel/utilities/proof-builder-macros.lisp"
+echo '(in-package "ACL2")' > "$SHADOW_BOOKS/kestrel/utilities/ubi.lisp"
+cat > "$SHADOW_BOOKS/kestrel/utilities/make-termination-theorem.lisp" <<'EOF'
+(in-package "ACL2")
+(defun make-termination-theorem (fn wrld) (declare (xargs :mode :program) (ignore fn wrld)) 't)
+EOF
+cat > "$SHADOW_BOOKS/kestrel/utilities/system/terms.lisp" <<'EOF'
+(in-package "ACL2")
+(include-book "coi/util/pseudo-translate" :dir :system :uncertified-okp t)
+(verify-termination body)
+EOF
+
+run_one() {
+  local label="$1"
+  local bin="$2"
+  local log="$TMPDIR_ROOT/$label.log"
+  ACL2_SYSTEM_BOOKS="$SHADOW_BOOKS" "$TIMEOUT_BIN" --kill-after=5s 90s "$bin" < "$HERE/repro.lisp" >"$log" 2>&1 || true
+  if grep -q "MUTUAL-RECURSION" "$log" && grep -q "VAR-CROSS-REC-A" "$log"; then
+    echo "[$label] REPRODUCED defdata map ?valpred + cross-package record VAR-CROSS-REC-A collision:"
+    grep -E "KMAPP|VAR-CROSS-REC-A|MUTUAL-RECURSION" "$log" | head -n 6
+  else
+    echo "[$label] FAILED to reproduce"
+    tail -n 25 "$log"
+    return 1
+  fi
+}
+
+run_one "SBCL-2.6.10" "$SBCL_ACL2"
+run_one "CCL-1.14" "$CCL_ACL2"
+echo "PASS: w4-fv-acl2s-defdata-map-and-record"
