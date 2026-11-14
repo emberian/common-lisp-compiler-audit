@@ -14,11 +14,18 @@ for entry in "$BOOKS_SRC"/*; do
   ln -s "$entry" "$WORK/books/$(basename "$entry")"
 done
 rm "$WORK/books/centaur"
-mkdir -p "$WORK/books/centaur/vl/util"
+mkdir -p "$WORK/books/centaur/vl/util" "$WORK/books/centaur/misc"
 for entry in "$BOOKS_SRC/centaur"/*; do
-  [ "$(basename "$entry")" = "vl" ] && continue
+  [ "$(basename "$entry")" = "vl" ] || [ "$(basename "$entry")" = "misc" ] && continue
   ln -s "$entry" "$WORK/books/centaur/$(basename "$entry")"
 done
+for entry in "$BOOKS_SRC/centaur/misc"/*; do
+  ln -s "$entry" "$WORK/books/centaur/misc/$(basename "$entry")"
+done
+rm -f "$WORK/books/centaur/misc/fast-cons-memo.lisp" "$WORK/books/centaur/misc/fast-cons-memo-raw.lsp"
+cp "$BOOKS_SRC/centaur/misc/fast-cons-memo.lisp" "$WORK/books/centaur/misc/fast-cons-memo.lisp"
+cp "$BOOKS_SRC/centaur/misc/fast-cons-memo-raw.lsp" "$WORK/books/centaur/misc/fast-cons-memo-raw.lsp"
+
 cat > "$WORK/books/centaur/vl/util/cwtime.lisp" <<'EOF'
 (in-package "ACL2")
 (defmacro cwtime (form &rest args) (declare (ignore args)) form)

@@ -1,7 +1,8 @@
 (in-package "ACL2")
-(set-debugger-enable :never)
+(ld "std/package.lsp" :dir :system)
 (include-book "centaur/misc/fast-cons-memo" :dir :system :ttags :all :uncertified-okp t)
 :q
+(setf *debugger-hook* nil)
 (let ((cell (cons 'orig-car 'orig-cdr)))
   (with-fast-cons-memo
     :fnname outer-test
@@ -10,9 +11,6 @@
     :initial-size 8
     :body (progn
             (setq outer-arr (mark-visited-cons cell :smashed-memo outer-arr))
-            ;; Inner with-fast-cons-memo overwrites global *fast-cons-memo-array*,
-            ;; so outer exit restores inner-arr instead of outer-arr, leaving
-            ;; CELL permanently corrupted!
             (with-fast-cons-memo
               :fnname inner-test
               :return-vals (v)

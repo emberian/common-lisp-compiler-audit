@@ -154,6 +154,18 @@ directory so previously shared URLs remain stable:
   `SB-C::REVERSE-VALUES-LIST` (`W4-KC-4`), ACL2 `badge-table-guard1` dropping unprovable `NATP-MEASURE`
   obligations on `G2` warrants (`W4-KC-5`), ACL2(p) `parallel-raw.lisp` `(pand)` `NIL` vs `T` &
   `spec-mv-let` leak (`W4-KC-6`), and SBCL 2D `%with-array-data` dropping `start` (`W4-KC-7`).
+- **[W4-KIMI-BOOKS-AUDIT.md](W4-KIMI-BOOKS-AUDIT.md)** — Wave-4 Kimi K3.1-pro + dual-runtime verification
+  across 71 untouched Community Book files (`hunts/w4-kimi-books/`) uncovering 8 novel bug classes
+  (`repros/w4-kb-*`, all verified on SBCL 2.6.10 & CCL 1.14): `centaur/aig/aig-vars-fast` **proving `NIL`
+  two ways** (`aig-vars-unordered-list` missing `hons-copy` on `'a` + `eql` vs `equal` on strings) and
+  crashing `bad-atom<=` on `((nil . 2) . (nil . 1))`; `centaur/misc/fast-cons-memo-raw.lsp` nested
+  `with-fast-cons-memo` permanently smashing outer cons cells to `(:SMASHED-MEMO FCM-MARKER)`;
+  `tools/oracle-timelimit` macroexpansion `gensym` forcing `:suppress-lisp-errors t`, negative `limit`
+  bypass, and `:ret (mv ans state)` `NIL` state crash; `std/stobjs/2d-arr` (`:ttags nil`) `(expt 2 60)`
+  live-stobj `ec-call` crash; `tools/plev-ccl` `*print-length*` corruption & `tools/advise` broken
+  `advisedp$`; `std/util/bstar` (`:ttags nil`) `def-b*-decomp` `b*-decomp-temp-var` capture & `access`
+  double RHS evaluation; `tools/stobj-frame` (`:ttags nil`) unrenamed formal `v`; and 5 `:ttags nil`
+  macro/contract bugs across `defattach-bang`, `defenum`, `rewrite-dollar`, and `def-functional-instance`.
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,

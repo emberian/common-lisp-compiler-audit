@@ -1,6 +1,7 @@
 (in-package "ACL2")
 (set-debugger-enable :never)
 (ld "std/package.lsp" :dir :system)
+(ld "centaur/bitops/package.lsp" :dir :system)
 (defpkg "FTY" (union-eq *acl2-exports* *common-lisp-symbols-from-main-lisp-package*))
 (include-book "std/util/defredundant" :dir :system :uncertified-okp t)
 (include-book "make-event/acl2x-help" :dir :system :uncertified-okp t)
@@ -22,9 +23,8 @@
   nil
   :rule-classes nil
   :hints (("Goal"
-           :use ((:instance (:executable-counterpart len)
-                            (x (aig-vars-unordered-list
-                                (list (coerce '(#\v) 'string) "v")))))
+           :use ((:instance (:executable-counterpart aig-vars-unordered-list)
+                            (x (list (coerce '(#\v) 'string) "v"))))
            :in-theory (enable aig-vars-unordered-list))))
 
 ;; 3. Guard-verified raw Lisp crash on valid cons AIG variables ((nil . 2) . (nil . 1))
@@ -33,16 +33,9 @@
   (declare (xargs :guard t))
   (aig-vars-fast x))
 
-;; 4. Guard-verified raw Lisp zero-length array OOB in aigtab-collect-vars when queue=nil.
-(defun trigger-empty-queue ()
-  (declare (xargs :guard t))
-  (aigtab-collect-vars nil nil))
-
 (cw "~%[AVUL-ATOM-RAW: ~x0]~%" (aig-vars-unordered-list 'a))
 (cw "~%[AVUL-STRINGS-RAW: ~x0]~%" (aig-vars-unordered-list (list (coerce '(#\v) 'string) "v")))
 :q
 (handler-case (acl2::trigger-bad-atom '((nil . 2) . (nil . 1)))
   (error (e) (format t "~%[AIG-BAD-ATOM-CRASH: ~A]~%" e)))
-(handler-case (acl2::trigger-empty-queue)
-  (error (e) (format t "~%[AIGTAB-EMPTY-QUEUE-CRASH: ~A]~%" e)))
 (quit)
