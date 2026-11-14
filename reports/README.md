@@ -64,6 +64,15 @@ directory so previously shared URLs remain stable:
   `derive-type` bogus compile-time `WARNING` + `0.0d0/0.0d0` NaN -> `1.0d0` & signed-zero misfolds;
   `Z3-3` CCL 1.14 ARM64 `FCMP` unordered-`NaN` signed-condition reuse (17 `(safety 3)` miscompilations
   + silent `NaN -> 0/1` `truncate`/`ceiling` corruption, with Z3-verified 0-overhead fix).
+- **[ACL2-WORLD-ROLLBACK.md](ACL2-WORLD-ROLLBACK.md)** — World-rollback & raw-side-table leak
+  audit across `encapsulate` `local`, `:u`, failed `include-book`, and `make-event` (`WRB-S1`
+  shallow `*user-stobj-alist*` snapshot aliasing `parent.k1` and `parent.k2` via `swap-stobjs`,
+  certifying `NIL` with `:ttags nil`; `WRB-S2` child stobj retraction mutating `stobj-table`
+  `tbl-keys`/`tbl-count` without `memoize-flush`, certifying `NIL` with `:ttags nil`; `WRB-S3`
+  `hcomp-restore-defs` omitting `*the-live-<stobj>*` `redundant-raw-lisp-discriminator` on failed
+  `include-book`, proving `NIL` with zero `memoize`/`apply$`/`defattach`; `WRB-S4` raw `defstobj`
+  `(defg <st-lst> nil)` wiping stobj memo-flush list across `local` `include-book`, certifying
+  `NIL` with `:ttags nil`; plus `WRB-R1..R3` raw Lisp crashes & `redef!` gensym desync).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
