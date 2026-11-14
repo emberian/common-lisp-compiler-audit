@@ -13,6 +13,12 @@ directory so previously shared URLs remain stable:
 - **[SBCL-F18-ARM64-BRANCH-OVERFLOW.md](SBCL-F18-ARM64-BRANCH-OVERFLOW.md)** — Live SBCL
   2.6.10 darwin-arm64 assembler crash (`The value -262148 is not of type (SIGNED-BYTE 19)`)
   triggered by recursive `defun-inline` expansion.
+- **[CCL-CODEGEN-FINDINGS.md](CCL-CODEGEN-FINDINGS.md)** — Four new Clozure CL 1.14
+  compiler & backend bug families (`CCL-CG-1` ARM64/ARM32 2D `aset2` / 3D `aref3` register
+  clobber at `(safety 3)`; `CCL-CG-2` `nx1-expand-inline-call` copying `space` into `safety`
+  and compiling all `inline` functions at `(safety 0)` whenever `(space 0)` is active;
+  `CCL-CG-3` unsound `(/ (* c1 x) c2)` float rewrite erasing overflow and flipping `-0.0d0`;
+  `CCL-CG-4a/4b` P2 compiler crashes & unsigned bit-offset shift).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
