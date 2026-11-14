@@ -73,6 +73,16 @@ directory so previously shared URLs remain stable:
   `include-book`, proving `NIL` with zero `memoize`/`apply$`/`defattach`; `WRB-S4` raw `defstobj`
   `(defg <st-lst> nil)` wiping stobj memo-flush list across `local` `include-book`, certifying
   `NIL` with `:ttags nil`; plus `WRB-R1..R3` raw Lisp crashes & `redef!` gensym desync).
+- **[ACL2-PROVER-KERNEL.md](ACL2-PROVER-KERNEL.md)** — Pure-kernel prover, waterfall, proof-builder,
+  meta-extract, and warrant-theory audit (**6 pure-kernel `NIL` proofs** `PK-S1..S6` on both SBCL
+  & CCL with `:ttag nil`, zero books, zero stobjs, zero raw Lisp, plus 1 evaluation-theory /
+  attachment-consistency refutation `PK-E1` and 5 minor kernel defects `PK-M1..M5`: `PK-S1`
+  `type-set-relieve-hyps` free-var backtracking wiping forced `ttree` `'assumption` tags; `PK-S2`
+  `relieve-hyps1-unify-subst-lst` `bind-free` candidate advance wiping forced `ttree` `'assumption`
+  tags; `PK-S3` `meta-extract-contextual-fact` inheriting forced `type-alist`/`pot-lst` entries via
+  `mfc` and dropping `ttree`; `PK-S4` proof-builder `:apply-linear` leaking unreachable `IF`-branch
+  `governors` into top-level `:hyps`; `PK-S5` `encapsulate` Pass-2 `local` warrant world-drift in
+  `(:guard-theorem fn)`; `PK-S6` unrestricted post-bootstrap `badge-table` reset abandoning warrants).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
