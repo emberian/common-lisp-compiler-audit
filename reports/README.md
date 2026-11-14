@@ -100,6 +100,17 @@ directory so previously shared URLs remain stable:
   injection spoofing `"proved"`; `FV-6` `centaur/satlink` `"s UNSATISFIABLE"` prefix match &
   exit-code `1`/`139` acceptance; plus 4-target mechanical fuzzing blueprint; `:ttags nil` verified
   cores of `GL`, `FGL`, and `clause-processors/*` audited clean).
+- **[HOST-COMPILERS-WAVE3.md](HOST-COMPILERS-WAVE3.md)** — Nine zero-UB host-compiler bugs across
+  SBCL 2.6.10 (`HC-W3-1..5`, all at `(safety 3)`) and Clozure CL 1.14 (`HC-W3-6..9`), including
+  **two more pure guard-verified ACL2 `(defthm nil-proved nil)` proofs on SBCL 2.6.10**: `HC-W3-1`
+  ARM64 `srctran.lisp:4084` `ash-inverted` `(:not (integer * 0))` subtype-negation bug + `arm64/arith.lisp`
+  `LSL` `|x|>=64` (`(logand #xffffffffffffffff (ash 1 (- (the integer x))))` returning `0` at `x=-1`
+  and proving `NIL` in ACL2); `HC-W3-2` ARM64/x86-64 `constraint-back.lisp:505` `char-code` `eq`
+  non-singleton range negation (proving `NIL` in ACL2); `HC-W3-3` Unicode titlecase `char-equal`
+  asymmetry; `HC-W3-4` `(set-exclusive-or x x) => x`; `HC-W3-5` `(reduce #'logior #() ...)` wrong
+  `derive-type`; plus CCL 1.14 `x862-vset1` misplaced paren silently dropping `(safety 3)` 64-bit
+  stores at `#x10000000` (`HC-W3-8`), `(complex single-float)` register clobber (`HC-W3-6`),
+  for-effect `bad regspec: NIL` compiler crashes (`HC-W3-7`), and x86-64 `COMISD` `NaN` (`HC-W3-9`).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,

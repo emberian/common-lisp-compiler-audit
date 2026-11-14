@@ -5,13 +5,16 @@ on SBCL 2.2.9 / 2.6.8 / 2.6.9 / 2.6.10; see `X86-SBCL.md`), SBCL was the **corre
 every Batch-1 soundness finding where hosts disagreed (`ACL2-BUG-REPORT.md` S3, S6; `CCL.md`
 CCL-1..CCL-3).
 
-> **Subsequent Wave-1 & Wave-2 SBCL 2.6.10 findings:** See
+> **Subsequent Wave-1, Wave-2 & Wave-3 SBCL 2.6.10 findings:** See
 > [`reports/SBCL-2.6.10-FINDINGS.md`](reports/SBCL-2.6.10-FINDINGS.md) (`SB-2610-1..4`: four
-> live VOP register-lifetime soundness/segfault bugs at `(safety 3)`) and
+> live VOP register-lifetime soundness/segfault bugs at `(safety 3)`),
 > [`reports/Z3-COMPILER-EQUIVALENCE.md`](reports/Z3-COMPILER-EQUIVALENCE.md) (`Z3-1`,
-> `Z3-1-ACL2`, `Z3-2`: live `(safety 3)` `inherit-equality-p` lattice bug in
-> `equality-constraints.lisp` that directly proves `(defthm nil-proved nil)` in pure
-> guard-verified ACL2 on SBCL 2.6.10 via `char-equal`, plus `same-arg` float misfolds).
+> `Z3-1-ACL2`, `Z3-2`: live `(safety 3)` `inherit-equality-p` lattice bug proving `NIL` in
+> ACL2 via `char-equal`, plus `same-arg` float misfolds), and
+> [`reports/HOST-COMPILERS-WAVE3.md`](reports/HOST-COMPILERS-WAVE3.md) (`HC-W3-1..5`: five more
+> live `(safety 3)` bugs — including `HC-W3-1` ARM64 `ash-inverted` and `HC-W3-2` `char-code`
+> `constraint-back`, **both of which prove `(defthm nil-proved nil)` in pure guard-verified ACL2
+> on SBCL 2.6.10**).
 
 Two SBCL compiler defects were found in the initial Batch-1 fuzzing sweep:
 
