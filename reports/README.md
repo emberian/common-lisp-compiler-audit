@@ -166,6 +166,18 @@ directory so previously shared URLs remain stable:
   `advisedp$`; `std/util/bstar` (`:ttags nil`) `def-b*-decomp` `b*-decomp-temp-var` capture & `access`
   double RHS evaluation; `tools/stobj-frame` (`:ttags nil`) unrenamed formal `v`; and 5 `:ttags nil`
   macro/contract bugs across `defattach-bang`, `defenum`, `rewrite-dollar`, and `def-functional-instance`.
+- **[W4-ACL2S-FV-FUZZ-FINDINGS.md](W4-ACL2S-FV-FUZZ-FINDINGS.md)** — Wave-4 mechanical fuzzing campaign
+  across `books/acl2s/` (`fuzz_acl2s_deep.py`, 91/91 per host) and `books/centaur/{gl,satlink,ipasir}`,
+  `books/clause-processors/`, and `books/projects/smtlink/` (`fuzz_gl_fgl_cp.py`, 130/130 per host + Z3 5.4.1)
+  uncovering 6 novel Community Book bug classes (`repros/w4-fv-*`, all verified on SBCL 2.6.10 & CCL 1.14):
+  end-to-end ACL2 + Z3 5.4.1 **`(defthm ... nil)` `Q.E.D.`** via lambda/`let` variable shadowing in verified
+  clause processor `projects/smtlink/verified/uninterpreted-fn-cp.lisp`; non-local
+  `(remove-untouchable acl2::create-state t)` in `centaur/gl/bfr-fraig-satlink.lisp:41-42` leaking
+  `create-state` into subsequent `(defttag nil)` code and **proving `NIL` (`Q.E.D.`)**; pure `:logic`
+  (`:ttags nil`) `!sym` outer-variable capture, bare `!`, and unguarded `match-fun` crash in
+  `acl2s/match.lisp`; `parse-defunc` ignoring `pseudo-translate` `erp` and crashing `(safety 0)`
+  `all-fnnames1` (`SIGSEGV` on SBCL); `acl2s/defdata/{map,record}.lisp` `?valpred` copy-paste & cross-package
+  field collision; and `satlink`/`ipasir` `INT32_MIN` (`-2147483648`) + `2^31` Dimacs 32-bit overflow.
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,

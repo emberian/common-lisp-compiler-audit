@@ -43,6 +43,4 @@
        (s (ipasir::ipasir-add-lit$a s 4294967295))
        (s (ipasir::ipasir-assume$a s (satlink::make-lit (expt 2 40) 0))))
     (mv (list :ADD-INTMIN-STATUS (consp s)) state)))
-(mv-let (res state) (w4-ipasir-test state)
-  (declare (ignore state))
-  res)
+(w4-ipasir-test state)

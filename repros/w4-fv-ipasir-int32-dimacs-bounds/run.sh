@@ -34,10 +34,10 @@ with tempfile.TemporaryDirectory(prefix="w4-fv-ipasir-") as td:
     for label, acl2_bin in [("SBCL-2.6.10", m.SBCL_ACL2), ("CCL-1.14", m.CCL_ACL2)]:
         rc, out, err = m.run_acl2_script(acl2_bin, repro_lisp, shadow, timeout_s=85)
         norm = " ".join(out.split())
-        if ":DIMACS-NEG -2147483648" in norm and ":NEGATED-OVERFLOWS-S32 T" in norm and ":DIMACS-POS-S32 NIL" in norm and ":ADD-INTMIN-STATUS" in norm:
-            print(f"[{label}] REPRODUCED ipasir/satlink INT32_MIN + 2^31 Dimacs overflow & 2^40 assumption:")
+        if ":DIMACS-NEG -2147483648" in norm and ":NEGATED-OVERFLOWS-S32 T" in norm and ":DIMACS-POS-S32 NIL" in norm and "Out of bounds literal" in norm:
+            print(f"[{label}] REPRODUCED satlink/ipasir INT32_MIN + 2^31 Dimacs overflow & ipasir-add-lit$a mismatch:")
             for line in out.splitlines():
-                if any(k in line for k in (":LIT-NEG-LITP", ":DIMACS-POS", ":ADD-INTMIN-STATUS")):
+                if any(k in line for k in (":LIT-NEG-LITP", ":DIMACS-POS", "Out of bounds literal")):
                     print(" ", line)
         else:
             print(f"[{label}] FAILED to reproduce (rc={rc})")
