@@ -9,19 +9,22 @@ import argparse
 import os
 import random
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
+SRC_BOOKS = "/Users/ember/dev/acl2-fix/head-worktree/books"
 SBCL_ACL2 = "/Users/ember/dev/acl2-fix/head-worktree/saved_acl2"
 CCL_ACL2 = "/Users/ember/dev/acl2-fix/ccl-worktree/saved_acl2"
-SHADOW_BOOKS = "/tmp/w3-acl2s-harness/books"
 TIMEOUT_BIN = "/opt/homebrew/bin/timeout"
 
 PREAMBLE = """
 (defpkg "FTY" *acl2-exports*)
 (ld "std/package.lsp" :dir :system)
+(ld "hacking/hacker-pkg.lsp" :dir :system)
+(ld "hacking/rewrite-code-pkg.lsp" :dir :system)
 (ld "data-structures/portcullis.acl2" :dir :system)
 (ld "coi/symbol-fns/portcullis.acl2" :dir :system)
 (ld "acl2s/package.lsp" :dir :system)
@@ -35,6 +38,97 @@ PREAMBLE = """
 (include-book "acl2s/properties" :dir :system :ttags :all :uncertified-okp t)
 (in-package "ACL2S")
 """
+
+
+def build_shadow_books(root: Path) -> str:
+    """Create a temporary read-write copy of minimal needed books without touching head-worktree."""
+    sb = root / "books"
+    sb.mkdir(parents=True, exist_ok=True)
+    for d in (
+        "acl2s", "xdoc", "misc", "data-structures", "hacking", "std",
+        "ordinals", "tools", "arithmetic-5", "make-event",
+        "clause-processors", "system", "defsort",
+    ):
+        shutil.copytree(Path(SRC_BOOKS) / d, sb / d)
+    (sb / "centaur" / "fty").mkdir(parents=True, exist_ok=True)
+    shutil.copytree(Path(SRC_BOOKS) / "centaur" / "misc", sb / "centaur" / "misc")
+    (sb / "coi" / "symbol-fns").mkdir(parents=True, exist_ok=True)
+    (sb / "coi" / "util").mkdir(parents=True, exist_ok=True)
+    (sb / "ihs").mkdir(parents=True, exist_ok=True)
+    (sb / "kestrel" / "utilities" / "system").mkdir(parents=True, exist_ok=True)
+
+    (sb / "centaur" / "fty" / "basetypes.lisp").write_text(
+        '(in-package "ACL2")\n'
+        '(include-book "std/basic/defs" :dir :system :uncertified-okp t)\n'
+        '(include-book "std/basic/pos-fix" :dir :system :uncertified-okp t)\n'
+        '(defun int-equiv (x y) (declare (xargs :guard t)) (equal (ifix x) (ifix y)))\n'
+        '(defequiv int-equiv)\n(defcong int-equiv equal (ifix x) 1)\n'
+        '(defun nat-equiv (x y) (declare (xargs :guard t)) (equal (nfix x) (nfix y)))\n'
+        '(defequiv nat-equiv)\n(defcong nat-equiv equal (nfix x) 1)\n'
+        '(defun bit-equiv (x y) (declare (xargs :guard t)) (equal (bfix x) (bfix y)))\n'
+        '(defequiv bit-equiv)\n(defcong bit-equiv equal (bfix x) 1)\n'
+    )
+    fixtype_src = (
+        '(in-package "FTY")\n'
+        '(defmacro deffixtype (&rest args) (declare (ignore args)) \'(value-triple :deffixtype-stub))\n'
+        '(defmacro deffixcong (&rest args) (declare (ignore args)) \'(value-triple :deffixcong-stub))\n'
+        '(defmacro deffixequiv (&rest args) (declare (ignore args)) \'(value-triple :deffixequiv-stub))\n'
+    )
+    (sb / "centaur" / "fty" / "fixtype.lisp").write_text(fixtype_src)
+    (sb / "centaur" / "fty" / "fixequiv.lisp").write_text(fixtype_src)
+    (sb / "coi" / "symbol-fns" / "portcullis.acl2").write_text(
+        '(in-package "ACL2")\n'
+        '(defpkg "SYMBOL-FNS" (union-eq *acl2-exports* *common-lisp-symbols-from-main-lisp-package*))\n'
+    )
+    (sb / "coi" / "symbol-fns" / "portcullis.lisp").write_text('(in-package "ACL2")\n')
+    (sb / "coi" / "symbol-fns" / "symbol-fns.lisp").write_text(
+        '(in-package "SYMBOL-FNS")\n'
+        '(defun join-symbols-lst (pkg lst) (declare (xargs :mode :logic :guard (symbol-listp lst)) (ignore pkg)) '
+        '(if (endp lst) "" (concatenate \'string (symbol-name (car lst)) (join-symbols-lst pkg (cdr lst)))))\n'
+        '(defun join-symbols-fn (pkg lst) (declare (xargs :mode :logic :guard (and (symbolp pkg) (symbol-listp lst)))) '
+        '(intern$ (join-symbols-lst pkg lst) (if (symbolp pkg) (symbol-package-name pkg) "ACL2")))\n'
+        '(defmacro suffix (&rest args) `(join-symbols-fn ,(car args) (list ,@args)))\n'
+        '(defmacro prefix (&rest args) `(let ((xs (list ,@args))) (join-symbols-fn (car (last xs)) xs)))\n'
+        '(defun item-to-numbered-symbol-list-rec (x k) (declare (xargs :mode :logic :guard (and (symbolp x) (natp k)))) '
+        '(if (zp k) nil (cons (intern$ (concatenate \'string (symbol-name x) (coerce (explode-atom k 10) \'string)) '
+        '(if (symbolp x) (symbol-package-name x) "ACL2")) (item-to-numbered-symbol-list-rec x (1- k)))))\n'
+    )
+    (sb / "coi" / "util" / "pseudo-translate.lisp").write_text(
+        '(in-package "ACL2")\n(program)\n'
+        '(defun pseudo-translate-add-fns (fns-args wrld) (if (endp fns-args) wrld '
+        '(let* ((fn (caar fns-args)) (args (cdar fns-args)) (wrld (putprop fn \'formals args wrld)) '
+        '(wrld (putprop fn \'stobjs-in (make-list (len args)) wrld)) (wrld (putprop fn \'stobjs-out \'(nil) wrld))) '
+        '(pseudo-translate-add-fns (cdr fns-args) wrld))))\n'
+        '(defun pseudo-translate (form new-fns-and-args wrld) '
+        '(let ((wrld1 (pseudo-translate-add-fns new-fns-and-args wrld))) '
+        '(translate-cmp form t nil t \'pseudo-translate wrld1 (default-state-vars nil))))\n'
+    )
+    (sb / "ihs" / "basic-definitions.lisp").write_text(
+        '(in-package "ACL2")\n'
+        '(defun zbp (x) (declare (xargs :guard t)) (or (not (integerp x)) (= x 0)))\n'
+        '(defun loghead (size i) (declare (xargs :guard (and (integerp size) (<= 0 size) (integerp i)))) (mod (ifix i) (expt 2 (nfix size))))\n'
+        '(defun logtail (pos i) (declare (xargs :guard (and (integerp pos) (<= 0 pos) (integerp i)))) (floor (ifix i) (expt 2 (nfix pos))))\n'
+        '(defun logcons (b i) (declare (xargs :guard (and (bitp b) (integerp i)))) (let ((i (ifix i))) (+ (if (= b 1) 1 0) (* 2 i))))\n'
+        '(defthm unsigned-byte-p-loghead (implies (and (integerp size) (<= 0 size) (integerp i)) (unsigned-byte-p size (loghead size i))))\n'
+        '(defthm logcons-type (implies (and (bitp b) (integerp i)) (integerp (logcons b i))) :rule-classes :type-prescription)\n'
+        '(defthm unsigned-byte-p-logcons (implies (and (bitp b) (integerp size) (< 0 size) (unsigned-byte-p (1- size) i)) (unsigned-byte-p size (logcons b i))))\n'
+    )
+    (sb / "kestrel" / "utilities" / "proof-builder-macros.lisp").write_text('(in-package "ACL2")\n')
+    (sb / "kestrel" / "utilities" / "ubi.lisp").write_text('(in-package "ACL2")\n')
+    (sb / "kestrel" / "utilities" / "make-termination-theorem.lisp").write_text(
+        '(in-package "ACL2")\n'
+        '(defun make-termination-theorem (fn wrld) (declare (xargs :mode :program) (ignore fn wrld)) \'t)\n'
+    )
+    (sb / "kestrel" / "utilities" / "system" / "terms.lisp").write_text(
+        '(in-package "ACL2")\n(include-book "coi/util/pseudo-translate" :dir :system)\n'
+        '(verify-termination body)\n'
+        '(defun filter-program-fns (fns wrld) (declare (xargs :mode :program)) '
+        '(cond ((endp fns) nil) ((eq (symbol-class (car fns) wrld) :program) '
+        '(cons (car fns) (filter-program-fns (cdr fns) wrld))) (t (filter-program-fns (cdr fns) wrld))))\n'
+        '(defun all-program-ffn-symbs (term ans wrld) (declare (xargs :mode :program)) '
+        '(append (filter-program-fns (all-ffn-symbs term nil) wrld) ans))\n'
+    )
+    return str(sb)
 
 
 def gen_defdata_cases(rng, count=25):
@@ -209,14 +303,14 @@ def gen_ccg_cases(rng, count=15):
     return cases
 
 
-def run_batch(acl2_bin, script_text, timeout_s=90):
+def run_batch(acl2_bin, script_text, shadow_books, timeout_s=120):
     with tempfile.NamedTemporaryFile("w", suffix=".lisp", delete=False) as tf:
         tf.write(script_text)
         tf_path = tf.name
     try:
         cmd = [TIMEOUT_BIN, "--kill-after=10s", f"{timeout_s}s", acl2_bin]
         env = os.environ.copy()
-        env["ACL2_SYSTEM_BOOKS"] = SHADOW_BOOKS
+        env["ACL2_SYSTEM_BOOKS"] = shadow_books
         wrapper_input = (
             PREAMBLE
             + f'\n(ld "{tf_path}" :ld-error-action :continue)\n'
@@ -278,6 +372,7 @@ def main():
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--runtime", choices=["sbcl", "ccl", "both"], default="both")
     ap.add_argument("--cases", type=int, default=20)
+    ap.add_argument("--save-logs", action="store_true", help="Write raw transcripts into hunts/acl2s/")
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
@@ -298,17 +393,20 @@ def main():
     if args.runtime in ("ccl", "both"):
         runtimes.append(("CCL-1.14", CCL_ACL2))
 
-    out_dir = Path("/Users/ember/dev/compiler-audit/hunts/acl2s")
-    for label, bin_path in runtimes:
-        print(f"=== Running fuzz batch (seed={args.seed}, cases={len(all_cases)}) on {label} ===")
-        rc, out, err = run_batch(bin_path, script, timeout_s=120)
-        (out_dir / f"last_fuzz_{label.lower()}.log").write_text(out)
-        findings = analyze_output(out, label)
-        print(f"[{label}] rc={rc}, stdout_len={len(out)}, findings={len(findings)}")
-        for kind, detail in findings:
-            print(f"  - [{kind}] {detail}")
-        if err.strip():
-            print(f"  [stderr preview] {err[:300]}")
+    out_dir = Path(__file__).resolve().parent
+    with tempfile.TemporaryDirectory(prefix="acl2s-fuzz-") as td:
+        shadow_books = build_shadow_books(Path(td))
+        for label, bin_path in runtimes:
+            print(f"=== Running fuzz batch (seed={args.seed}, cases={len(all_cases)}) on {label} ===")
+            rc, out, err = run_batch(bin_path, script, shadow_books, timeout_s=120)
+            if args.save_logs:
+                (out_dir / f"last_fuzz_{label.lower()}.log").write_text(out)
+            findings = analyze_output(out, label)
+            print(f"[{label}] rc={rc}, stdout_len={len(out)}, findings={len(findings)}")
+            for kind, detail in findings:
+                print(f"  - [{kind}] {detail}")
+            if err.strip():
+                print(f"  [stderr preview] {err[:300]}")
 
 
 if __name__ == "__main__":

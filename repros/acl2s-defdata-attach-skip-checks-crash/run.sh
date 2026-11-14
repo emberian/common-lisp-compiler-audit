@@ -27,13 +27,24 @@ mkdir -p "$SHADOW_BOOKS/centaur/fty" \
          "$SHADOW_BOOKS/kestrel/utilities/system"
 
 cat > "$SHADOW_BOOKS/centaur/fty/basetypes.lisp" <<'EOF'
-(in-package "FTY")
-(defun integerp-fix (x) (declare (xargs :guard t)) (ifix x))
+(in-package "ACL2")
+(include-book "std/basic/defs" :dir :system :uncertified-okp t)
+(include-book "std/basic/pos-fix" :dir :system :uncertified-okp t)
+(defun int-equiv (x y) (declare (xargs :guard t)) (equal (ifix x) (ifix y)))
+(defequiv int-equiv)
+(defcong int-equiv equal (ifix x) 1)
+(defun nat-equiv (x y) (declare (xargs :guard t)) (equal (nfix x) (nfix y)))
+(defequiv nat-equiv)
+(defcong nat-equiv equal (nfix x) 1)
+(defun bit-equiv (x y) (declare (xargs :guard t)) (equal (bfix x) (bfix y)))
+(defequiv bit-equiv)
+(defcong bit-equiv equal (bfix x) 1)
 EOF
 cat > "$SHADOW_BOOKS/centaur/fty/fixtype.lisp" <<'EOF'
 (in-package "FTY")
-(defmacro deffixtype (&rest args) (declare (ignore args)) '(value-triple :fty-stub))
-(defmacro deffixequiv (&rest args) (declare (ignore args)) '(value-triple :fty-stub))
+(defmacro deffixtype (&rest args) (declare (ignore args)) '(value-triple :deffixtype-stub))
+(defmacro deffixcong (&rest args) (declare (ignore args)) '(value-triple :deffixcong-stub))
+(defmacro deffixequiv (&rest args) (declare (ignore args)) '(value-triple :deffixequiv-stub))
 EOF
 cp "$SHADOW_BOOKS/centaur/fty/fixtype.lisp" "$SHADOW_BOOKS/centaur/fty/fixequiv.lisp"
 
@@ -41,6 +52,7 @@ cat > "$SHADOW_BOOKS/coi/symbol-fns/portcullis.acl2" <<'EOF'
 (in-package "ACL2")
 (defpkg "SYMBOL-FNS" (union-eq *acl2-exports* *common-lisp-symbols-from-main-lisp-package*))
 EOF
+echo '(in-package "ACL2")' > "$SHADOW_BOOKS/coi/symbol-fns/portcullis.lisp"
 cat > "$SHADOW_BOOKS/coi/symbol-fns/symbol-fns.lisp" <<'EOF'
 (in-package "SYMBOL-FNS")
 (defun join-symbols-lst (pkg lst)
