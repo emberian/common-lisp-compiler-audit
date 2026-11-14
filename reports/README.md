@@ -126,6 +126,14 @@ directory so previously shared URLs remain stable:
   crashing valid `:loop$-recursion t` definitions with `HARD ACL2 ERROR in CHOKE-ON-LOOP$-RECURSION`;
   and `ACL2S-4` `defunc` `test?-phase` `skip-proofs` + `with-timeout-aux-raw` uncaught `storage-condition`
   aborting raw Lisp on non-terminating `definec` (+ 5 minor static defects).
+- **[W4-KERNEL-FUZZ-FINDINGS.md](W4-KERNEL-FUZZ-FINDINGS.md)** — Wave-4 mechanical kernel fuzzing
+  campaign (`hunts/w4-kernel-fuzz/`: 5,438 falsified congruence/rewrite goals, 352 book-DAG `:pcert`
+  certifications, 3,960 `:functional-instance`/`defun-sk`/hint checks across SBCL 2.6.10 & CCL 1.14)
+  uncovering 4 novel ACL2 kernel bugs: `W4-KF-1` `(:termination-theorem fn substn)` unchecked free-var
+  capture triggering `HARD ACL2 ERROR in ASSERT$`; `W4-KF-2` out-of-clique `(:termination-theorem ...)`
+  missing `(msg ...)` wrapper crashing `FMT0`; `W4-KF-3` `defun-sk-fn` macroexpander crashes + odd-length
+  `(:stobjs st1 st2)` / `:dfs` splice under `:constrain t`; and `W4-KF-4` internal `:OMITTED` sentinel
+  leaking into user `:backtrack` hints and top-of-waterfall `hints`.
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,
