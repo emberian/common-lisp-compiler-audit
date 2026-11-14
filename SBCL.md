@@ -1,10 +1,19 @@
 # SBCL findings
 
-Across this audit (arm64 macOS on SBCL 2.6.10, and x86-64 Linux on SBCL 2.2.9 / 2.6.8 /
-2.6.9 / 2.6.10; see `X86-SBCL.md`), SBCL is the **correct** party in every soundness
-finding where hosts disagreed (`ACL2-BUG-REPORT.md` S3, S6; `CCL.md` CCL-1..CCL-3).
+Across the initial Batch-1 differential audit (arm64 macOS on SBCL 2.6.10, and x86-64 Linux
+on SBCL 2.2.9 / 2.6.8 / 2.6.9 / 2.6.10; see `X86-SBCL.md`), SBCL was the **correct** party in
+every Batch-1 soundness finding where hosts disagreed (`ACL2-BUG-REPORT.md` S3, S6; `CCL.md`
+CCL-1..CCL-3).
 
-Two SBCL compiler defects were found by our fuzzers:
+> **Subsequent Wave-1 & Wave-2 SBCL 2.6.10 findings:** See
+> [`reports/SBCL-2.6.10-FINDINGS.md`](reports/SBCL-2.6.10-FINDINGS.md) (`SB-2610-1..4`: four
+> live VOP register-lifetime soundness/segfault bugs at `(safety 3)`) and
+> [`reports/Z3-COMPILER-EQUIVALENCE.md`](reports/Z3-COMPILER-EQUIVALENCE.md) (`Z3-1`,
+> `Z3-1-ACL2`, `Z3-2`: live `(safety 3)` `inherit-equality-p` lattice bug in
+> `equality-constraints.lisp` that directly proves `(defthm nil-proved nil)` in pure
+> guard-verified ACL2 on SBCL 2.6.10 via `char-equal`, plus `same-arg` float misfolds).
+
+Two SBCL compiler defects were found in the initial Batch-1 fuzzing sweep:
 
 1. **SB1 (soundness, x86-64, SBCL 2.6.8–2.6.9 — ALREADY FIXED upstream in 2.6.10):**
    variable-shift modular `ash` miscompiled to `0` at `(speed 3)(safety 0)` due to a VOP

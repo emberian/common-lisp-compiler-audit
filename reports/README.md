@@ -55,6 +55,15 @@ directory so previously shared URLs remain stable:
   `PSC-R1a..d` normed-spine fast-alist `hl-alist-stolen-warning` raw break & FAL decoder bugs;
   `PSC-F1` `read-object-with-case` ignoring `:downcase`/`:invert`; `PSC-R2`/`PSC-R3` `#u`, `#f`,
   and `#!` `hidden-defpkg` reader bugs).
+- **[Z3-COMPILER-EQUIVALENCE.md](Z3-COMPILER-EQUIVALENCE.md)** — Z3 SMT equivalence verification
+  (67 checks: 15 `SAT` counterexamples, 52 `UNSAT` proofs) across SBCL 2.6.10 and Clozure CL 1.14:
+  `Z3-1` SBCL 2.6.10 `inherit-equality-p` (`equality-constraints.lisp:153`) returning `from`
+  instead of the equivalence-lattice meet + default-FPU QNaN inversions at `(speed 1)(safety 3)`;
+  `Z3-1-ACL2` pure guard-verified ACL2 `:logic` function proving `(defthm nil-proved nil)` on
+  SBCL 2.6.10 via `char-equal` (`:ttag nil`, zero books); `Z3-2` SBCL 2.6.10 `same-arg` float
+  `derive-type` bogus compile-time `WARNING` + `0.0d0/0.0d0` NaN -> `1.0d0` & signed-zero misfolds;
+  `Z3-3` CCL 1.14 ARM64 `FCMP` unordered-`NaN` signed-condition reuse (17 `(safety 3)` miscompilations
+  + silent `NaN -> 0/1` `truncate`/`ceiling` corruption, with Z3-verified 0-overhead fix).
 
 Host-level summaries at the repo root:
 - `CCL.md` and `CCL-OPTIMIZERS.md` (Clozure CL 1.14 arm64 + x86-64: `CCL-1`, `CCL-2`,

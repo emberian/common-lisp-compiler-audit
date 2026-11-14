@@ -1,0 +1,283 @@
+[
+  {
+    "name": "ccl_arm64_fcmp_actual_eq",
+    "source": "compiler/ARM64/arm642.lisp:477-485, 7845-7858, 9878-9885",
+    "category": "arm64-fp-cc",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 0.88,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm64_fcmp_actual_ne",
+    "source": "compiler/ARM64/arm642.lisp:477-485, 7845-7858, 9878-9885",
+    "category": "arm64-fp-cc",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 0.68,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm64_fcmp_actual_gt",
+    "source": "compiler/ARM64/arm642.lisp:477-485, 7845-7858, 9878-9885",
+    "category": "arm64-fp-cc",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 14.91,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm64_fcmp_actual_le",
+    "source": "compiler/ARM64/arm642.lisp:477-485, 7845-7858, 9878-9885",
+    "category": "arm64-fp-cc",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 2.08,
+    "witness": {
+      "x": "-0.9999999999976123543632411383441649377346038818359375*(2**-1022)",
+      "y": "NaN",
+      "x_bits": "0x800fffffffffd5ff",
+      "y_bits": "0x0",
+      "ieee_expected": false,
+      "ccl_arm64_actual": true
+    },
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm64_fcmp_actual_lt",
+    "source": "compiler/ARM64/arm642.lisp:477-485, 7845-7858, 9878-9885",
+    "category": "arm64-fp-cc",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 3.83,
+    "witness": {
+      "x": "-0.999999999999999555910790149937383830547332763671875*(2**-1022)",
+      "y": "NaN",
+      "x_bits": "0x800ffffffffffffe",
+      "y_bits": "0x0",
+      "ieee_expected": false,
+      "ccl_arm64_actual": true
+    },
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm64_fcmp_actual_ge",
+    "source": "compiler/ARM64/arm642.lisp:477-485, 7845-7858, 9878-9885",
+    "category": "arm64-fp-cc",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 17.33,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm64_fcmp_lt_vs_gt_symmetry_broken",
+    "source": "compiler/ARM64/arm642.lisp:7845-7858",
+    "category": "arm64-fp-cc",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 21.66,
+    "witness": {
+      "x": "NaN",
+      "y": "NaN",
+      "ccl_(< x y)": true,
+      "ccl_(> y x)": false
+    },
+    "notes": "(< NaN 1.0d0) => T while (> 1.0d0 NaN) => NIL"
+  },
+  {
+    "name": "ccl_arm64_min_opencoded_vs_generic_differential",
+    "source": "compiler/optimizers.lisp:1812 + arm642.lisp:7845",
+    "category": "arm64-fp-differential",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 10.11,
+    "witness": {
+      "x": "1d+-0 (qNaN)",
+      "y": "1.0d0",
+      "opencoded_min": "NaN",
+      "generic_min": "1"
+    },
+    "notes": "Open-coded (min 1d+-0 1.0d0) returns NaN while generic (min 1d+-0 1.0d0) returns 1.0d0"
+  },
+  {
+    "name": "ccl_arm64_unary_truncate_nan_returns_zero",
+    "source": "level-0/l0-numbers.lisp:1165-1169 + arm64-numbers.lisp:43-47",
+    "category": "arm64-fp-runtime",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 3.74,
+    "witness": {
+      "x": "NaN",
+      "ccl_truncate_result": "(0, 1D+-0) [ceiling returns (1, 1D+-0)!]",
+      "expected": "FLOATING-POINT-INVALID-OPERATION / arithmetic-error"
+    },
+    "notes": "Under default FPU mode, (truncate 1d+-0)=>0, (floor 1d+-0)=>0, (ceiling 1d+-0)=>1, (round 1d+-0)=>0!"
+  },
+  {
+    "name": "ccl_arm64_fcmp_proposed_fix_eq_sound",
+    "source": "arm642.lisp (proposed FP condition map)",
+    "category": "arm64-fp-cc-fix",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 0.36,
+    "witness": null,
+    "notes": "cr_bit=0b0, true_p=True matches IEEE-754 :EQ in both value and branch-false contexts"
+  },
+  {
+    "name": "ccl_arm64_fcmp_proposed_fix_ne_sound",
+    "source": "arm642.lisp (proposed FP condition map)",
+    "category": "arm64-fp-cc-fix",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 0.36,
+    "witness": null,
+    "notes": "cr_bit=0b0, true_p=False matches IEEE-754 :NE in both value and branch-false contexts"
+  },
+  {
+    "name": "ccl_arm64_fcmp_proposed_fix_gt_sound",
+    "source": "arm642.lisp (proposed FP condition map)",
+    "category": "arm64-fp-cc-fix",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 17.93,
+    "witness": null,
+    "notes": "cr_bit=0b1100, true_p=True matches IEEE-754 :GT in both value and branch-false contexts"
+  },
+  {
+    "name": "ccl_arm64_fcmp_proposed_fix_ge_sound",
+    "source": "arm642.lisp (proposed FP condition map)",
+    "category": "arm64-fp-cc-fix",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 23.37,
+    "witness": null,
+    "notes": "cr_bit=0b1010, true_p=True matches IEEE-754 :GE in both value and branch-false contexts"
+  },
+  {
+    "name": "ccl_arm64_fcmp_proposed_fix_lt_sound",
+    "source": "arm642.lisp (proposed FP condition map)",
+    "category": "arm64-fp-cc-fix",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 0.72,
+    "witness": null,
+    "notes": "cr_bit=0b100, true_p=True matches IEEE-754 :LT in both value and branch-false contexts"
+  },
+  {
+    "name": "ccl_arm64_fcmp_proposed_fix_le_sound",
+    "source": "arm642.lisp (proposed FP condition map)",
+    "category": "arm64-fp-cc-fix",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 0.67,
+    "witness": null,
+    "notes": "cr_bit=0b1000, true_p=False matches IEEE-754 :LE in both value and branch-false contexts"
+  },
+  {
+    "name": "ccl_arm64_lap_%iash_under_caller_contract_bv64",
+    "source": "level-0/ARM64/arm64-numbers.lisp:23-33 + l0-numbers.lisp:1791-1806",
+    "category": "arm64-lap-shift",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 47.95,
+    "witness": null,
+    "notes": "Guarded by %ash-right (shift < 64) and %ash-left (length + shift <= 60)"
+  },
+  {
+    "name": "ccl_acode_rewrite_ash_const_right_clamp_63",
+    "source": "compiler/acode-rewrite.lisp:465-495",
+    "category": "acode-shift",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.23,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm64_lap_%fixnum_signum_bv64",
+    "source": "level-0/ARM64/arm64-numbers.lisp:7-12",
+    "category": "arm64-lap-arith",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.1,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm64_lap_%fixnum_intlen_cls_eor_trick",
+    "source": "level-0/ARM64/arm64-numbers.lisp:36-41",
+    "category": "arm64-lap-arith",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.39,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_nx0_bounded_integer_add_sub_mul",
+    "source": "compiler/nx0.lisp:422-490",
+    "category": "nx0-interval",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 416.2,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_nx0_bounded_integer_logand_bv16",
+    "source": "compiler/nx0.lisp:510-555",
+    "category": "nx0-interval",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 21.43,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_arm642_ubfm_bfm_and_align_up_bv64",
+    "source": "compiler/ARM64/arm642.lisp:9266-9269 + arm64-vinsns.lisp",
+    "category": "arm64-bitfield",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 15.69,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "ccl_optimizers_ldb_dpb_mask_deposit_bv64",
+    "source": "compiler/optimizers.lisp:2040-2135",
+    "category": "optimizers-bitfield",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 0.1,
+    "witness": null,
+    "notes": ""
+  }
+]

@@ -1,0 +1,542 @@
+[
+  {
+    "name": "eq_constraints_inherit_int_vs_float",
+    "source": "equality-constraints.lisp:169-178",
+    "category": "equivalence-lattice",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 75.48,
+    "witness": {
+      "x": "Int(3)",
+      "y": "Float64(1.5*(2**1))",
+      "z": "Float64(1.5*(2**1))",
+      "eql(y,z)": true,
+      "=(x,y)": true,
+      "true_eql(x,z)": false,
+      "sbcl_derived_eql(x,z)": true
+    },
+    "notes": "inherit-equality-p returns FROM (eql) instead of lattice meet (=)"
+  },
+  {
+    "name": "eq_constraints_inherit_signed_zero",
+    "source": "equality-constraints.lisp:169-178",
+    "category": "equivalence-lattice",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 8.94,
+    "witness": {
+      "fx": "-0.0",
+      "fy": "+0.0",
+      "fz": "+0.0",
+      "fx_bits": "0x8000000000000000",
+      "fz_bits": "0x0"
+    },
+    "notes": "(= -0.0 +0.0) and (eql +0.0 +0.0) unsoundly derive (eql -0.0 +0.0)"
+  },
+  {
+    "name": "eq_constraints_inherit_char_equal_acl2",
+    "source": "equality-constraints.lisp:169-178",
+    "category": "equivalence-lattice",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 1.54,
+    "witness": {
+      "x": "'p'",
+      "y": "'P'",
+      "z": "'P'",
+      "acl2_impact": "Proves (defthm nil-proved nil) in pure guard-verified ACL2 on SBCL 2.6.10"
+    },
+    "notes": "(eql y z) + (char-equal x y) unsoundly derives (eql x z) / (char= x z)"
+  },
+  {
+    "name": "eq_constraints_inherit_bignum_eq",
+    "source": "equality-constraints.lisp:169-178",
+    "category": "equivalence-lattice",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 1.18,
+    "witness": {
+      "ptr_x": 1,
+      "ptr_y": 0,
+      "ptr_z": 0,
+      "bignum_val": 4611686018427387905
+    },
+    "notes": "Distinct equal bignums satisfy (eq y z) and (= x y) while (eq x z) is NIL"
+  },
+  {
+    "name": "eq_constraints_qnan_not_num_eq_folds_eql_nil",
+    "source": "equality-constraints.lisp:535-537",
+    "category": "ieee754-constraints",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 2.34,
+    "witness": {
+      "x_bits": "0x7ff8000000000000",
+      "y_bits": "0x7ff8000000000000",
+      "(= x y)": false,
+      "true_(eql x y)": true,
+      "sbcl_folded_(eql x y)": false
+    },
+    "notes": "Triggers under SBCL DEFAULT FPU mode on quiet NaN!"
+  },
+  {
+    "name": "eq_constraints_qnan_eql_folds_num_eq_t",
+    "source": "equality-constraints.lisp:575-577",
+    "category": "ieee754-constraints",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 2.37,
+    "witness": {
+      "x_bits": "0x7ff8000000000000",
+      "y_bits": "0x7ff8000000000000",
+      "(eql x y)": true,
+      "true_(= x y)": false,
+      "sbcl_folded_(= x y)": true
+    },
+    "notes": "Triggers under SBCL DEFAULT FPU mode on quiet NaN!"
+  },
+  {
+    "name": "eq_constraints_nan_not_lt_folds_ge",
+    "source": "equality-constraints.lisp:26-31",
+    "category": "ieee754-constraints",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 2.02,
+    "witness": {
+      "ox": "NaN",
+      "oy": "NaN",
+      "(< ox oy)": false,
+      "true_(>= ox oy)": false,
+      "sbcl_folded_(>= ox oy)": true
+    },
+    "notes": "not-operator maps < to >= without checking float NaN possibility"
+  },
+  {
+    "name": "eq_constraints_fixed_lattice_meet_sound",
+    "source": "equality-constraints.lisp:169-178 (proposed fix)",
+    "category": "equivalence-lattice",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 2.81,
+    "witness": null,
+    "notes": "Lattice meet(eql, =) = '=' is transitive on all non-NaN IEEE-754 floats"
+  },
+  {
+    "name": "srctran_div_same_arg_bounded_float",
+    "source": "srctran.lisp:2247-2250 (/-derive-type-aux)",
+    "category": "float-derive-type",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 3984.79,
+    "witness": {
+      "x": "+0.0",
+      "x_bits": "0x0",
+      "true_(/ x x)": "NaN",
+      "sbcl_derived": "[1.0d0, 1.0d0]"
+    },
+    "notes": "0.0d0 / 0.0d0 = NaN, excluded by derived singleton (double-float 1.0d0 1.0d0)"
+  },
+  {
+    "name": "srctran_ftruncate_ffloor_fceiling_same_arg",
+    "source": "srctran.lisp:2611-2626, 2808-2813, 2843-2849",
+    "category": "float-derive-type",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 5610.85,
+    "witness": {
+      "x": "+0.0",
+      "true_ftruncate_quot": "NaN",
+      "sbcl_derived_quot": "1.0d0 (and integer (1 1) causing WARNING in float-tran.lisp:1870)"
+    },
+    "notes": "Folds NaN to 1.0d0 AND causes full WARNING on (truncate/floor/ceiling x x) for double-float"
+  },
+  {
+    "name": "srctran_sub_same_arg_rtn_signed_zero",
+    "source": "srctran.lisp:2098-2121 (--derive-type-aux)",
+    "category": "float-derive-type",
+    "z3_status": "sat",
+    "expected_status": "sat",
+    "sound": false,
+    "time_ms": 12.2,
+    "witness": {
+      "x": "1.8484885395826349263614929441246204078197479248046875*(2**-125)",
+      "true_(- x x)_RTN": "-0.0d0",
+      "diff_bits": "0x8000000000000000",
+      "sbcl_derived": "(DOUBLE-FLOAT 0.0d0 0.0d0) (:normalize-zeros nil)"
+    },
+    "notes": "Under :rounding-mode :negative-infinity, x - x = -0.0d0, violating derived +0.0d0"
+  },
+  {
+    "name": "srctran_sub_same_arg_rne_sound",
+    "source": "srctran.lisp:2098-2121 (under RNE)",
+    "category": "float-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 4.43,
+    "witness": null,
+    "notes": "Under IEEE-754 RNE/RTP/RTZ, finite x - x is always +0.0"
+  },
+  {
+    "name": "bitops_unsigned_logand_bounds_o1_bv8",
+    "source": "bitops-derive-type.lisp:118-139, 207-228, 314-332",
+    "category": "bitops-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 21.46,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_unsigned_logior_bounds_o1_bv8",
+    "source": "bitops-derive-type.lisp:118-139, 207-228, 314-332",
+    "category": "bitops-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 20.81,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_unsigned_logxor_bounds_o1_bv8",
+    "source": "bitops-derive-type.lisp:118-139, 207-228, 314-332",
+    "category": "bitops-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 31.8,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_signed_logand_bounds_bv8",
+    "source": "bitops-derive-type.lisp:141-364",
+    "category": "bitops-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 138.8,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_signed_logior_bounds_add_one_bv8",
+    "source": "bitops-derive-type.lisp:141-364",
+    "category": "bitops-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 68.59,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_signed_logxor_bounds_bv8",
+    "source": "bitops-derive-type.lisp:141-364",
+    "category": "bitops-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 76.18,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_cmatch_gray_code_logxor_ash_right",
+    "source": "bitops-derive-type.lisp:395-410",
+    "category": "bitops-cmatch",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 17.85,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_signed_lognot_bounds_bv64",
+    "source": "srctran.lisp:3305-3320",
+    "category": "bitops-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 3.82,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_cmatch_logxor_x_sub_1_bv64",
+    "source": "bitops-derive-type.lisp:372-375",
+    "category": "bitops-cmatch",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 3.44,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_cmatch_logxor_x_add_1_bv64",
+    "source": "bitops-derive-type.lisp:377-380",
+    "category": "bitops-cmatch",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 3.17,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_cmatch_logxor_x_neg_x_bv64",
+    "source": "bitops-derive-type.lisp:382-393",
+    "category": "bitops-cmatch",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 2.68,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_cmatch_logior_x_neg_x_bv64",
+    "source": "bitops-derive-type.lisp:419-434",
+    "category": "bitops-cmatch",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 3.93,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "bitops_cmatch_logand_x_neg_x_bv64",
+    "source": "bitops-derive-type.lisp:443-462",
+    "category": "bitops-cmatch",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 11.78,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_ash_derive_type_aux_mixed_sign",
+    "source": "srctran.lisp:3185-3245",
+    "category": "arith-derive-type",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 621.58,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_floor_via_truncate_bounds_bv12",
+    "source": "srctran.lisp:4909-4949",
+    "category": "div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 49.96,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_ceiling_via_truncate_bounds_bv12",
+    "source": "srctran.lisp:4951-4993",
+    "category": "div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 55.96,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_floor_pow2_pos_8_bv64",
+    "source": "srctran.lisp:5038-5052",
+    "category": "div-pow2-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 2.95,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_floor_pow2_neg_8_bv64",
+    "source": "srctran.lisp:5038-5052",
+    "category": "div-pow2-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 34.3,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_ceiling_pow2_word_no_overflow_bv64",
+    "source": "srctran.lisp:5065-5074",
+    "category": "div-pow2-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 10.85,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_granlund_montgomery_udiv_3_word64",
+    "source": "srctran.lisp:5282-5327",
+    "category": "magic-div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.49,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_granlund_montgomery_udiv_7_word64",
+    "source": "srctran.lisp:5282-5327",
+    "category": "magic-div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.87,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_granlund_montgomery_udiv_10_word64",
+    "source": "srctran.lisp:5282-5327",
+    "category": "magic-div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.19,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_granlund_montgomery_udiv_14_word64",
+    "source": "srctran.lisp:5282-5327",
+    "category": "magic-div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 3.13,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_granlund_montgomery_sdiv_3_word64",
+    "source": "srctran.lisp:5333-5365",
+    "category": "magic-div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.68,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_granlund_montgomery_sdiv_7_word64",
+    "source": "srctran.lisp:5333-5365",
+    "category": "magic-div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.66,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_granlund_montgomery_sdiv_-7_word64",
+    "source": "srctran.lisp:5333-5365",
+    "category": "magic-div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.65,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_granlund_montgomery_sdiv_-10_word64",
+    "source": "srctran.lisp:5333-5365",
+    "category": "magic-div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 1.67,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_ldb_dpb_deposit_field_identities_bv64",
+    "source": "srctran.lisp:3450-3620",
+    "category": "bitfield-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 0.11,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "modarith_unsigned_width_cut_identities_bv64",
+    "source": "modarith.lisp:1-620",
+    "category": "modular-arithmetic",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 9.72,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_interval_untruncate_truncate_bv10",
+    "source": "srctran.lisp:1486-1510",
+    "category": "constraint-back",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 642.57,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_signed_word_checked_floor_sound",
+    "source": "srctran.lisp:4977-4995",
+    "category": "div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 167.25,
+    "witness": null,
+    "notes": ""
+  },
+  {
+    "name": "srctran_signed_word_checked_ceiling_sound",
+    "source": "srctran.lisp:4977-4995",
+    "category": "div-transform",
+    "z3_status": "unsat",
+    "expected_status": "unsat",
+    "sound": true,
+    "time_ms": 147.18,
+    "witness": null,
+    "notes": ""
+  }
+]

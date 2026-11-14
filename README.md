@@ -14,14 +14,14 @@ Systematic soundness, code-generation, and trust-boundary audit of **ACL2** and 
 
 ## Summary of Verified Findings
 
-Counts below reflect **distinct root-cause bug classes** currently committed with standalone reproducers (excluding duplicate triggers of the same root cause; three additional Wave-2 audit tracks on the ACL2 prover kernel, world rollback, and Z3 compiler equivalence are in verification).
+Counts below reflect **distinct root-cause bug classes** currently committed with standalone reproducers (excluding duplicate triggers of the same root cause; two additional Wave-2 audit tracks on the ACL2 prover kernel and world rollback are in verification).
 
 | Target | Soundness / Wrong-Code | Security / Sandbox Bypass | Crash / Robustness / Divergence | Total Distinct Classes |
 |---|---:|---:|---:|---:|
-| **ACL2 (`8.7+`)** | **16** *(18 root causes; all prove `NIL` or falsify a proved theorem)* | **1** *(`certify-book :ttags nil` & wormhole disk write)* | **17** *(+ 5 source-audited latent defects)* | **34** *(36 root causes)* |
-| **SBCL (`2.6.8–2.6.10`)** | **4** *(3 live in `2.6.10` at `(safety 3)`; 1 in `2.6.8–2.6.9` fixed in `2.6.10`)* | 0 | **2** *(both live in `2.6.10`, pure ANSI CL; 1 segfault at `(safety 3)`, 1 arm64 asm crash)* | **6** *(5 live in `2.6.10`)* |
-| **Clozure CL (`1.14`)** | **5** *(2 at `(safety 3)`, incl. `(space 0)` overwriting `(safety 3)` -> `0`)* | 0 | **3** *(saved-image W^X livelock, `2^60` `ash` corruption, arm64 P2 bugs)* | **8** |
-| **Total** | **25** | **1** | **22** | **48** |
+| **ACL2 (`8.7+`)** | **16** *(18 ACL2 root causes + 1 pure SBCL-induced `NIL` proof `Z3-1-ACL2` counted under SBCL)* | **1** *(`certify-book :ttags nil` & wormhole disk write)* | **17** *(+ 5 source-audited latent defects)* | **34** *(36 root causes)* |
+| **SBCL (`2.6.8–2.6.10`)** | **6** *(5 live in `2.6.10` at `(safety 3)`, incl. `Z3-1` proving `NIL` in ACL2; 1 fixed in `2.6.10`)* | 0 | **2** *(both live in `2.6.10`, pure ANSI CL; 1 segfault at `(safety 3)`, 1 arm64 asm crash)* | **8** *(7 live in `2.6.10`)* |
+| **Clozure CL (`1.14`)** | **6** *(3 at `(safety 3)`, incl. ARM64 `FCMP` `NaN` & `(space 0)` overwriting `(safety 3)` -> `0`)* | 0 | **3** *(saved-image W^X livelock, `2^60` `ash` corruption, arm64 P2 bugs)* | **9** |
+| **Total** | **28** | **1** | **22** | **51** |
 
 ### Soundness Threat Model (ACL2)
 
@@ -42,6 +42,8 @@ Breakdown of the **16 ACL2 soundness classes (18 root causes)** by trust boundar
    - CL `(satisfies p)` `upgraded-array-element-type` cache surviving ACL2 `:u` (`S3`) and unretracted `proclaim-dfs` `ftype` surviving `:u` (`S6`, plus stobj trigger `B2-S6b`).
 4. **Book / `.cert` / `.sao` / `#Y` deserialization & cross-host boundaries (`3` classes)**:
    - Stale compiled `.fasl`/`.da64fsl`/`.lx64fsl` loaded without hash tie when timestamp `>=` `.cert` (`S1`), cross-host `#+`/`#-` reader conditionals in certified books (`S2`), and 13-byte `.sao` V1 `size/idx = 0` `(svref arr -1)` OOB read at `(safety 0)` yielding non-ACL2 `#<BOGUS object @ #xBE>` on single-host CCL and proving `NIL` across SBCL->CCL `#Y` certification with `:ttags nil` and zero `#+`/`#-` (`PSC-S1` in [`reports/ACL2-PKG-SERIALIZE-CERT.md`](reports/ACL2-PKG-SERIALIZE-CERT.md)).
+5. **Pure host-compiler miscompilation proving `NIL` in guard-verified ACL2 (`1` class, counted under SBCL)**:
+   - SBCL 2.6.10's `inherit-equality-p` (`src/compiler/equality-constraints.lisp:153-163`) returns `from` instead of the equivalence-lattice meet when chaining `eq`/`eql`/`char=` with `=`/`char-equal` at `(speed 1)(safety 3)` — miscompiling a pure guard-verified `:logic` function calling `char-equal` (`:ttag nil`, zero books, zero stobjs/attachments) so `*1*` evaluation returns `T` while `(:definition ...)` simplifies to `NIL`, proving `(defthm nil-proved nil)` in 15 prover steps (`Z3-1-ACL2` in [`reports/Z3-COMPILER-EQUIVALENCE.md`](reports/Z3-COMPILER-EQUIVALENCE.md)).
 
 *(Note for ACL2 maintainers: `ACL2-BUG-REPORT.md` at the repository root is **frozen** as Batch 1 so URLs and section numbers already shared remain stable; all subsequent batches live in standalone files under [`reports/`](reports/README.md). Six earlier one-off findings shared prior to Batch 1 — `defthm.lisp` meta `hyp-fn` guard, `boot-strap-flg` `make-event :expansion?`, `encapsulate` `bogus-exported-compliants` `split-types-term`, `maybe-flush-and-compress1` raw cache hit, interactive `proof-builder` `(verify t) :prove`, and `put-defabsstobj-invariant-risk` — are excluded from the counts above.)*
 
@@ -60,6 +62,7 @@ Breakdown of the **16 ACL2 soundness classes (18 root causes)** by trust boundar
 | [`reports/SBCL-2.6.10-FINDINGS.md`](reports/SBCL-2.6.10-FINDINGS.md) | SBCL `2.6.10` | 3 (`SB-2610-2..4`, all at `(safety 3)`) | 0 | 1 (`SB-2610-1`, pure ANSI CL segfault at `(safety 3)`) | `x86-64` `%more-arg-values-skip`, `arm64`/`x86-64` SIMD VOP `:from (:argument)` & backwards `move`, `arm64` `bignum-mult-and-add-4-arg` register clobber |
 | [`CCL.md`](CCL.md) & [`CCL-OPTIMIZERS.md`](CCL-OPTIMIZERS.md) | CCL `1.14` | 2 (`CCL-3`/`CCL-OPT-2`, `CCL-OPT-1`) | 0 | 2 (`CCL-1`, `CCL-2`) | `save-application` arm64 W^X `mprotect` livelock, `(ash 1 (1- 2^60))` corrupt bignum, 15-op `require-type` multiple-values leak, 4-op unary `truncate`-family value drop |
 | [`reports/CCL-CODEGEN-FINDINGS.md`](reports/CCL-CODEGEN-FINDINGS.md) | CCL `1.14` | 3 (`CCL-CG-1..3`, 2 at `(safety 3)`) | 0 | 1 (`CCL-CG-4a/4b`) | `arm64` 2D `aset2`/3D `aref3` reg clobber at `(safety 3)`, `nx1-expand-inline-call` copying `(space 0)` -> `(safety 0)`, unsound `(/ (* c1 x) c2)` float rewrite, P2 `%get-bit`/`%fixnum-ref-double-float` |
+| [`reports/Z3-COMPILER-EQUIVALENCE.md`](reports/Z3-COMPILER-EQUIVALENCE.md) | SBCL `2.6.10`, CCL `1.14`, ACL2 `8.7+` | 3 (`Z3-1` + `Z3-1-ACL2`, `Z3-2`, `Z3-3`; all at `(safety 3)`) | 0 | *(bogus full `WARNING` in `Z3-2`)* | SBCL `inherit-equality-p` lattice bug proving `NIL` in ACL2 via `char-equal`, `same-arg` float `derive-type` `NaN`->`1.0d0`, CCL ARM64 `FCMP` unordered-`NaN` (17 bugs + Z3-proved fix) |
 
 ---
 
